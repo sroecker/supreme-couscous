@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.2.0.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
+In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.2.1.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
 
 ## Use
 
@@ -35,6 +35,8 @@ For the bundled SQL demo, right-click `examples/demo`. For an OAuth variant, sel
 
 Results are candidate files for human review. They do not include verified source locations or confidence scores. Completed investigations can produce false positives. Incomplete runs stay visibly incomplete; cancellation or failure retains the previous result in the current session.
 
+If the server is stopped, the plugin reports the selected model and port before starting an investigation. **Copy start command** copies the launcher command; run it from the Antares project directory and keep that terminal open. CLI failures show a bounded diagnostic message instead of a JSON parsing error. Diagnostics remain in memory and are not added to saved reports; common credential forms are redacted.
+
 ## Review a scan
 
 1. Select a candidate in **Antares Review**. The header shows scan completion separately from how many candidates remain unreviewed.
@@ -53,7 +55,7 @@ CWE means Common Weakness Enumeration: a standard name and number for a class of
 
 ## Scope
 
-Version 0.2.0 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
+Version 0.2.1 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
 
 Remote SSH/containers, browser editors, Windows/Linux execution, sweeps, automatic server/model installation, SARIF export, and permanent suppressions are future work. Original plan milestones beyond this MVP remain proposals.
 

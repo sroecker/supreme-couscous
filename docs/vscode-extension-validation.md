@@ -72,3 +72,13 @@ Validation:
 - Desktop automation failed to initialize (`Sky Computer Use native pipe startup failed`), so a visual inspection and real mouse-click pass were not completed. Editor tests exercise the production handlers programmatically and inspect generated panel HTML.
 
 Local test records are in ignored `logs/vscodium-review-test.json` and `logs/vscodium-review-testrestore.json`. Normal user settings and saved review decisions were not changed by these tests.
+
+## Version 0.2.1 CLI failure handling
+
+A user scan failed because its selected 350M inference endpoint was unreachable. The CLI wrote an `InferenceError` to stderr and exited 2 without JSON. The extension discarded stderr and attempted to parse empty stdout, hiding the cause behind `Unexpected end of JSON input`.
+
+The adapter now retains a bounded stderr tail in memory, redacts common credential patterns in displayed diagnostics, and distinguishes empty or malformed output from valid partial JSON. Before scanning, the extension checks the selected local server's health with a three-second timeout. An unavailable server produces a model/port-specific message and a **Copy start command** action. Valid exit-2 reports remain incomplete reports rather than exceptions.
+
+All 14 unit tests passed, including stderr-only failure, malformed output, valid partial results, credential redaction, and unavailable/loading/healthy endpoint checks. TypeScript compilation and 0.2.1 VSIX packaging passed. This update was not separately run inside VSCodium; previous editor validation remains documented above.
+
+After restarting the local 350M server, a real adapter query reached the endpoint and returned valid JSON with exit 2 and the reason `Model submitted no valid repository file paths.` The adapter successfully parsed and classified it as incomplete. This verifies recovery from the connection/parser failure, not a successful security finding. The ignored local record is `logs/extension-recovery.json`.

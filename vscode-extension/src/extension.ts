@@ -6,7 +6,7 @@ import { homedir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { counts, decision, invalidateDecision, nextPending, reviewSummary, ReviewStatus, Run, setDecision } from './review-model';
 import { ReviewMessage, ReviewPanel, reviewHtml, runKey } from './review-panel';
-import { candidatePath, childEnvironment, inside, isComplete, parseReport, profile, Report, runCli } from './core';
+import { candidatePath, checkServer, childEnvironment, cliReport, inside, isComplete, LocalServerError, parseReport, profile, Report, runCli } from './core';
 class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
   private event = new vscode.EventEmitter<void>();
   onDidChangeTreeData = this.event.event;
@@ -104,7 +104,15 @@ export async function activate(context: vscode.ExtensionContext) {
   };
   const register = (name: string, handler: (...args: any[]) => unknown) => {
     context.subscriptions.push(vscode.commands.registerCommand(name, async (...args: any[]) => {
-      try { return await handler(...args); } catch (error) { vscode.window.showErrorMessage(`Antares: ${error instanceof Error ? error.message : String(error)}`); }
+      try { return await handler(...args); } catch (error) {
+        if (error instanceof LocalServerError) {
+          const action = await vscode.window.showErrorMessage(error.message, 'Copy start command');
+          if (action) {
+            await vscode.env.clipboard.writeText(error.startCommand);
+            void vscode.window.showInformationMessage('Start command copied. Run it from your Antares project folder and keep that terminal open.');
+          }
+        } else void vscode.window.showErrorMessage(`Antares: ${error instanceof Error ? error.message : String(error)}`);
+      }
     }));
   };
   register('antares.configure', async () => {
@@ -168,6 +176,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (!path.isAbsolute(executable)) throw new Error('Run Antares: Configure Local CLI first.');
     await access(executable, constants.X_OK);
     const connection = profile(config().get<string>('model', 'antares-1b'));
+    await checkServer(connection);
     const budget = config().get<number>('toolBudget', 10), seconds = config().get<number>('timeoutSeconds', 300);
     if (!Number.isInteger(budget) || budget < 1 || budget > 50 || !Number.isInteger(seconds) || seconds < 1 || seconds > 1800) throw new Error('Invalid tool budget or timeout.');
     const storage = context.globalStorageUri.fsPath;
@@ -188,11 +197,9 @@ export async function activate(context: vscode.ExtensionContext) {
           }, storage, childEnvironment(history), seconds * 1000, abort.signal);
           const run: Run = { target, model: connection.model, cwe, started, finished: new Date().toISOString(), status: result.stopped ?? 'failed' };
           if (!result.stopped) {
-            try {
-              run.report = parseReport(result.stdout);
-              if (run.report.metadata.model !== connection.model) throw new Error('Result model does not match selected model.');
-              run.status = isComplete(run.report, result.exitCode) ? 'completed' : 'incomplete';
-            } catch (error) { throw new Error(`CLI exited ${result.exitCode}: ${error instanceof Error ? error.message : String(error)}`); }
+            run.report = cliReport(result);
+            if (run.report.metadata.model !== connection.model) throw new Error('Result model does not match selected model.');
+            run.status = isComplete(run.report, result.exitCode) ? 'completed' : 'incomplete';
           }
           if (result.stopped) candidates.update(`${run.status}; previous result retained`, last);
           else {

@@ -45,3 +45,26 @@ test('preserves UTF-8 characters split across stdout chunks',async()=>{
  const r=await runCli(process.execPath,['-e','process.stdout.write(Buffer.from([0xe2]));setTimeout(()=>process.stdout.write(Buffer.from([0x82,0xac])),20)'],{},os.tmpdir(),{},2000,new AbortController().signal);
  assert.equal(r.stdout,'€');
 });
+test('CLI failure preserves stderr instead of reporting an empty JSON parse error',async()=>{
+ const {cliReport}=require('../dist/core');
+ const r=await runCli(process.execPath,['-e','console.error("Error: Could not reach the inference endpoint (ConnectError).");process.exit(2)'],{},os.tmpdir(),{},2000,new AbortController().signal);
+ assert.equal(r.stdout,'');assert.equal(r.exitCode,2);
+ assert.throws(()=>cliReport(r),/Could not reach the inference endpoint/);
+ assert.throws(()=>cliReport({...r,stderr:''}),/No report or error details/);
+ assert.throws(()=>cliReport({...r,stdout:'{"summary":',stderr:''}),/invalid or truncated/);
+});
+test('valid partial JSON survives exit 2 and diagnostics redact common credentials',()=>{
+ const {cliReport}=require('../dist/core');
+ assert.equal(isComplete(cliReport({stdout:JSON.stringify(good),stderr:'warning',exitCode:2}),2),false);
+ try {cliReport({stdout:'',stderr:'Error Bearer abc api_key=secret123',exitCode:2});assert.fail();}
+ catch(e){assert.match(e.message,/redacted/);assert.doesNotMatch(e.message,/abc|secret123/);}
+});
+test('connection check explains stopped and loading servers',async()=>{
+ const {checkServer,LocalServerError}=require('../dist/core');const previous=global.fetch;
+ try {
+  global.fetch=async()=>{throw Error('offline')};
+  await assert.rejects(checkServer(profile('antares-350m')),e=>e instanceof LocalServerError && e.message.includes('8086') && e.startCommand.includes('ANTARES_MODEL=antares-350m'));
+  global.fetch=async()=>({ok:false,status:503});await assert.rejects(checkServer(profile('antares-1b')),/not ready/);
+  global.fetch=async()=>({ok:true,status:200});await checkServer(profile('antares-1b'));
+ }finally{global.fetch=previous;}
+});

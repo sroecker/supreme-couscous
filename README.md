@@ -157,7 +157,7 @@ npm test
 npm run package
 ```
 
-Install `antares-local-0.2.0.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and paste the path to this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor.
+Install `antares-local-0.2.1.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and paste the path to this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor.
 
 See [editor validation](docs/vscode-extension-validation.md) for VSCodium test results and current limits. The [integration plan](docs/vscode-integration-plan.md) records the longer-term roadmap.
 
