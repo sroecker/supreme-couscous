@@ -1,0 +1,47 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const fs=require('node:fs/promises');
+const os=require('node:os');
+const path=require('node:path');
+const {parseReport,isComplete,candidatePath,runCli,profile,childEnvironment}=require('../dist/core');
+const good={findings:[],summary:{generation_errors:0,failed_workers:0},metadata:{model:'antares-350m'}};
+test('completion requires valid schema and successful exit',()=>{
+ assert.equal(isComplete(parseReport(JSON.stringify(good)),0),true);
+ assert.equal(isComplete(good,2),false);
+ assert.equal(isComplete({...good,warnings:['incomplete']},0),false);
+ assert.equal(isComplete({...good,summary:{...good.summary,incomplete_reason:'missing submission'}},0),false);
+ assert.throws(()=>parseReport('{}')); assert.throws(()=>parseReport('log\n{}'));
+});
+test('fixed profiles and restricted child environment',()=>{
+ assert.match(profile('antares-350m').endpoint,/:8086/);assert.match(profile('antares-1b').endpoint,/:8082/);
+ assert.throws(()=>profile('custom'));process.env.ANTARES_API_KEY='test-secret';
+ assert.equal(childEnvironment('/tmp/history').ANTARES_API_KEY,undefined);delete process.env.ANTARES_API_KEY;
+});
+test('finding navigation rejects traversal and escaping symlinks',async()=>{
+ const root=await fs.mkdtemp(path.join(os.tmpdir(),'antares-path-'));
+ await fs.writeFile(path.join(root,'ok.py'),'x');await fs.symlink('/etc/hosts',path.join(root,'escape'));
+ assert.equal(await candidatePath(root,'ok.py'),await fs.realpath(path.join(root,'ok.py')));
+ await assert.rejects(candidatePath(root,'../hosts'));await assert.rejects(candidatePath(root,'/etc/hosts'));
+ await assert.rejects(candidatePath(root,'escape'));await fs.rm(root,{recursive:true});
+});
+test('process accepts JSON stdin without shell expansion',async()=>{
+ const result=await runCli(process.execPath,['-e','process.stdin.on("data",b=>process.stdout.write(b))'],{value:'$(touch never)'},os.tmpdir(),{},2000,new AbortController().signal);
+ assert.equal(result.exitCode,0);assert.equal(JSON.parse(result.stdout).value,'$(touch never)');
+});
+test('timeout and cancellation terminate a hanging process',async()=>{
+ const r=await runCli(process.execPath,['-e','setInterval(()=>{},1000)'],{},os.tmpdir(),{},50,new AbortController().signal);
+ assert.equal(r.stopped,'timeout');
+ const abort=new AbortController();const pending=runCli(process.execPath,['-e','setInterval(()=>{},1000)'],{},os.tmpdir(),{},2000,abort.signal);
+ setTimeout(()=>abort.abort(),50);assert.equal((await pending).stopped,'cancelled');
+});
+test('recorded false positives remain findings, incomplete stays incomplete',async()=>{
+ const root=path.resolve(__dirname,'../../reports');
+ const report=parseReport(await fs.readFile(path.join(root,'antares-350m-demo.json'),'utf8'));
+ assert.equal(report.findings[0].file_path,'app.py');assert.equal(isComplete(report,0),true);
+ const rows=JSON.parse(await fs.readFile(path.join(root,'fastmcp-oauth-summary.json'),'utf8'));
+ assert.equal(rows.find(r=>r.case==='audience'&&r.variant==='fixed').complete,false);
+});
+test('preserves UTF-8 characters split across stdout chunks',async()=>{
+ const r=await runCli(process.execPath,['-e','process.stdout.write(Buffer.from([0xe2]));setTimeout(()=>process.stdout.write(Buffer.from([0x82,0xac])),20)'],{},os.tmpdir(),{},2000,new AbortController().signal);
+ assert.equal(r.stdout,'€');
+});

@@ -1,6 +1,8 @@
 # VS Code integration plan for Antares
 
-Research date: 11 September 2026. Status: proposed implementation, not an implemented extension.
+Research date: 11 September 2026. Status: roadmap; a first local macOS MVP is now implemented in [vscode-extension](../vscode-extension/README.md). See [validation](vscode-extension-validation.md) for tested scope. Later phases below remain proposals.
+
+Follow-up: [static inspection of Cisco scanner 1.0.6](cisco-ide-scanner-research.md) confirms a Python subprocess/JSON architecture and no identified Antares integration. It also verifies the distributed Apache-2.0 license and explains the live MCP discovery boundary.
 
 ## Recommendation
 
@@ -18,7 +20,7 @@ Use Cisco's existing IDE scanner alongside it when MCP configuration and agent-s
 | [Cisco Skill Scanner](https://github.com/cisco-ai-defense/skill-scanner/blob/main/docs-site/index.mdx) | Agent-skill analysis, used by Cisco's IDE scanner. | Useful for skill packages; separate from the Antares source-localization loop. |
 | [Cisco Antares](https://blogs.cisco.com/ai/introducing-antares-the-most-efficient-open-weight-ai-models-for-vulnerability-localization) | CWE-directed repository exploration and ranked candidate source files. | The engine this extension would expose. |
 
-**Finding:** Cisco already offers a relevant security-scanner extension. I did not find a publicly documented Cisco Antares-specific VS Code extension or explicit Antares integration in that scanner. Searches covered the Marketplace, Cisco AI Defense documentation, and Cisco Foundation AI references. The scanner's listing and settings reference contained no Antares mention when checked. This is a bounded research result, not proof that no private, upcoming, or unindexed integration exists. No VSIX was installed or audited during this research.
+**Finding:** Cisco already offers a relevant security-scanner extension. I did not find a publicly documented Cisco Antares-specific VS Code extension or explicit Antares integration in that scanner. Searches covered the Marketplace, Cisco AI Defense documentation, and Cisco Foundation AI references. The scanner's listing and settings reference contained no Antares mention when checked. This is a bounded research result, not proof that no private, upcoming, or unindexed integration exists. This initial pass did not inspect a VSIX; the linked follow-up statically inspects version 1.0.6 without installing it.
 
 The scanner documents LLM provider settings, including local Ollama, but that is not evidence of Antares compatibility. Our Antares setup uses an agent loop with repository inspection and the completions API. Simply selecting an Antares model name in another analyzer would not establish equivalent behavior. See [scanner provider settings](https://cisco-ai-defense.github.io/docs/ai-security-scanner/settings) and the [official Antares quickstart](https://github.com/cisco-foundation-ai/cookbook/blob/main/1_quickstarts/Quickstart_Antares.md).
 
@@ -27,7 +29,7 @@ The scanner documents LLM provider settings, including local Ollama, but that is
 | Option | Benefit | Constraint | Decision |
 | --- | --- | --- | --- |
 | Run Cisco's scanner as-is | Immediate MCP/skill scanning in VS Code. | No verified Antares workflow. | Complementary evaluation. |
-| Add an Antares engine to Cisco's extension | Could reuse its established UI. | Public extension source, license, contribution path, and supported engine API need verification. Open-source scanner backends do not establish extension reuse rights. | Time-box a feasibility spike. |
+| Add an Antares engine to Cisco's extension | Could reuse its established UI. | The follow-up verifies the distributed Apache-2.0 license; original source/build access, contribution path, and a supported engine API remain unresolved. | Time-box a feasibility spike. |
 | Standalone Antares extension | Direct fit to this POC; small, independently testable scope. | Own setup, result UI, and lifecycle handling. | Recommended MVP. |
 | VS Code task plus report viewer | Fastest manual proof of integration. | Limited cancellation, history, and candidate-review experience. | Useful one-day spike or fallback. |
 

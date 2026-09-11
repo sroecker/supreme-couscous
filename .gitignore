@@ -242,3 +242,8 @@ __pycache__/
 *.log
 .DS_Store
 .env
+
+# Local VS Code extension build artifacts
+vscode-extension/node_modules/
+vscode-extension/dist/
+vscode-extension/*.vsix

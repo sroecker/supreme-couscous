@@ -146,9 +146,20 @@ Both models flagged all three vulnerable OAuth examples. The 350M model also fla
 | `.venv/`, `.venv-fastmcp/` | Local Python environments; ignored by Git. |
 | `.antares-data/`, `logs/` | Local history and logs; ignored by Git. |
 
-## VS Code integration
+## VS Code and VSCodium
 
-The [integration plan](docs/vscode-integration-plan.md) reviews Cisco's existing IDE scanner and proposes a local Antares extension, including architecture, review workflow, implementation phases, and acceptance tests.
+The [Antares Local extension](vscode-extension/README.md) connects the editor to this POC's local CLI and model endpoints. It supports manual CWE investigations, candidate-file navigation, cancellation, and JSON export.
+
+```sh
+cd vscode-extension
+npm ci
+npm test
+npm run package
+```
+
+Install `antares-local-0.1.0.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and select this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor.
+
+See [editor validation](docs/vscode-extension-validation.md) for VSCodium test results and current limits. The [integration plan](docs/vscode-integration-plan.md) records the longer-term roadmap.
 
 ## License
 

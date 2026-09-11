@@ -1,0 +1,58 @@
+# Antares Local for VS Code and VSCodium
+
+Run local CWE investigations using your installed Antares CLI and llama.cpp server. This independent extension uses standard VS Code APIs and has no Microsoft Marketplace, Copilot, Cisco AI Defense, or cloud-model dependency at runtime.
+
+## Install
+
+Build from the `vscode-extension` directory with Node.js 22:
+
+```sh
+npm ci
+npm test
+npm run package
+```
+
+In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.1.0.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
+
+## Use
+
+Follow the repository setup to install the Antares CLI and convert model weights. Start one of these servers from the repository root in a separate terminal:
+
+```sh
+./scripts/serve.sh
+# Or:
+ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
+```
+
+1. Open the source workspace and trust it.
+2. Run **Antares: Configure Local CLI** and select the absolute path to this POC's `.venv/bin/antares` executable. Select the executable, not `scripts/antares.sh`.
+3. Run **Antares: Select Local Model**. 1B uses port 8082; 350M uses 8086.
+4. Right-click a target folder and choose **Antares: Investigate CWE**, or use the Command Palette to scan a workspace root.
+5. Enter a CWE such as `CWE-89` or `CWE-287`, then confirm the target. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
+6. Review the **Antares Candidates** view in Explorer. Click a candidate to open its file. Use **Antares: Show Last Result** or **Antares: Export Last Result** for JSON details.
+
+For the bundled SQL demo, right-click `examples/demo`. For an OAuth variant, select its individual directory, such as `examples/fastmcp-oauth/audience/vulnerable`, to avoid scanning its corrected sibling.
+
+Results are candidate files for human review. They do not include verified source locations or confidence scores. Completed investigations can produce false positives. Incomplete runs stay visibly incomplete; cancellation or failure retains the previous result in the current session.
+
+## Scope
+
+Version 0.1.0 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
+
+Remote SSH/containers, browser editors, Windows/Linux execution, sweeps, automatic server/model installation, SARIF export, and reviewer suppressions are future work. Original plan milestones beyond this MVP remain proposals.
+
+The extension persists only the latest completed/partial JSON result under private extension global storage; the view starts fresh on editor reload. CLI history is also stored there and may contain source excerpts. There is no extension telemetry. Source paths and text go to the selected localhost inference server through Antares. `.antares.toml` controls exclusions; `.gitignore` is not automatically applied. No MCP servers or fixture applications are started.
+
+Model/server processes remain separately managed. The extension does not download weights or silently switch endpoints. Saved-file changes observed in the editor mark displayed results potentially stale; comprehensive disk/hash tracking is not implemented in this MVP.
+
+## Validation
+
+`npm test` checks report parsing, incomplete execution, path containment and escaping symlinks, subprocess stdin handling, timeout/cancellation, local profiles, environment filtering, and recorded report handling.
+
+`test/editor.js` runs inside an actual editor Extension Development Host. It activates the extension, checks command registration, invokes its scan service against both models, checks candidate rendering/navigation, and opens JSON details. It requires both local endpoints and `ANTARES_TEST_ROOT` pointing to the POC. It is excluded from the VSIX.
+
+The editor test uses an isolated user-data directory and disables Workspace Trust only in that test profile. Normal installations require a trusted workspace. See the repository's extension validation report for observed editor/version and run results.
+
+## License
+
+MIT. The installed Antares CLI, llama.cpp, and model weights retain their own licenses and are not included in the extension package.

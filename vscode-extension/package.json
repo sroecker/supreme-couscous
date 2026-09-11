@@ -1,0 +1,116 @@
+{
+  "name": "antares-local",
+  "displayName": "Antares Local",
+  "description": "Local CWE investigations with Antares and llama.cpp.",
+  "version": "0.1.0",
+  "publisher": "sroecker",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sroecker/supreme-couscous.git"
+  },
+  "engines": {
+    "vscode": "^1.95.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "extensionKind": [
+    "workspace"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    },
+    "virtualWorkspaces": false
+  },
+  "activationEvents": [
+    "onView:antares.candidates"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "antares.configure",
+        "title": "Antares: Configure Local CLI"
+      },
+      {
+        "command": "antares.selectModel",
+        "title": "Antares: Select Local Model"
+      },
+      {
+        "command": "antares.investigate",
+        "title": "Antares: Investigate CWE"
+      },
+      {
+        "command": "antares.export",
+        "title": "Antares: Export Last Result"
+      },
+      {
+        "command": "antares.details",
+        "title": "Antares: Show Last Result"
+      }
+    ],
+    "views": {
+      "explorer": [
+        {
+          "id": "antares.candidates",
+          "name": "Antares Candidates"
+        }
+      ]
+    },
+    "menus": {
+      "explorer/context": [
+        {
+          "command": "antares.investigate",
+          "when": "explorerResourceIsFolder && resourceScheme == file && isWorkspaceTrusted"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Antares Local",
+      "properties": {
+        "antares.cliPath": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Absolute path to the installed .venv/bin/antares executable."
+        },
+        "antares.model": {
+          "type": "string",
+          "enum": [
+            "antares-1b",
+            "antares-350m"
+          ],
+          "default": "antares-1b",
+          "scope": "machine",
+          "description": "1B uses localhost:8082; 350M uses localhost:8086."
+        },
+        "antares.toolBudget": {
+          "type": "number",
+          "default": 10,
+          "minimum": 1,
+          "maximum": 50
+        },
+        "antares.timeoutSeconds": {
+          "type": "number",
+          "default": 300,
+          "minimum": 1,
+          "maximum": 1800
+        }
+      }
+    }
+  },
+  "scripts": {
+    "compile": "tsc -p .",
+    "test": "npm run compile && node --test test/*.test.js",
+    "vscode:prepublish": "npm run compile",
+    "package": "vsce package --no-dependencies"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.2",
+    "@types/vscode": "1.95.0",
+    "@vscode/vsce": "3.9.2",
+    "typescript": "7.0.2"
+  }
+}

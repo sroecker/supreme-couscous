@@ -1,0 +1,52 @@
+# Local editor extension validation
+
+Tested 11 September 2026. Extension: `sroecker.antares-local` 0.1.0. Editor: **VSCodium 1.95.3**, installed at `/Applications/VSCodium.app`, running on local macOS.
+
+## Observed results
+
+- TypeScript compilation passed.
+- Seven Node test cases passed: schema/completion handling, fixed profiles and environment filtering, path containment and escaping symlinks, JSON stdin without shell expansion, timeout/cancellation, recorded result handling, and split UTF-8 output.
+- `vsce package --no-dependencies` produced a VSIX containing only the manifest, license, README, and two compiled JavaScript modules. No model weights, dependencies, or source-bearing run history are included.
+- The VSIX installed successfully through VSCodium's CLI into an isolated profile.
+- The packaged extension activated in VSCodium's Extension Development Host. Both local model profiles completed real CWE-89 investigations through the extension's scan service.
+- The test verified command registration, candidate-tree item counts, navigation to `app.py`, and opening JSON details.
+
+| Model | Execution | Investigation time | Candidates |
+| --- | --- | --- | --- |
+| antares-350m | completed | 10.04 s | app.py |
+| antares-1b | completed | 24.88 s | app.py |
+
+These durations describe separate model trajectories, not a controlled speed benchmark. Both returned zero generation errors, zero failed workers, and no incomplete reason. The reports still include failed exploration tool calls; completed execution does not establish accuracy beyond this reviewed fixture.
+
+VSIX SHA-256:
+
+```text
+d14dfb100d995f705d9ea7de8fae7388370baeae88d4951ffd388906ae94d2e8
+```
+
+## Reproduce
+
+Build and package using the [extension README](../vscode-extension/README.md). Start both local servers, then run from the POC root:
+
+```sh
+ANTARES_TEST_ROOT="$PWD" /Applications/VSCodium.app/Contents/MacOS/Electron \
+  --user-data-dir /tmp/antares-codium-test-profile \
+  --extensions-dir /tmp/antares-codium-test-extensions \
+  --extensionDevelopmentPath="$PWD/vscode-extension" \
+  --extensionTestsPath="$PWD/vscode-extension/test/editor.js" \
+  --disable-workspace-trust --skip-welcome --skip-release-notes "$PWD"
+```
+
+For package validation, install the VSIX into that isolated extensions directory and set `--extensionDevelopmentPath` to its installed `sroecker.antares-local-0.1.0` directory. The packaged-code test completed with extension-host exit code 0. Raw results are local and ignored at `logs/vscodium-extension-test.json`.
+
+The tests invoke the extension scan service and navigation commands programmatically inside the real editor; they do not automate every interactive prompt or visually inspect the UI. Workspace Trust is disabled only in the isolated test profile. The normal extension manifest and command handlers require trust, but an untrusted-workspace editor test has not yet been run.
+
+## Compatibility and limits
+
+The manifest targets stable VS Code API 1.95 or newer, and the extension uses no Microsoft-specific service. The installed VSCodium 1.95.3 was tested directly; Microsoft VS Code itself and other VSCodium versions were not installed/tested in this session. VSCodium is a distribution of the open-source editor, as described on its [official site](https://vscodium.com/).
+
+This is a local macOS MVP: one manual CWE query, fixed 1B/350M endpoints, cancellation, file candidates, and JSON export. Inference servers are managed separately. Linux/Windows, remote hosts, automatic model download, sweeps, suppression management, comprehensive snapshot freshness, and history restoration are not implemented.
+
+No Cisco IDE scanner is required. Its [architecture research](cisco-ide-scanner-research.md) is retained as background; this extension implements our own Antares CLI/llama.cpp workflow. Original roadmap features beyond this scope remain proposals in the [integration plan](vscode-integration-plan.md).
+
+The test install used an isolated profile, leaving the user's normal VSCodium extensions and settings untouched. Install the local VSIX through **Extensions: Install from VSIX…** to use it in the normal profile.
