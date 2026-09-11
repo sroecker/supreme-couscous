@@ -146,6 +146,10 @@ Both models flagged all three vulnerable OAuth examples. The 350M model also fla
 | `.venv/`, `.venv-fastmcp/` | Local Python environments; ignored by Git. |
 | `.antares-data/`, `logs/` | Local history and logs; ignored by Git. |
 
+## VS Code integration
+
+The [integration plan](docs/vscode-integration-plan.md) reviews Cisco's existing IDE scanner and proposes a local Antares extension, including architecture, review workflow, implementation phases, and acceptance tests.
+
 ## License
 
 This project uses the [MIT license](LICENSE). Downloaded Antares and llama.cpp components retain their upstream licenses; model weights and upstream source are not included in Git.
