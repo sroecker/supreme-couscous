@@ -50,3 +50,9 @@ This is a local macOS MVP: one manual CWE query, fixed 1B/350M endpoints, cancel
 No Cisco IDE scanner is required. Its [architecture research](cisco-ide-scanner-research.md) is retained as background; this extension implements our own Antares CLI/llama.cpp workflow. Original roadmap features beyond this scope remain proposals in the [integration plan](vscode-integration-plan.md).
 
 The test install used an isolated profile, leaving the user's normal VSCodium extensions and settings untouched. Install the local VSIX through **Extensions: Install from VSIX…** to use it in the normal profile.
+
+## Version 0.1.1 usability update
+
+The CLI configuration command now accepts a pasted path, expands `~/`, suggests an executable from an open POC workspace, and validates that the file exists and is executable. Investigations offer named weakness categories with descriptions; entering a numeric CWE is only needed for the custom option.
+
+TypeScript compilation and VSIX packaging passed for 0.1.1. The real VSCodium/model integration results above apply to 0.1.0; these updated input dialogs have not been separately automated in the editor.

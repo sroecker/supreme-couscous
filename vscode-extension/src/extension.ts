@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { access, mkdir, realpath, stat, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';
+import { homedir } from 'node:os';
 import { candidatePath, childEnvironment, inside, isComplete, parseReport, profile, Report, runCli } from './core';
 interface Run { target: string; model: string; cwe: string; status: string; started: string; finished: string; report?: Report }
 class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
@@ -39,10 +40,41 @@ export function activate(context: vscode.ExtensionContext) {
   };
   register('antares.configure', async () => {
     supported();
-    const selection = await vscode.window.showOpenDialog({ canSelectMany: false, openLabel: 'Select .venv/bin/antares' });
-    if (selection?.[0]) {
-      await access(selection[0].fsPath, constants.X_OK);
-      await config().update('cliPath', selection[0].fsPath, vscode.ConfigurationTarget.Global);
+    let suggested = config().get<string>('cliPath', '');
+    if (!suggested) {
+      for (const folder of vscode.workspace.workspaceFolders ?? []) {
+        if (folder.uri.scheme !== 'file') continue;
+        const candidate = path.join(folder.uri.fsPath, '.venv', 'bin', 'antares');
+        try {
+          if ((await stat(candidate)).isFile()) {
+            await access(candidate, constants.X_OK);
+            suggested = candidate;
+            break;
+          }
+        } catch { /* Try the next workspace folder. */ }
+      }
+    }
+    const normalize = (value: string) => value.trim().startsWith('~/')
+      ? path.join(homedir(), value.trim().slice(2)) : value.trim();
+    const selection = await vscode.window.showInputBox({
+      title: 'Configure Antares CLI',
+      prompt: 'Paste the path to .venv/bin/antares. Hidden directories and ~/ paths are supported.',
+      placeHolder: '/path/to/antares/.venv/bin/antares',
+      value: suggested,
+      ignoreFocusOut: true,
+      validateInput: async value => {
+        const executable = normalize(value);
+        if (!path.isAbsolute(executable)) return 'Enter an absolute path or a path starting with ~/.';
+        try {
+          if (!(await stat(executable)).isFile()) return 'The path must point to an executable file.';
+          await access(executable, constants.X_OK);
+          return null;
+        } catch { return 'File not found or not executable. Select the installed .venv/bin/antares.'; }
+      }
+    });
+    if (selection !== undefined) {
+      await config().update('cliPath', normalize(selection), vscode.ConfigurationTarget.Global);
+      void vscode.window.showInformationMessage('Antares CLI path saved.');
     }
   });
   register('antares.selectModel', async () => {
@@ -111,7 +143,18 @@ export function activate(context: vscode.ExtensionContext) {
       const folder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Select a scan target' });
       if (!folder) return; uri = folder.uri;
     }
-    const cwe = await vscode.window.showInputBox({ title: 'Investigate CWE', value: 'CWE-287', validateInput: v => /^CWE-[1-9]\d*$/.test(v) ? null : 'Use a CWE ID such as CWE-287.' });
+    const category = await vscode.window.showQuickPick([
+      { label: 'SQL injection', description: 'CWE-89', detail: 'User input changes a database query.', cwe: 'CWE-89' },
+      { label: 'Improper authentication', description: 'CWE-287', detail: 'Identity or token validation, including OAuth audience checks.', cwe: 'CWE-287' },
+      { label: 'Missing authorization', description: 'CWE-862', detail: 'Operations lack required permission or scope checks.', cwe: 'CWE-862' },
+      { label: 'Unintended proxy / confused deputy', description: 'CWE-441', detail: 'Credential forwarding and service-boundary misuse.', cwe: 'CWE-441' },
+      { label: 'OS command injection', description: 'CWE-78', detail: 'User input changes a shell or system command.', cwe: 'CWE-78' },
+      { label: 'Cross-site scripting', description: 'CWE-79', detail: 'Untrusted content is rendered as executable web content.', cwe: 'CWE-79' },
+      { label: 'Path traversal', description: 'CWE-22', detail: 'User-controlled paths escape their intended directory.', cwe: 'CWE-22' },
+      { label: 'Custom weakness category…', detail: 'Enter a different CWE identifier.', cwe: '' }
+    ], { title: 'What should Antares investigate?', placeHolder: 'Choose a weakness to focus the scan. CWE IDs are standard category labels.', matchOnDescription: true, matchOnDetail: true });
+    if (!category) return;
+    const cwe = category.cwe || await vscode.window.showInputBox({ title: 'Custom weakness category', prompt: 'Enter a Common Weakness Enumeration identifier.', placeHolder: 'CWE-287', validateInput: v => /^CWE-[1-9]\d*$/.test(v) ? null : 'Use a CWE ID such as CWE-287.' });
     if (!cwe) return;
     const dirty = vscode.workspace.textDocuments.some(d => d.isDirty && d.uri.scheme === 'file' && inside(uri!.fsPath, d.uri.fsPath));
     if (dirty) {

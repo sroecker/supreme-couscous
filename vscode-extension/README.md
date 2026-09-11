@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.1.0.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
+In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.1.1.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
 
 ## Use
 
@@ -25,19 +25,23 @@ ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
 ```
 
 1. Open the source workspace and trust it.
-2. Run **Antares: Configure Local CLI** and select the absolute path to this POC's `.venv/bin/antares` executable. Select the executable, not `scripts/antares.sh`.
+2. Run **Antares: Configure Local CLI** and paste the path to this POC's `.venv/bin/antares` executable. Hidden directories work normally, and `~/` is supported. When the POC is an open workspace folder, the installed executable is suggested automatically. The path is validated before saving; use the executable, not `scripts/antares.sh`.
 3. Run **Antares: Select Local Model**. 1B uses port 8082; 350M uses 8086.
 4. Right-click a target folder and choose **Antares: Investigate CWE**, or use the Command Palette to scan a workspace root.
-5. Enter a CWE such as `CWE-89` or `CWE-287`, then confirm the target. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
+5. Choose a plain-language weakness category such as **SQL injection** or **Improper authentication**, then confirm the target. The plugin supplies its CWE identifier automatically. **Custom weakness category…** lets you enter another identifier. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
 6. Review the **Antares Candidates** view in Explorer. Click a candidate to open its file. Use **Antares: Show Last Result** or **Antares: Export Last Result** for JSON details.
 
 For the bundled SQL demo, right-click `examples/demo`. For an OAuth variant, select its individual directory, such as `examples/fastmcp-oauth/audience/vulnerable`, to avoid scanning its corrected sibling.
 
 Results are candidate files for human review. They do not include verified source locations or confidence scores. Completed investigations can produce false positives. Incomplete runs stay visibly incomplete; cancellation or failure retains the previous result in the current session.
 
+## Why choose a weakness?
+
+CWE means Common Weakness Enumeration: a standard name and number for a class of software weakness. Antares is trained to locate files relevant to a selected weakness, so each investigation needs a focus. You can select the category without knowing its number. This MVP does not automatically discover every applicable category or run a broad sweep.
+
 ## Scope
 
-Version 0.1.0 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
+Version 0.1.1 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
 
 Remote SSH/containers, browser editors, Windows/Linux execution, sweeps, automatic server/model installation, SARIF export, and reviewer suppressions are future work. Original plan milestones beyond this MVP remain proposals.
 
