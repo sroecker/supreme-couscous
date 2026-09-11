@@ -227,6 +227,9 @@ reports/*
 !reports/report-verbose.md
 !reports/cpu-query/
 !reports/cpu-sweep/
+!reports/gpu-query/
+!reports/gpu-sweep/
+!reports/gpu-validation.md
 .antares-data/
 __pycache__/
 *.log

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "runs": [
+    {
+      "invocations": [
+        {
+          "executionSuccessful": true,
+          "properties": {
+            "cwe_ids_triggered": [
+              "CWE-89"
+            ],
+            "duration_seconds": 60.05189558299753,
+            "failed_tool_calls": 6,
+            "failed_workers": 0,
+            "generation_errors": 0,
+            "incomplete_reason": null,
+            "per_cwe_results": [],
+            "retried_turns": 0,
+            "tool_call_count": 20,
+            "total_findings": 1,
+            "total_workers": 0
+          }
+        }
+      ],
+      "results": [
+        {
+          "level": "note",
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "app.py"
+                }
+              }
+            }
+          ],
+          "message": {
+            "text": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          },
+          "properties": {
+            "cweIds": [
+              "CWE-89"
+            ],
+            "likelihoodOfExploit": "High",
+            "submissionRank": 1,
+            "title": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+          },
+          "ruleId": "CWE-89"
+        }
+      ],
+      "tool": {
+        "driver": {
+          "name": "antares-cli",
+          "rules": [
+            {
+              "helpUri": "https://cwe.mitre.org/data/definitions/89.html",
+              "id": "CWE-89",
+              "name": "Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              },
+              "shortDescription": {
+                "text": "CWE-89 \u2014 Improper Neutralization of Special Elements used in an SQL Command ('SQL Injection')"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "version": "2.1.0"
+}

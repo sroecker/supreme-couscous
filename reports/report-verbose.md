@@ -1,5 +1,7 @@
 # Antares local POC: verbose example output
 
+**Historical CPU results:** the GPU issue described below has since been resolved by using BF16 GGUF. The launcher now defaults to Metal. See [GPU validation](gpu-validation.md) for the cause, fix, and new results.
+
 These are saved outputs from the completed local runs on 2026-09-11, not simulated examples or new scans. The focused query correctly localized SQL injection in the deliberately vulnerable fixture. The automatic sweep completed but also produced unsupported findings.
 
 ## Configuration

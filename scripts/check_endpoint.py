@@ -10,6 +10,7 @@ from antares_cli.inference.granite import apply_granite_chat_template
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--port", type=int, default=8082)
+parser.add_argument("--max-tokens", type=int, default=16)
 args = parser.parse_args()
 base_url = f"http://127.0.0.1:{args.port}"
 for attempt in range(45):
@@ -24,7 +25,7 @@ else:
 messages = json.loads(Path(__file__).with_name("smoke-messages.json").read_text())
 prompt = apply_granite_chat_template(messages)
 response = httpx.post(f"{base_url}/completion", json={
-    "prompt": prompt, "n_predict": 16, "temperature": 0, "n_probs": 2,
+    "prompt": prompt, "n_predict": args.max_tokens, "temperature": 0, "n_probs": 2,
     "cache_prompt": False,
 }, timeout=90)
 response.raise_for_status()
