@@ -8,6 +8,8 @@ Based on the [Cisco Antares quickstart](https://github.com/cisco-foundation-ai/c
 
 The tested platform is macOS on Apple Silicon with Python 3.12, `uv`, `hf`, Git, CMake, Apple command-line developer tools, `unzip`, `curl`, and `jq`. The Metal device/runtime must support BF16; use the CPU fallback otherwise.
 
+No llama.cpp source patch is required. The [change history and reverted experiment](reports/gpu-validation.md#what-actually-needed-changing) explain the BF16 conversion fix, launcher changes, and the temporary shader patch that did not solve the issue.
+
 An authenticated Hugging Face account with approved access to `fdtn-ai/antares-1b` is required for downloads. Run `hf auth login` in your terminal. The model weights and BF16 GGUF use approximately 6.8 GiB together; the optional F16 fallback adds about 3.4 GiB. Allow additional space for dependencies and build files.
 
 ## First-time setup

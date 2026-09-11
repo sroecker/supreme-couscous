@@ -2,6 +2,51 @@
 
 The local Antares endpoint now runs on the GPU using BF16 GGUF. No llama.cpp source changes are needed. The pinned converter and runtime remain at `451b89bae0c4b1dd612eb503ceace906c01ddcc9`.
 
+## What actually needed changing
+
+**The lasting fix was model conversion and launcher configuration, not a patch to llama.cpp.** The working vendor checkout is unmodified. Commit `3e4f51e` in this POC contains the integration fix and its validation tools.
+
+| Component | Change retained in the working POC |
+| --- | --- |
+| Model conversion | Generate `antares-1b-bf16.gguf` with `--outtype bf16` instead of using F16/F32 GGUF for Metal. |
+| [Server launcher](../scripts/serve.sh) | Default to the BF16 file and `--gpu-layers all`; retain `ANTARES_DEVICE=cpu` for the original F16 CPU fallback. |
+| [Endpoint check](../scripts/check_endpoint.py) | Test the full saved Antares prompt and finite token probabilities; add `--max-tokens` for a longer completion check. |
+| [GPU diagnostic runner](../scripts/diagnose_gpu.py) | Compare model formats and execution settings on a separate, temporary endpoint. |
+| llama.cpp converter and kernels | No retained source edits or custom kernels. Use the pinned upstream revision. |
+| Antares CLI and original checkpoint | No source edits or changes to the downloaded checkpoint. |
+
+The converter already supports `GraniteMoeHybridForCausalLM`. Antares's configuration has only attention layers and no routed experts, so the upstream converter selects standard Granite for the GGUF. No architecture remapping patch, tokenizer patch, or edited model `config.json` was needed. The converter preserved the checkpoint's RoPE and Granite scaling settings.
+
+The CLI must use `/v1/completions` with its own serialized prompt and the matching served alias `antares-1b`. That was part of the original integration and was not the cause of the GPU numerical failure. Disabling flash attention is part of the verified configuration, but did not by itself fix the failure.
+
+### Temporary source patch tested and reverted
+
+To test whether unsafe shader compiler optimizations caused the failure, we temporarily modified `ggml/src/ggml-metal/ggml-metal-device.m` in the vendor checkout. The same additional line was inserted after both runtime `MTLCompileOptions` allocations: one for embedded per-kind shader libraries and one for runtime-generated shader source.
+
+```diff
+ MTLCompileOptions * options = [MTLCompileOptions new];
++options.fastMathEnabled = getenv("GGML_METAL_FAST_MATH_DISABLE") == NULL;
+ options.preprocessorMacros = prep;
+```
+
+We rebuilt llama-server and ran the F16 model with `GGML_METAL_FAST_MATH_DISABLE=1`. The full Antares prompt still produced non-finite probabilities and repeated `@` characters. Both inserted lines were removed, and the unmodified source was rebuilt before validating BF16.
+
+**Do not apply that experimental patch.** `GGML_METAL_FAST_MATH_DISABLE` was introduced solely by this temporary experiment; it is not an upstream option in the pinned checkout and is not used by the final launcher. Changing shader math optimizations did not prevent half-precision operands from overflowing.
+
+### Runtime version versus format
+
+We built the pinned upstream revision locally to match the converter and make the final configuration reproducible. A newer build alone did not fix the full-prompt failure with F16 weights. BF16 was validated with this local build; BF16 was not retested with the preinstalled Homebrew build `10809` (`5266f24da`), so these results do not establish a minimum required llama.cpp version.
+
+To confirm the local vendor tree still matches its recorded upstream revision:
+
+```sh
+git -C vendor/llama.cpp rev-parse HEAD
+git -C vendor/llama.cpp status --short
+git -C vendor/llama.cpp diff --exit-code
+```
+
+Expect revision `451b89bae0c4b1dd612eb503ceace906c01ddcc9`, no status entries, and an empty diff.
+
 ## Failure and cause
 
 With F16 GGUF, a complete 1,020-token Antares prompt generated repeated `@` characters and non-finite token probabilities. A one-token prompt was not a sufficient compatibility check. CPU-only inference worked.
