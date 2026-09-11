@@ -1,20 +1,23 @@
 # Antares local POC
 
-Run `fdtn-ai/antares-1b` or `fdtn-ai/antares-350m` locally with Antares CLI 1.0.0 and llama.cpp. The default is **1B BF16 inference on the Metal GPU**; an F16 CPU fallback is available.
+Run Antares **1B** or **350M** locally with Antares CLI 1.0.0 and llama.cpp on Apple Silicon. Both models use BF16 Metal inference; 1B is the default.
 
-Based on the [Cisco Antares quickstart](https://github.com/cisco-foundation-ai/cookbook/blob/main/1_quickstarts/Quickstart_Antares.md). See [GPU validation](reports/gpu-validation.md) for the working configuration and numerical diagnosis, or the [verbose CPU report](reports/report-verbose.md) for example terminal output and investigation steps.
+Based on the [Cisco Antares quickstart](https://github.com/cisco-foundation-ai/cookbook/blob/main/1_quickstarts/Quickstart_Antares.md). This repository includes launchers, vulnerability examples, offline fixture tests, and recorded model results.
 
 ## Requirements
 
-The tested platform is macOS on Apple Silicon with Python 3.12, `uv`, `hf`, Git, CMake, Apple command-line developer tools, `unzip`, `curl`, and `jq`. The Metal device/runtime must support BF16; use the CPU fallback otherwise.
+- macOS on Apple Silicon with BF16-capable Metal support.
+- Python 3.12, `uv`, `hf`, Git, CMake, Apple command-line developer tools, and `unzip`.
+- A Hugging Face account with access to the selected Antares models. Authenticate with `hf auth login`.
+- Space for model weights, GGUF files, and dependencies: approximately 6.8 GiB for the 1B source weights and BF16 GGUF together. The additional 350M GGUF is approximately 708 MB, plus its source weights.
 
-No llama.cpp source patch is required. The [change history and reverted experiment](reports/gpu-validation.md#what-actually-needed-changing) explain the BF16 conversion fix, launcher changes, and the temporary shader patch that did not solve the issue.
+## Setup
 
-An authenticated Hugging Face account with approved access to `fdtn-ai/antares-1b` is required for downloads. Run `hf auth login` in your terminal. The model weights and BF16 GGUF use approximately 6.8 GiB together; the optional F16 fallback adds about 3.4 GiB. Allow additional space for dependencies and build files.
+Run commands from the repository root. For an existing checkout, skip environment creation, extraction, or cloning that you have already completed.
 
-## First-time setup
+### Install dependencies and build llama.cpp
 
-Run these commands from the project root. They assume a fresh checkout; skip extraction, cloning, and environment creation if those directories already exist.
+The bundled CLI is extracted from the pinned 1B model download and supports both model sizes.
 
 ```sh
 hf download fdtn-ai/antares-1b --revision 10417eb35641b32e7141157db19c76eb545193b6 --local-dir models/antares-1b
@@ -27,138 +30,122 @@ git clone https://github.com/ggml-org/llama.cpp.git vendor/llama.cpp
 git -C vendor/llama.cpp checkout 451b89bae0c4b1dd612eb503ceace906c01ddcc9
 cmake -S vendor/llama.cpp -B build/llama.cpp -DCMAKE_BUILD_TYPE=Release -DGGML_METAL=ON -DLLAMA_BUILD_TESTS=OFF -DLLAMA_BUILD_EXAMPLES=OFF
 cmake --build build/llama.cpp --target llama-server -j 6
+```
 
+`requirements.lock.txt` is the tested environment's dependency snapshot and includes the extracted `vendor/antares-cli` package. Conversion and inference use the same pinned llama.cpp revision.
+
+### Convert the 1B model
+
+```sh
 .venv/bin/python vendor/llama.cpp/convert_hf_to_gguf.py models/antares-1b --outfile models/antares-1b-bf16.gguf --outtype bf16
 ```
 
-`requirements.lock.txt` records the installed dependency versions and includes `./vendor/antares-cli`, so extract the CLI before installing dependencies. This is a version snapshot for the tested environment, not a cross-platform lock with artifact hashes. The converter and server use the same pinned, unmodified llama.cpp revision.
+### Add the smaller 350M model
 
-For the optional CPU fallback, also convert F16 weights:
-
-```sh
-.venv/bin/python vendor/llama.cpp/convert_hf_to_gguf.py models/antares-1b --outfile models/antares-1b-f16.gguf --outtype f16
-```
-
-## Add the smaller 350M model
-
-After the first-time setup, download [Antares 350M](https://huggingface.co/fdtn-ai/antares-350m) with an account that has access and convert it using the same unmodified llama.cpp build:
+Use the same environment and build:
 
 ```sh
 hf download fdtn-ai/antares-350m --revision cdf6d054fa5f491553ccb1704269cbd1954c6c6e --local-dir models/antares-350m
 .venv/bin/python vendor/llama.cpp/convert_hf_to_gguf.py models/antares-350m --outfile models/antares-350m-bf16.gguf --outtype bf16
+```
+
+## Run a model
+
+Start a server in its own terminal:
+
+```sh
+# 1B on port 8082
+./scripts/serve.sh
+
+# Or 350M on port 8086
 ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
 ```
 
-In another terminal, use the matching model and port for scans:
+Stop a server with Ctrl-C. Different ports allow both models to run side by side.
+
+In the terminal used for scans, select the matching model. The defaults are 1B and port 8082; to use 350M, set:
 
 ```sh
-.venv/bin/python scripts/check_endpoint.py --port 8086 --max-tokens 128
-ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/antares.sh query examples/demo --cwe CWE-89 --output reports/my-350m-demo
-ANTARES_MODEL=antares-350m ANTARES_PORT=8086 .venv/bin/python scripts/scan_oauth_examples.py --output reports/my-350m-oauth
+export ANTARES_MODEL=antares-350m
+export ANTARES_PORT=8086
 ```
 
-The GGUF is approximately 708 MB; source weights require additional space. Port 8086 allows the smaller model to coexist with the default 1B endpoint on 8082. `ANTARES_MODEL` selects both the GGUF filename and served/client alias. `ANTARES_PORT` selects the local port; an explicit `ANTARES_ENDPOINT` overrides the client's derived URL. Match client settings to the server. `ANTARES_GGUF` still overrides the weights path. The 350M tests use BF16 Metal; CPU use requires separately converting its F16 GGUF and has not been validated here. See the [350M test report](reports/antares-350m.md) for observed results and comparison limits.
-
-## Run
-
-Start the GPU server in one terminal:
+Verify the selected endpoint:
 
 ```sh
-./scripts/serve.sh
+.venv/bin/python scripts/check_endpoint.py --port "${ANTARES_PORT:-8082}" --max-tokens 128
 ```
 
-In another terminal, verify inference and follow the plan/query/sweep workflow:
+### Configuration
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `ANTARES_MODEL` | `antares-1b` | Selects `antares-1b` or `antares-350m` for the server and CLI. |
+| `ANTARES_PORT` | `8082` | Sets the server port and the CLI's local endpoint port. |
+| `ANTARES_ENDPOINT` | Derived from the port | Overrides the CLI URL, normally `http://127.0.0.1:8082/v1/completions`. |
+| `ANTARES_GGUF` | Selected model's BF16 file | Overrides the server's weights path. |
+| `ANTARES_DEVICE` | `metal` | Selects Metal or `cpu`; CPU mode requires a separately converted F16 GGUF. |
+
+The server uses a 16,384-token context and one slot. Extra arguments to `serve.sh` are forwarded to llama-server. The CLI stores local history in `.antares-data/` and uses HTTP to communicate with the local model.
+
+## Scan code
+
+Use the selected model to plan coverage, investigate a specific CWE, or scan several categories:
 
 ```sh
-curl http://127.0.0.1:8082/health
-.venv/bin/python scripts/check_endpoint.py --max-tokens 128
 ./scripts/antares.sh plan examples/demo --max-cwes 3
 ./scripts/antares.sh query examples/demo --cwe CWE-89 --output reports/my-query
-jq '{summary, warnings: (.warnings // []), findings}' reports/my-query/report.json
-# Review the focused result before expanding coverage.
 ./scripts/antares.sh sweep examples/demo --max-cwes 3 --workers 1 --no-tui --output reports/my-sweep
 ```
 
-Use a fresh output directory for each run. Stop the server with Ctrl-C in its terminal. A second server cannot use the same port. For file logging, create `logs/` and run `./scripts/serve.sh > logs/llama-server.log 2>&1` in the foreground.
+Use a fresh output directory for each run. Results include JSON, Markdown, and SARIF reports. Review the focused query before expanding coverage.
 
-The endpoint is `http://127.0.0.1:8082/v1/completions`, with model alias `antares-1b`, a 16,384-token context, one server slot, and disabled flash attention. Antares serializes its own tool prompt without a server-side chat template. The CLI calls this backend `remote` because it uses HTTP; inference remains local.
+To scan another repository, replace `examples/demo` with its absolute path. Keep reports and history outside the scan target. Configure exclusions in the target's `.antares.toml`; Git ignore rules are not automatically Antares exclusions.
 
-### Configuration and scripts
+Check report warnings and completion status before interpreting findings. A completed investigation can still produce false positives or miss vulnerabilities.
 
-| Interface | Behavior |
-| --- | --- |
-| `./scripts/serve.sh` | Uses `models/antares-1b-bf16.gguf` and offloads all layers to Metal. Extra arguments are forwarded to llama-server. |
-| `ANTARES_DEVICE=cpu ./scripts/serve.sh` | Uses F16 weights with `--gpu-layers 0 --device none`; stop the GPU server before switching. |
-| `ANTARES_GGUF=/absolute/path/model.gguf` | Overrides the selected model file. Use BF16 for batched Metal inference with this checkpoint. |
-| `./scripts/antares.sh …` | Invokes the project-local CLI, defaults to the 1B endpoint on 8082, honors model/endpoint/port environment overrides, clears the API key, and stores history under `.antares-data/`. Global Antares profiles are unchanged. |
-| `.venv/bin/python scripts/check_endpoint.py` | Waits for health, then checks finite token probabilities with the saved 1,020-token prompt. Options: `--port` (8082) and `--max-tokens` (16). Exits nonzero on failure. |
-| `.venv/bin/python scripts/diagnose_gpu.py` | Runs an isolated BF16 GPU check on port 8085, then stops its own server. See the diagnostic commands below. |
+## Test examples
 
-If you override the server port or alias, also pass the matching `--endpoint` or `--model` to the Antares command and the matching `--port` to the smoke check.
+The SQL injection demo in `examples/demo/` is deliberately vulnerable and scanned as source.
 
-### Scan another repository
-
-Replace `examples/demo` with an absolute repository path. Keep reports and `.antares-data` outside that target, and configure exclusions in its `.antares.toml`; Git ignore rules are not automatically Antares exclusions. The bundled `examples/demo/app.py` is deliberately vulnerable and is inspected as source without running Flask.
-
-Check `summary.generation_errors`, `summary.failed_workers`, `summary.incomplete_reason`, warnings, and sweep worker errors before interpreting findings. A completed scan does not validate its findings. The CLI's `query` and `sweep` commands normally exit 0 on completion and 2 for invalid or incomplete work; these examples do not use `--fail-on-findings`.
-
-## Verified results
-
-All four saved runs completed with zero generation errors, zero failed workers, no warnings, and no incomplete reason. Tool-call failures were recovered within the investigations.
-
-| Run | Duration | Findings | Failed tool calls | Report |
-| --- | --- | --- | --- | --- |
-| BF16 GPU, CWE-89 query | 60.05 s | SQL injection in `app.py`, supported by source review | 6 | [GPU query](reports/gpu-query/report.md) |
-| BF16 GPU, three-CWE sweep | 124.90 s | CWE-20, CWE-78, CWE-79 in `app.py` | 12 | [GPU sweep](reports/gpu-sweep/report.md) |
-| F16 CPU, CWE-89 query | 41.84 s | SQL injection in `app.py`, supported by source review | 2 | [CPU query](reports/cpu-query/report.md) |
-| F16 CPU, three-CWE sweep | 167.57 s | CWE-20, CWE-78, CWE-79 in `app.py` | 7 | [CPU sweep](reports/cpu-sweep/report.md) |
-
-These are different model investigations, not controlled CPU/GPU speed benchmarks. Each report folder includes JSON, Markdown, and SARIF.
-
-The automatic top-three selection omitted CWE-89. Source review supports the focused SQL-injection finding: request input is concatenated directly into SQL. CWE-20 is broad; the sweep's CWE-78 and CWE-79 findings are unsupported by this fixture, which invokes no OS commands and returns JSON without an HTML-rendering sink. `likelihood_of_exploit` is taxonomy metadata, not confidence in a finding.
-
-## GPU troubleshooting and diagnosis
-
-F16 and F32 GGUFs produced repeated `@` characters and non-finite probabilities in normal batched Metal inference. A measured MLP activation of about 84,489 exceeds F16's finite limit of 65,504. The pinned Metal matrix kernels use half operands for both F16 and F32 weights; BF16 uses a wider-range path. The fix requires BF16 GGUF, not an upstream source patch. Full evidence is in [GPU validation](reports/gpu-validation.md).
-
-For a missing GGUF, rerun the corresponding conversion command. For connection errors, confirm the server has finished loading and check its log. A healthy HTTP response alone is insufficient; run the numerical smoke check.
-
-To compare the failing and working GPU paths without replacing the main endpoint:
+The [FastMCP OAuth examples](examples/fastmcp-oauth/README.md) provide three vulnerable/fixed pairs covering missing audience validation, token passthrough, and missing privileged-tool scope checks. Run their eight offline behavioral tests in a separate environment:
 
 ```sh
-.venv/bin/python scripts/diagnose_gpu.py --model models/antares-1b-f16.gguf
-.venv/bin/python scripts/diagnose_gpu.py --model models/antares-1b-bf16.gguf
+uv venv --python 3.12 .venv-fastmcp
+uv pip install --python .venv-fastmcp/bin/python -r examples/fastmcp-oauth/requirements.txt
+.venv-fastmcp/bin/python examples/fastmcp-oauth/test_fixtures.py
 ```
 
-The diagnostic defaults to `--case baseline`. Repeat `--case` to select `no-concurrency`, `no-graph-optimize`, `ubatch-1`, or `flash-attention`. It refuses an occupied port 8085 and saves results to `reports/diagnostics/gpu-<model-stem>.json`. Inspect each result's `exit_code`; the diagnostic runner records failed checks rather than adopting their exit status. Reusing a model filename replaces its diagnostic JSON, and reusing a case replaces `logs/gpu-<case>.log`. The F16 baseline is expected to fail. Run cases sequentially to limit memory use.
-
-## Additional FastMCP OAuth examples
-
-[Three paired FastMCP fixtures](examples/fastmcp-oauth/README.md) cover missing audience validation, MCP bearer-token passthrough, and missing privileged-tool scope checks. Each deliberately vulnerable variant has a corrected control. They are source-only examples with synthetic data; they do not launch public services.
-
-The examples include eight offline behavioral tests using FastMCP 3.4.7 in a separate `.venv-fastmcp` environment. Run Antares against all six isolated targets with:
+With the selected model server running, scan all six variants:
 
 ```sh
 .venv/bin/python scripts/scan_oauth_examples.py --output reports/my-fastmcp-oauth
 ```
 
-The [recorded results](reports/fastmcp-oauth.md) separate fixture behavior from Antares findings, including any misses or false positives. Full setup and single-case commands are in the example README.
+The runner records expected and actual findings separately from execution status. See the example README for case selection and timeout options.
 
-## Repository layout and local artifacts
+## Recorded results
 
-| Path | Purpose | Git |
-| --- | --- | --- |
-| `scripts/` | Launchers, checks, GPU diagnostics, and saved generic Antares prompt | Tracked |
-| `examples/demo/` | Deliberately vulnerable scan fixture | Tracked |
-| `examples/fastmcp-oauth/` | Paired OAuth fixtures, offline tests, and case definitions | Tracked |
-| `reports/antares-350m*`, `reports/fastmcp-oauth-350m-summary.json` | Smaller-model validation and comparison snapshots | Tracked |
-| `reports/fastmcp-oauth.md`, `reports/fastmcp-oauth-summary.json` | Reviewed results for the OAuth fixtures | Tracked |
-| `reports/report-verbose.md`, `reports/gpu-validation.md` | Reviewed output and numerical diagnosis | Tracked |
-| `reports/cpu-query/`, `reports/cpu-sweep/`, `reports/gpu-query/`, `reports/gpu-sweep/` | Completed demo report snapshots; use different folders for new runs | Tracked |
-| `requirements.lock.txt` | Installed dependency version snapshot | Tracked |
-| `models/`, `vendor/`, `build/`, `.venv/`, `.venv-fastmcp/` | Weights, upstream source, binaries, dependencies | Ignored |
-| `.antares-data/`, `logs/`, other `reports/` folders | Private history, diagnostic logs, subsequent scan results | Ignored |
+| Report | Contents |
+| --- | --- |
+| [350M validation and comparison](reports/antares-350m.md) | Setup provenance, endpoint output, SQL demo, and comparison with 1B. |
+| [1B OAuth results](reports/fastmcp-oauth.md) | Six fixture outcomes, including false positives and an incomplete control scan. |
+| [Verbose demo report](reports/report-verbose.md) | Example terminal output and investigation steps. |
 
-The local F32 GGUF is a 6.8 GiB diagnostic artifact and is not used by either launcher mode. `reports/diagnostics/verified-query` records an earlier incomplete run and is not a successful scan. Diagnostic artifacts and private traces may be absent in a fresh checkout; the tracked reports are self-contained. Model downloads and conversion are required again if you remove `models/`; removing `build/` or `.venv/` requires rebuilding or reinstalling.
+Both models flagged all three vulnerable OAuth examples. The 350M model also flagged all three corrected controls; 1B flagged two controls and left one investigation incomplete. These small runs demonstrate the workflow, not reliable security classification or a controlled performance benchmark.
 
-The project has an [MIT license](LICENSE). Downloaded Antares and llama.cpp components retain their own upstream licenses and access conditions; their source and weights are not included in Git.
+## Repository layout
+
+| Path | Contents |
+| --- | --- |
+| `scripts/` | Model launchers, endpoint checks, and scan runner. |
+| `examples/` | Source fixtures, behavioral tests, and usage instructions. |
+| `reports/` | Tracked result snapshots; new run artifacts are ignored by default. |
+| `requirements.lock.txt` | Tested dependency version snapshot. |
+| `models/`, `vendor/`, `build/` | Local model files, upstream code, and binaries; ignored by Git. |
+| `.venv/`, `.venv-fastmcp/` | Local Python environments; ignored by Git. |
+| `.antares-data/`, `logs/` | Local history and logs; ignored by Git. |
+
+## License
+
+This project uses the [MIT license](LICENSE). Downloaded Antares and llama.cpp components retain their upstream licenses; model weights and upstream source are not included in Git.
