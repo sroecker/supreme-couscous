@@ -1,0 +1,174 @@
+[
+  {
+    "case": "audience",
+    "variant": "vulnerable",
+    "cwe": "CWE-287",
+    "complete": true,
+    "exit_code": 0,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 10,
+      "duration_seconds": 28.676620624999487,
+      "cwe_ids_triggered": [
+        "CWE-287"
+      ],
+      "failed_tool_calls": 1,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "audience/vulnerable/report.json"
+  },
+  {
+    "case": "audience",
+    "variant": "fixed",
+    "cwe": "CWE-287",
+    "complete": false,
+    "exit_code": 2,
+    "expected_paths": [],
+    "actual_paths": [],
+    "matches_expected": null,
+    "summary": {
+      "total_findings": 0,
+      "tool_call_count": 50,
+      "duration_seconds": 156.58479212499878,
+      "cwe_ids_triggered": [],
+      "failed_tool_calls": 47,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": "Model ended without an explicit final submission."
+    },
+    "warnings": [
+      "Model ended without an explicit final submission."
+    ],
+    "report": "audience/fixed/report.json"
+  },
+  {
+    "case": "token_passthrough",
+    "variant": "vulnerable",
+    "cwe": "CWE-441",
+    "complete": true,
+    "exit_code": 0,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 11,
+      "duration_seconds": 31.214723790999415,
+      "cwe_ids_triggered": [
+        "CWE-441"
+      ],
+      "failed_tool_calls": 1,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "token_passthrough/vulnerable/report.json"
+  },
+  {
+    "case": "token_passthrough",
+    "variant": "fixed",
+    "cwe": "CWE-441",
+    "complete": true,
+    "exit_code": 0,
+    "expected_paths": [],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": false,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 10,
+      "duration_seconds": 31.29731025000001,
+      "cwe_ids_triggered": [
+        "CWE-441"
+      ],
+      "failed_tool_calls": 1,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "token_passthrough/fixed/report.json"
+  },
+  {
+    "case": "tool_scope",
+    "variant": "vulnerable",
+    "cwe": "CWE-862",
+    "complete": true,
+    "exit_code": 0,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 11,
+      "duration_seconds": 39.31721375000052,
+      "cwe_ids_triggered": [
+        "CWE-862"
+      ],
+      "failed_tool_calls": 1,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "tool_scope/vulnerable/report.json"
+  },
+  {
+    "case": "tool_scope",
+    "variant": "fixed",
+    "cwe": "CWE-862",
+    "complete": true,
+    "exit_code": 0,
+    "expected_paths": [],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": false,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 10,
+      "duration_seconds": 33.714374584000325,
+      "cwe_ids_triggered": [
+        "CWE-862"
+      ],
+      "failed_tool_calls": 1,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "tool_scope/fixed/report.json"
+  }
+]

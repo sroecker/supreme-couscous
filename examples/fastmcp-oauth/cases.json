@@ -1,0 +1,17 @@
+[
+  {
+    "id": "audience",
+    "cwe": "CWE-287",
+    "description": "Tokens for another resource must be rejected."
+  },
+  {
+    "id": "token_passthrough",
+    "cwe": "CWE-441",
+    "description": "An MCP bearer token must not be forwarded to the upstream API."
+  },
+  {
+    "id": "tool_scope",
+    "cwe": "CWE-862",
+    "description": "Audit export requires audit:export in addition to baseline authentication."
+  }
+]

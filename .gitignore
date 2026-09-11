@@ -219,6 +219,7 @@ __marimo__/
 
 # Local Antares POC artifacts and reviewed reports
 .venv/
+.venv-fastmcp/
 vendor/
 build/
 models/
@@ -230,6 +231,8 @@ reports/*
 !reports/gpu-query/
 !reports/gpu-sweep/
 !reports/gpu-validation.md
+!reports/fastmcp-oauth.md
+!reports/fastmcp-oauth-summary.json
 .antares-data/
 __pycache__/
 *.log

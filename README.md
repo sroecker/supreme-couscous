@@ -112,16 +112,30 @@ To compare the failing and working GPU paths without replacing the main endpoint
 
 The diagnostic defaults to `--case baseline`. Repeat `--case` to select `no-concurrency`, `no-graph-optimize`, `ubatch-1`, or `flash-attention`. It refuses an occupied port 8085 and saves results to `reports/diagnostics/gpu-<model-stem>.json`. Inspect each result's `exit_code`; the diagnostic runner records failed checks rather than adopting their exit status. Reusing a model filename replaces its diagnostic JSON, and reusing a case replaces `logs/gpu-<case>.log`. The F16 baseline is expected to fail. Run cases sequentially to limit memory use.
 
+## Additional FastMCP OAuth examples
+
+[Three paired FastMCP fixtures](examples/fastmcp-oauth/README.md) cover missing audience validation, MCP bearer-token passthrough, and missing privileged-tool scope checks. Each deliberately vulnerable variant has a corrected control. They are source-only examples with synthetic data; they do not launch public services.
+
+The examples include eight offline behavioral tests using FastMCP 3.4.7 in a separate `.venv-fastmcp` environment. Run Antares against all six isolated targets with:
+
+```sh
+.venv/bin/python scripts/scan_oauth_examples.py --output reports/my-fastmcp-oauth
+```
+
+The [recorded results](reports/fastmcp-oauth.md) separate fixture behavior from Antares findings, including any misses or false positives. Full setup and single-case commands are in the example README.
+
 ## Repository layout and local artifacts
 
 | Path | Purpose | Git |
 | --- | --- | --- |
 | `scripts/` | Launchers, checks, GPU diagnostics, and saved generic Antares prompt | Tracked |
 | `examples/demo/` | Deliberately vulnerable scan fixture | Tracked |
+| `examples/fastmcp-oauth/` | Paired OAuth fixtures, offline tests, and case definitions | Tracked |
+| `reports/fastmcp-oauth.md`, `reports/fastmcp-oauth-summary.json` | Reviewed results for the OAuth fixtures | Tracked |
 | `reports/report-verbose.md`, `reports/gpu-validation.md` | Reviewed output and numerical diagnosis | Tracked |
 | `reports/cpu-query/`, `reports/cpu-sweep/`, `reports/gpu-query/`, `reports/gpu-sweep/` | Completed demo report snapshots; use different folders for new runs | Tracked |
 | `requirements.lock.txt` | Installed dependency version snapshot | Tracked |
-| `models/`, `vendor/`, `build/`, `.venv/` | Weights, upstream source, binaries, dependencies | Ignored |
+| `models/`, `vendor/`, `build/`, `.venv/`, `.venv-fastmcp/` | Weights, upstream source, binaries, dependencies | Ignored |
 | `.antares-data/`, `logs/`, other `reports/` folders | Private history, diagnostic logs, subsequent scan results | Ignored |
 
 The local F32 GGUF is a 6.8 GiB diagnostic artifact and is not used by either launcher mode. `reports/diagnostics/verified-query` records an earlier incomplete run and is not a successful scan. Diagnostic artifacts and private traces may be absent in a fresh checkout; the tracked reports are self-contained. Model downloads and conversion are required again if you remove `models/`; removing `build/` or `.venv/` requires rebuilding or reinstalling.
