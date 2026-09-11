@@ -1,0 +1,14 @@
+.venv/
+vendor/
+build/
+models/
+logs/
+reports/*
+!reports/report-verbose.md
+!reports/cpu-query/
+!reports/cpu-sweep/
+.antares-data/
+__pycache__/
+*.log
+.DS_Store
+.env
