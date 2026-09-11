@@ -233,6 +233,10 @@ reports/*
 !reports/gpu-validation.md
 !reports/fastmcp-oauth.md
 !reports/fastmcp-oauth-summary.json
+!reports/antares-350m.md
+!reports/fastmcp-oauth-350m-summary.json
+!reports/antares-350m-smoke.json
+!reports/antares-350m-demo.json
 .antares-data/
 __pycache__/
 *.log

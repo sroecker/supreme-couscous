@@ -62,6 +62,8 @@ Or select a single pair or variant:
 
 Repeat `--case` or `--variant` to select multiple values. Each run uses the configured local endpoint, the case's CWE, and a terminal-call budget of 10. The model receives the standard CWE prompt, without a custom hint identifying the expected defect. The report directory must be new and outside the fixtures. A 300-second wall-clock limit applies to each investigation; use `--timeout` to change it. Timed-out cases are recorded as incomplete with exit code 124, and the runner continues to the remaining cases.
 
+To test the smaller model, follow the [350M setup](../../README.md#add-the-smaller-350m-model), then prefix the scan command with `ANTARES_MODEL=antares-350m ANTARES_PORT=8086`. See the [350M comparison report](../../reports/antares-350m.md). New summaries include the model reported by Antares so results can be attributed to the selected model.
+
 Outputs include `summary.json` plus `report.json`, `report.md`, `report.sarif`, and `run.log` under `<case>/<variant>/`. The runner writes the summary after each result. It exits 2 if any scan is operationally incomplete; a mismatch with expected findings is recorded rather than treated as an execution failure.
 
 Interpret `matches_expected` only when `complete` is true. A complete scan can still miss the mistake or flag a corrected control. The offline tests establish fixture behavior independently of model output. The [recorded Antares results](../../reports/fastmcp-oauth.md) summarize the initial run; detailed rerun artifacts remain local and ignored by Git.

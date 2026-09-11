@@ -1,6 +1,6 @@
 # Antares local POC
 
-Run `fdtn-ai/antares-1b` locally with Antares CLI 1.0.0 and llama.cpp. The default is **BF16 inference on the Metal GPU**; an F16 CPU fallback is available.
+Run `fdtn-ai/antares-1b` or `fdtn-ai/antares-350m` locally with Antares CLI 1.0.0 and llama.cpp. The default is **1B BF16 inference on the Metal GPU**; an F16 CPU fallback is available.
 
 Based on the [Cisco Antares quickstart](https://github.com/cisco-foundation-ai/cookbook/blob/main/1_quickstarts/Quickstart_Antares.md). See [GPU validation](reports/gpu-validation.md) for the working configuration and numerical diagnosis, or the [verbose CPU report](reports/report-verbose.md) for example terminal output and investigation steps.
 
@@ -39,6 +39,26 @@ For the optional CPU fallback, also convert F16 weights:
 .venv/bin/python vendor/llama.cpp/convert_hf_to_gguf.py models/antares-1b --outfile models/antares-1b-f16.gguf --outtype f16
 ```
 
+## Add the smaller 350M model
+
+After the first-time setup, download [Antares 350M](https://huggingface.co/fdtn-ai/antares-350m) with an account that has access and convert it using the same unmodified llama.cpp build:
+
+```sh
+hf download fdtn-ai/antares-350m --revision cdf6d054fa5f491553ccb1704269cbd1954c6c6e --local-dir models/antares-350m
+.venv/bin/python vendor/llama.cpp/convert_hf_to_gguf.py models/antares-350m --outfile models/antares-350m-bf16.gguf --outtype bf16
+ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
+```
+
+In another terminal, use the matching model and port for scans:
+
+```sh
+.venv/bin/python scripts/check_endpoint.py --port 8086 --max-tokens 128
+ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/antares.sh query examples/demo --cwe CWE-89 --output reports/my-350m-demo
+ANTARES_MODEL=antares-350m ANTARES_PORT=8086 .venv/bin/python scripts/scan_oauth_examples.py --output reports/my-350m-oauth
+```
+
+The GGUF is approximately 708 MB; source weights require additional space. Port 8086 allows the smaller model to coexist with the default 1B endpoint on 8082. `ANTARES_MODEL` selects both the GGUF filename and served/client alias. `ANTARES_PORT` selects the local port; an explicit `ANTARES_ENDPOINT` overrides the client's derived URL. Match client settings to the server. `ANTARES_GGUF` still overrides the weights path. The 350M tests use BF16 Metal; CPU use requires separately converting its F16 GGUF and has not been validated here. See the [350M test report](reports/antares-350m.md) for observed results and comparison limits.
+
 ## Run
 
 Start the GPU server in one terminal:
@@ -70,7 +90,7 @@ The endpoint is `http://127.0.0.1:8082/v1/completions`, with model alias `antare
 | `./scripts/serve.sh` | Uses `models/antares-1b-bf16.gguf` and offloads all layers to Metal. Extra arguments are forwarded to llama-server. |
 | `ANTARES_DEVICE=cpu ./scripts/serve.sh` | Uses F16 weights with `--gpu-layers 0 --device none`; stop the GPU server before switching. |
 | `ANTARES_GGUF=/absolute/path/model.gguf` | Overrides the selected model file. Use BF16 for batched Metal inference with this checkpoint. |
-| `./scripts/antares.sh …` | Invokes the project-local CLI, fixes its endpoint/model, clears the API key, and stores history under `.antares-data/`. Global Antares profiles are unchanged. |
+| `./scripts/antares.sh …` | Invokes the project-local CLI, defaults to the 1B endpoint on 8082, honors model/endpoint/port environment overrides, clears the API key, and stores history under `.antares-data/`. Global Antares profiles are unchanged. |
 | `.venv/bin/python scripts/check_endpoint.py` | Waits for health, then checks finite token probabilities with the saved 1,020-token prompt. Options: `--port` (8082) and `--max-tokens` (16). Exits nonzero on failure. |
 | `.venv/bin/python scripts/diagnose_gpu.py` | Runs an isolated BF16 GPU check on port 8085, then stops its own server. See the diagnostic commands below. |
 
@@ -131,6 +151,7 @@ The [recorded results](reports/fastmcp-oauth.md) separate fixture behavior from 
 | `scripts/` | Launchers, checks, GPU diagnostics, and saved generic Antares prompt | Tracked |
 | `examples/demo/` | Deliberately vulnerable scan fixture | Tracked |
 | `examples/fastmcp-oauth/` | Paired OAuth fixtures, offline tests, and case definitions | Tracked |
+| `reports/antares-350m*`, `reports/fastmcp-oauth-350m-summary.json` | Smaller-model validation and comparison snapshots | Tracked |
 | `reports/fastmcp-oauth.md`, `reports/fastmcp-oauth-summary.json` | Reviewed results for the OAuth fixtures | Tracked |
 | `reports/report-verbose.md`, `reports/gpu-validation.md` | Reviewed output and numerical diagnosis | Tracked |
 | `reports/cpu-query/`, `reports/cpu-sweep/`, `reports/gpu-query/`, `reports/gpu-sweep/` | Completed demo report snapshots; use different folders for new runs | Tracked |

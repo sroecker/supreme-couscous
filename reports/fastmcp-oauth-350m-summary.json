@@ -1,0 +1,188 @@
+[
+  {
+    "case": "audience",
+    "variant": "vulnerable",
+    "cwe": "CWE-287",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 9,
+      "duration_seconds": 9.806783166997775,
+      "cwe_ids_triggered": [
+        "CWE-287"
+      ],
+      "failed_tool_calls": 6,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "audience/vulnerable/report.json"
+  },
+  {
+    "case": "audience",
+    "variant": "fixed",
+    "cwe": "CWE-287",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": false,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 8,
+      "duration_seconds": 8.994764957998996,
+      "cwe_ids_triggered": [
+        "CWE-287"
+      ],
+      "failed_tool_calls": 6,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "audience/fixed/report.json"
+  },
+  {
+    "case": "token_passthrough",
+    "variant": "vulnerable",
+    "cwe": "CWE-441",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 8,
+      "duration_seconds": 9.92111583299993,
+      "cwe_ids_triggered": [
+        "CWE-441"
+      ],
+      "failed_tool_calls": 6,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "token_passthrough/vulnerable/report.json"
+  },
+  {
+    "case": "token_passthrough",
+    "variant": "fixed",
+    "cwe": "CWE-441",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": false,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 8,
+      "duration_seconds": 11.222628375002387,
+      "cwe_ids_triggered": [
+        "CWE-441"
+      ],
+      "failed_tool_calls": 4,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "token_passthrough/fixed/report.json"
+  },
+  {
+    "case": "tool_scope",
+    "variant": "vulnerable",
+    "cwe": "CWE-862",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [
+      "server.py"
+    ],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": true,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 11,
+      "duration_seconds": 10.190790417000244,
+      "cwe_ids_triggered": [
+        "CWE-862"
+      ],
+      "failed_tool_calls": 8,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "tool_scope/vulnerable/report.json"
+  },
+  {
+    "case": "tool_scope",
+    "variant": "fixed",
+    "cwe": "CWE-862",
+    "model": "antares-350m",
+    "complete": true,
+    "exit_code": 0,
+    "timed_out": false,
+    "expected_paths": [],
+    "actual_paths": [
+      "server.py"
+    ],
+    "matches_expected": false,
+    "summary": {
+      "total_findings": 1,
+      "tool_call_count": 9,
+      "duration_seconds": 9.150317416999314,
+      "cwe_ids_triggered": [
+        "CWE-862"
+      ],
+      "failed_tool_calls": 4,
+      "retried_turns": 0,
+      "generation_errors": 0,
+      "failed_workers": 0,
+      "total_workers": 0,
+      "incomplete_reason": null
+    },
+    "warnings": [],
+    "report": "tool_scope/fixed/report.json"
+  }
+]

@@ -47,6 +47,8 @@ The corrected callback explicitly requires `audit:export`, and the offline tests
 
 The [tracked JSON summary](fastmcp-oauth-summary.json) preserves all six outcomes, counters, and warnings. Its `report` paths are relative to the ignored local directory `reports/fastmcp-oauth-run-1/`, which contains the full raw reports and logs and is not included in a fresh checkout. Initial results predate the runner's added per-investigation wall-clock timeout; none of these six cases was stopped by that timeout.
 
+For the smaller model on the same fixtures, see the [350M comparison](antares-350m.md).
+
 ## Reproduce
 
 After following the [fixture environment setup](../examples/fastmcp-oauth/README.md#offline-behavioral-tests), run from the repository root:

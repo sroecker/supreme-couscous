@@ -51,6 +51,7 @@ for case in CASES:
         actual = sorted({f["file_path"] for f in report.get("findings", [])
                          if case["cwe"] in f.get("cwe_ids", [])})
         row = {"case": case["id"], "variant": variant, "cwe": case["cwe"],
+               "model": report.get("metadata", {}).get("model"),
                "complete": complete, "exit_code": exit_code, "timed_out": timed_out,
                "expected_paths": expected, "actual_paths": actual,
                "matches_expected": actual == expected if complete else None,
