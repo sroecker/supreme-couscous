@@ -56,3 +56,19 @@ The test install used an isolated profile, leaving the user's normal VSCodium ex
 The CLI configuration command now accepts a pasted path, expands `~/`, suggests an executable from an open POC workspace, and validates that the file exists and is executable. Investigations offer named weakness categories with descriptions; entering a numeric CWE is only needed for the custom option.
 
 TypeScript compilation and VSIX packaging passed for 0.1.1. The real VSCodium/model integration results above apply to 0.1.0; these updated input dialogs have not been separately automated in the editor.
+
+## Version 0.2.0 guided review
+
+The review panel opens after a scan and offers candidate selection, source navigation beside the panel, general CWE-specific inspection checklists, notes, Confirm/Dismiss/Unreviewed actions, remaining-review counts, and JSON export with decisions. Dismissal requires a reason. Source is not modified by review actions.
+
+Latest-run restoration supports existing 0.1.x stored results. Decisions persist across reloads and remain separate from investigation completion. Reviewed files are hashed; a changed or missing file reopens its decision when review is opened or restored. Notes are retained. This does not detect all dependency-level changes or provide a full snapshot history.
+
+Validation:
+
+- All 11 unit tests passed, including review transitions, required dismissal reasons, stale-file invalidation, invalid review messages, and HTML escaping.
+- VSCodium 1.95.3 integration tests passed for opening a restored run, generating panel content, confirming and dismissing a candidate, source navigation, rejecting missing reasons and messages for an older run, and restoring saved notes/decisions in a second editor process.
+- The final 0.2.0 VSIX installed successfully in the isolated profile; its review-action integration test passed with extension-host exit code 0.
+- These review tests replay an existing SQL demo result. They do not rerun inference or claim that test-only confirmations/dismissals are security verdicts.
+- Desktop automation failed to initialize (`Sky Computer Use native pipe startup failed`), so a visual inspection and real mouse-click pass were not completed. Editor tests exercise the production handlers programmatically and inspect generated panel HTML.
+
+Local test records are in ignored `logs/vscodium-review-test.json` and `logs/vscodium-review-testrestore.json`. Normal user settings and saved review decisions were not changed by these tests.

@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {
@@ -49,6 +49,11 @@
       {
         "command": "antares.details",
         "title": "Antares: Show Last Result"
+      },
+      {
+        "command": "antares.review",
+        "title": "Antares: Review Last Scan",
+        "icon": "$(checklist)"
       }
     ],
     "views": {
@@ -64,6 +69,13 @@
         {
           "command": "antares.investigate",
           "when": "explorerResourceIsFolder && resourceScheme == file && isWorkspaceTrusted"
+        }
+      ],
+      "view/title": [
+        {
+          "command": "antares.review",
+          "when": "view == antares.candidates",
+          "group": "navigation"
         }
       ]
     },
@@ -99,7 +111,13 @@
           "maximum": 1800
         }
       }
-    }
+    },
+    "viewsWelcome": [
+      {
+        "view": "antares.candidates",
+        "contents": "Run a focused code investigation, then review the candidate files.\n[Investigate code](command:antares.investigate)"
+      }
+    ]
   },
   "scripts": {
     "compile": "tsc -p .",

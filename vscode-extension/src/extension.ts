@@ -1,10 +1,12 @@
 import * as vscode from 'vscode';
-import { access, mkdir, realpath, stat, writeFile } from 'node:fs/promises';
+import { access, mkdir, readFile, realpath, rename, stat, writeFile } from 'node:fs/promises';
 import { constants } from 'node:fs';
 import path from 'node:path';
 import { homedir } from 'node:os';
+import { createHash } from 'node:crypto';
+import { counts, decision, invalidateDecision, nextPending, reviewSummary, ReviewStatus, Run, setDecision } from './review-model';
+import { ReviewMessage, ReviewPanel, reviewHtml, runKey } from './review-panel';
 import { candidatePath, childEnvironment, inside, isComplete, parseReport, profile, Report, runCli } from './core';
-interface Run { target: string; model: string; cwe: string; status: string; started: string; finished: string; report?: Report }
 class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
   private event = new vscode.EventEmitter<void>();
   onDidChangeTreeData = this.event.event;
@@ -13,10 +15,11 @@ class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
   update(message: string, run?: Run) { this.message = message; this.run = run; this.event.fire(); }
   getTreeItem(item: vscode.TreeItem) { return item; }
   getChildren(): vscode.TreeItem[] {
-    return [new vscode.TreeItem(this.message), ...(this.run?.report?.findings ?? []).map(f => {
+    return [new vscode.TreeItem(this.message), ...(this.run?.report?.findings ?? []).map((f, index) => {
       const item = new vscode.TreeItem(`${f.cwe_ids.join(', ')} · ${f.file_path}`);
-      item.description = 'Candidate — review required'; item.tooltip = f.title;
-      item.command = { command: 'antares.openCandidate', title: 'Open candidate', arguments: [this.run!.target, f.file_path] };
+      item.description = decision(this.run!, index).status; item.tooltip = f.title;
+      item.iconPath = new vscode.ThemeIcon(({unreviewed: 'circle-outline', confirmed: 'check', dismissed: 'circle-slash'})[decision(this.run!, index).status]);
+      item.command = { command: 'antares.review', title: 'Review candidate', arguments: [index] };
       return item;
     })];
   }
@@ -24,10 +27,76 @@ class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
 }
 let active: AbortController | undefined;
 export function deactivate() { active?.abort(); }
-export function activate(context: vscode.ExtensionContext) {
+export async function activate(context: vscode.ExtensionContext) {
   const candidates = new Candidates();
   context.subscriptions.push(candidates, vscode.window.registerTreeDataProvider('antares.candidates', candidates));
   let last: Run | undefined;
+  let savingReview = false;
+  const review = new ReviewPanel(handleReviewMessage);
+  context.subscriptions.push(review);
+  async function persist(run: Run) {
+    const storage = context.globalStorageUri.fsPath;
+    await mkdir(storage, { recursive: true, mode: 0o700 });
+    const temporary = path.join(storage, 'last-result.json.tmp');
+    await writeFile(temporary, JSON.stringify(run, null, 2), { mode: 0o600 });
+    await rename(temporary, path.join(storage, 'last-result.json'));
+  }
+  function refresh() {
+    if (last) candidates.update(`${last.status} · ${reviewSummary(last)}`, last);
+  }
+  async function sourceHash(run: Run, index: number) {
+    const file = await candidatePath(run.target, run.report!.findings[index].file_path);
+    return createHash('sha256').update(await readFile(file)).digest('hex');
+  }
+  async function refreshDecisions(run: Run) {
+    let changed = false;
+    for (let index = 0; index < (run.report?.findings.length ?? 0); index++) {
+      if (decision(run, index).status === 'unreviewed') continue;
+      let hash: string | undefined;
+      try { hash = await sourceHash(run, index); } catch { /* Missing or unsafe files require review. */ }
+      changed = invalidateDecision(run, index, hash) || changed;
+    }
+    return changed;
+  }
+  async function saveDecision(index: number, status: ReviewStatus, note: string) {
+    supported();
+    if (busy || savingReview || !last) throw new Error('Wait for the current operation to finish.');
+    savingReview = true;
+    try {
+      const run: Run = { ...last, reviews: { ...last.reviews } };
+      const finding = run.report?.findings[index];
+      if (!finding) throw new Error('Unknown candidate.');
+      const file = await candidatePath(run.target, finding.file_path);
+      if (vscode.workspace.textDocuments.some(d => d.uri.fsPath === file && d.isDirty)) throw new Error('Save the source file before recording a review decision.');
+      const hash = await sourceHash(run, index);
+      setDecision(run, index, status, note, hash);
+      await persist(run);
+      last = run;
+      refresh();
+      review.show(run, index, status === 'unreviewed' ? 'Notes saved. This candidate remains to review.' : `Decision saved. ${counts(run).unreviewed ? 'Continue with Next unreviewed.' : 'All candidates have a review decision.'}`);
+    } finally { savingReview = false; }
+  }
+  async function handleReviewMessage(message: ReviewMessage) {
+    if (!message || typeof message.action !== 'string' || !last || message.run !== runKey(last)) throw new Error('This review belongs to an older run. Open the latest result.');
+    if (!Number.isInteger(message.index) || message.index < 0) throw new Error('Invalid candidate.');
+    if (['select', 'open', 'decide', 'next'].includes(message.action) && !last.report?.findings[message.index]) throw new Error('Unknown candidate.');
+    switch (message.action) {
+      case 'select': await showReview(message.index); break;
+      case 'open': await vscode.commands.executeCommand('antares.openCandidate', last.target, last.report!.findings[message.index].file_path); break;
+      case 'decide': await saveDecision(message.index, message.status as ReviewStatus, message.note as string); break;
+      case 'next': await showReview(nextPending(last, message.index)); break;
+      case 'export': await vscode.commands.executeCommand('antares.export'); break;
+      case 'raw': await vscode.commands.executeCommand('antares.details'); break;
+      default: throw new Error('Unknown review action.');
+    }
+  }
+  async function showReview(index = 0) {
+    if (!last) throw new Error('Run an investigation first.');
+    if (busy || savingReview) throw new Error('Wait for the current operation to finish.');
+    if (await refreshDecisions(last)) await persist(last);
+    refresh();
+    review.show(last, index);
+  }
   const config = () => vscode.workspace.getConfiguration('antares');
   const supported = () => {
     if (!vscode.workspace.isTrusted) throw new Error('Trust this workspace before running Antares.');
@@ -83,7 +152,7 @@ export function activate(context: vscode.ExtensionContext) {
   });
   let busy = false;
   async function investigate(targetUri: vscode.Uri, cwe: string): Promise<Run> {
-    if (busy) throw new Error('An investigation is already running.');
+    if (busy || savingReview) throw new Error('An investigation or review save is already running.');
     busy = true;
     try { return await performInvestigation(targetUri, cwe); } finally { busy = false; }
   }
@@ -127,9 +196,10 @@ export function activate(context: vscode.ExtensionContext) {
           }
           if (result.stopped) candidates.update(`${run.status}; previous result retained`, last);
           else {
-            await writeFile(path.join(storage, 'last-result.json'), JSON.stringify(run, null, 2), { mode: 0o600 });
+            await persist(run);
             last = run;
-            candidates.update(`${run.status} · ${run.report?.findings.length ?? 0} candidates · ${run.model}`, run);
+            refresh();
+            review.show(run);
           }
           return run;
         } finally { cancel.dispose(); }
@@ -166,8 +236,9 @@ export function activate(context: vscode.ExtensionContext) {
   });
   register('antares.openCandidate', async (root: string, relative: string) => {
     if (!last || last.target !== root || !last.report?.findings.some(f => f.file_path === relative)) throw new Error('Candidate does not belong to the last result.');
-    await vscode.window.showTextDocument(vscode.Uri.file(await candidatePath(root, relative)));
+    await vscode.window.showTextDocument(vscode.Uri.file(await candidatePath(root, relative)), { viewColumn: vscode.ViewColumn.One, preview: false });
   });
+  register('antares.review', showReview);
   register('antares.details', async () => {
     if (!last) throw new Error('No completed or partial result in this session.');
     await vscode.window.showTextDocument(await vscode.workspace.openTextDocument({ content: JSON.stringify(last, null, 2), language: 'json' }));
@@ -178,7 +249,33 @@ export function activate(context: vscode.ExtensionContext) {
     if (uri) await vscode.workspace.fs.writeFile(uri, Buffer.from(JSON.stringify(last, null, 2)));
   });
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(event => {
-    if (last && event.document.uri.scheme === 'file' && inside(last.target, event.document.uri.fsPath)) candidates.update('Source changed — results may be stale', last);
+    if (event.contentChanges.length && last && event.document.uri.scheme === 'file' && inside(last.target, event.document.uri.fsPath)) {
+      last.sourceChanged = true;
+      candidates.update('Source changed — results may be stale', last);
+    }
   }));
-  return { investigate, getLastRun: () => last, getCandidates: () => candidates.getChildren(), cancel: () => active?.abort() };
+  try {
+    const saved = JSON.parse(await readFile(path.join(context.globalStorageUri.fsPath, 'last-result.json'), 'utf8'));
+    if (!['target', 'model', 'cwe', 'started', 'finished'].every(k => typeof saved[k] === 'string') ||
+        !['completed', 'incomplete'].includes(saved.status)) throw new Error('Invalid saved result.');
+    saved.report = parseReport(JSON.stringify(saved.report));
+    const roots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
+    if (roots.some(root => inside(root, saved.target))) {
+      const rawReviews = saved.reviews;
+      saved.reviews = {};
+      for (const [key, value] of Object.entries(rawReviews ?? {})) {
+        const d = value as any;
+        if (/^(0|[1-9]\d*)$/.test(key) && saved.report.findings[Number(key)] &&
+            ['unreviewed', 'confirmed', 'dismissed'].includes(d?.status) && typeof d.note === 'string' && d.note.length <= 4000 && typeof d.updated === 'string' &&
+            (d.sourceHash === undefined || /^[a-f0-9]{64}$/.test(d.sourceHash))) saved.reviews[key] = d;
+      }
+      last = saved;
+      if (await refreshDecisions(last!)) await persist(last!);
+      refresh();
+    }
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code !== 'ENOENT') candidates.update('Saved result unavailable. Run a new investigation.');
+  }
+  return { investigate, getLastRun: () => last, getCandidates: () => candidates.getChildren(), cancel: () => active?.abort(), showReview, saveDecision, handleReviewMessage, getReviewHtml: () => last ? reviewHtml(last, review.selected, 'testnonce') : '' };
+
 }
