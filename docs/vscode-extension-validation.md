@@ -82,3 +82,16 @@ The adapter now retains a bounded stderr tail in memory, redacts common credenti
 All 14 unit tests passed, including stderr-only failure, malformed output, valid partial results, credential redaction, and unavailable/loading/healthy endpoint checks. TypeScript compilation and 0.2.1 VSIX packaging passed. This update was not separately run inside VSCodium; previous editor validation remains documented above.
 
 After restarting the local 350M server, a real adapter query reached the endpoint and returned valid JSON with exit 2 and the reason `Model submitted no valid repository file paths.` The adapter successfully parsed and classified it as incomplete. This verifies recovery from the connection/parser failure, not a successful security finding. The ignored local record is `logs/extension-recovery.json`.
+
+
+## Version 0.3.0 automatic sweeps
+
+The plugin now exposes **Antares: Sweep Code Automatically** in the Command Palette, folder context menu, and candidate-view toolbar. Automatic sweep is also the first investigation-picker option. It calls the CLI's JSON `tool sweep` interface with automatic selection, up to three categories by default, and one worker. Category count is configurable from 1–10, with a separate whole-sweep timeout defaulting to 900 seconds.
+
+Review displays per-category results and candidate CWE labels. Its guidance follows the selected candidate's CWE. Focused queries retain their existing behavior. Neither automatic selection nor an empty category result establishes comprehensive security coverage.
+
+All 16 unit tests passed. The VSCodium 1.95.3 integration test ran a real 350M sweep against `examples/demo`, verified command registration, the actual `cwe_sweep` report metadata, three selected categories, candidate-view counts, and review-panel coverage content. The test process exited 0. The initial test assertion expected `sweep` metadata and was corrected to the installed CLI's `cwe_sweep` value before the successful test rerun.
+
+The final model run was **incomplete**, taking 31.26 seconds, with 1 candidates and 2 failed category worker(s). It selected CWE-79, CWE-20, and CWE-78. The extension preserved the partial result and category errors; this is an integration pass, not a successful security assessment. The original SQL injection CWE-89 was not selected in this bounded automatic portfolio.
+
+The local raw record is ignored at `logs/vscodium-sweep-test.json`. TypeScript compilation and 0.3.0 VSIX packaging passed. This release was tested through the Extension Development Host, not by installing its VSIX into the normal user profile.

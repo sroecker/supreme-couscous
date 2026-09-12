@@ -68,3 +68,17 @@ test('connection check explains stopped and loading servers',async()=>{
   global.fetch=async()=>({ok:true,status:200});await checkServer(profile('antares-1b'));
  }finally{global.fetch=previous;}
 });
+test('automatic sweep selects categories and fixes concurrency at one worker',()=>{
+ const {scanRequest}=require('../dist/core');
+ const sweep=scanRequest('/target',profile('antares-350m'),10);
+ assert.equal(sweep.mode,'sweep');assert.equal(sweep.payload.workers,1);
+ assert.deepEqual(sweep.payload.selection,{scope:'auto',max_cwes:3});assert.equal(sweep.payload.cwe_ids,undefined);
+ assert.deepEqual(scanRequest('/target',profile('antares-1b'),10,'CWE-89').payload.cwe_ids,['CWE-89']);
+ assert.throws(()=>scanRequest('/target',profile('antares-1b'),10,undefined,11));
+ assert.throws(()=>scanRequest('/target',profile('antares-1b'),10,''));
+});
+test('per-category errors remain incomplete and malformed sweep reports are rejected',()=>{
+ const r={...good,per_cwe_results:[{cwe_id:'CWE-89',finding_count:0,error_message:'worker failed'}]};
+ assert.equal(isComplete(parseReport(JSON.stringify(r)),0),false);
+ assert.throws(()=>parseReport(JSON.stringify({...good,per_cwe_results:'bad'})));
+});

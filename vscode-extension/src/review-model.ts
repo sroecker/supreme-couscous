@@ -3,7 +3,7 @@ export type ReviewStatus = 'unreviewed' | 'confirmed' | 'dismissed';
 export interface Decision { status: ReviewStatus; note: string; updated: string; sourceHash?: string }
 export interface Run {
   target: string; model: string; cwe: string; status: string; started: string; finished: string;
-  report?: Report; reviews?: Record<string, Decision>; sourceChanged?: boolean;
+  mode?: 'query' | 'sweep'; report?: Report; reviews?: Record<string, Decision>; sourceChanged?: boolean;
 }
 export function decision(run: Run, index: number): Decision {
   return run.reviews?.[String(index)] ?? { status: 'unreviewed', note: '', updated: '' };

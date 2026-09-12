@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {
@@ -54,6 +54,11 @@
         "command": "antares.review",
         "title": "Antares: Review Last Scan",
         "icon": "$(checklist)"
+      },
+      {
+        "command": "antares.sweep",
+        "title": "Antares: Sweep Code Automatically",
+        "icon": "$(search)"
       }
     ],
     "views": {
@@ -67,11 +72,20 @@
     "menus": {
       "explorer/context": [
         {
+          "command": "antares.sweep",
+          "when": "explorerResourceIsFolder && resourceScheme == file && isWorkspaceTrusted"
+        },
+        {
           "command": "antares.investigate",
           "when": "explorerResourceIsFolder && resourceScheme == file && isWorkspaceTrusted"
         }
       ],
       "view/title": [
+        {
+          "command": "antares.sweep",
+          "when": "view == antares.candidates",
+          "group": "navigation"
+        },
         {
           "command": "antares.review",
           "when": "view == antares.candidates",
@@ -109,6 +123,20 @@
           "default": 300,
           "minimum": 1,
           "maximum": 1800
+        },
+        "antares.sweepMaxCwes": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "maximum": 10,
+          "description": "Maximum automatically selected weakness categories per sweep. They run sequentially."
+        },
+        "antares.sweepTimeoutSeconds": {
+          "type": "number",
+          "default": 900,
+          "minimum": 1,
+          "maximum": 3600,
+          "description": "Wall-clock timeout for the entire sweep, in seconds."
         }
       }
     },

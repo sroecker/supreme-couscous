@@ -8,12 +8,14 @@ export interface Report {
   summary: { generation_errors: number; failed_workers: number; incomplete_reason?: string | null; [key: string]: unknown };
   metadata: { model: string; [key: string]: unknown };
   warnings?: string[];
+  per_cwe_results?: { cwe_id: string; finding_count: number; error_message?: string | null }[];
 }
 export function parseReport(text: string): Report {
   const r = JSON.parse(text);
   if (!r || !Array.isArray(r.findings) || !r.summary || typeof r.metadata?.model !== 'string' ||
       !['generation_errors', 'failed_workers'].every(k => Number.isInteger(r.summary[k]) && r.summary[k] >= 0) ||
       (r.warnings !== undefined && (!Array.isArray(r.warnings) || !r.warnings.every((w: unknown) => typeof w === 'string'))) ||
+      (r.per_cwe_results !== undefined && (!Array.isArray(r.per_cwe_results) || !r.per_cwe_results.every((v: any) => typeof v?.cwe_id === 'string' && Number.isInteger(v.finding_count) && v.finding_count >= 0 && (v.error_message == null || typeof v.error_message === 'string')))) ||
       !r.findings.every((f: Finding) => typeof f?.file_path === 'string' && typeof f.title === 'string' &&
         Array.isArray(f.cwe_ids) && f.cwe_ids.every(c => typeof c === 'string'))) {
     throw new Error('Unsupported Antares result schema.');
@@ -22,7 +24,7 @@ export function parseReport(text: string): Report {
 }
 export function isComplete(r: Report, exitCode: number | null): boolean {
   return exitCode === 0 && !r.warnings?.length && !r.summary.incomplete_reason &&
-    r.summary.generation_errors === 0 && r.summary.failed_workers === 0;
+    r.summary.generation_errors === 0 && r.summary.failed_workers === 0 && !r.per_cwe_results?.some(result => result.error_message);
 }
 export function inside(root: string, file: string): boolean {
   const relative = path.relative(root, file);
@@ -112,4 +114,15 @@ export function runCli(executable: string, args: string[], request: unknown, cwd
     child.stdin.on('error', () => { /* exit handler reports early child termination */ });
     child.stdin.end(JSON.stringify(request));
   });
+}
+
+export function scanRequest(target: string, connection: { model: string; endpoint: string }, budget: number, cwe?: string, maxCwes = 3) {
+  if (!Number.isInteger(budget) || budget < 1 || budget > 50) throw new Error('Tool budget must be between 1 and 50.');
+  const base = { target, ...connection, backend: 'remote', tool_budget: budget };
+  if (cwe !== undefined) {
+    if (!/^CWE-[1-9]\d*$/.test(cwe)) throw new Error('Enter a CWE ID such as CWE-287.');
+    return { mode: 'query', payload: { ...base, cwe_ids: [cwe] } };
+  }
+  if (!Number.isInteger(maxCwes) || maxCwes < 1 || maxCwes > 10) throw new Error('Sweep size must be between 1 and 10 categories.');
+  return { mode: 'sweep', payload: { ...base, workers: 1, selection: { scope: 'auto', max_cwes: maxCwes } } };
 }

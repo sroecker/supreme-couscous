@@ -1,6 +1,6 @@
 # VS Code integration plan for Antares
 
-Research date: 11 September 2026. Status: roadmap; a local macOS MVP with guided review and latest-run persistence is now implemented in [vscode-extension](../vscode-extension/README.md). See [validation](vscode-extension-validation.md) for tested scope. Later phases below remain proposals.
+Research date: 11 September 2026. Status: roadmap; a local macOS MVP with automatic sweeps, guided review, and latest-run persistence is now implemented in [vscode-extension](../vscode-extension/README.md). See [validation](vscode-extension-validation.md) for tested scope. Later phases below remain proposals.
 
 Follow-up: [static inspection of Cisco scanner 1.0.6](cisco-ide-scanner-research.md) confirms a Python subprocess/JSON architecture and no identified Antares integration. It also verifies the distributed Apache-2.0 license and explains the live MCP discovery boundary.
 

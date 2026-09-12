@@ -6,7 +6,7 @@ import { homedir } from 'node:os';
 import { createHash } from 'node:crypto';
 import { counts, decision, invalidateDecision, nextPending, reviewSummary, ReviewStatus, Run, setDecision } from './review-model';
 import { ReviewMessage, ReviewPanel, reviewHtml, runKey } from './review-panel';
-import { candidatePath, checkServer, childEnvironment, cliReport, inside, isComplete, LocalServerError, parseReport, profile, Report, runCli } from './core';
+import { candidatePath, checkServer, childEnvironment, cliReport, inside, isComplete, LocalServerError, parseReport, profile, Report, runCli, scanRequest } from './core';
 class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
   private event = new vscode.EventEmitter<void>();
   onDidChangeTreeData = this.event.event;
@@ -159,15 +159,14 @@ export async function activate(context: vscode.ExtensionContext) {
     if (choice) await config().update('model', choice, vscode.ConfigurationTarget.Global);
   });
   let busy = false;
-  async function investigate(targetUri: vscode.Uri, cwe: string): Promise<Run> {
+  async function investigate(targetUri: vscode.Uri, cwe?: string): Promise<Run> {
     if (busy || savingReview) throw new Error('An investigation or review save is already running.');
     busy = true;
     try { return await performInvestigation(targetUri, cwe); } finally { busy = false; }
   }
-  async function performInvestigation(targetUri: vscode.Uri, cwe: string): Promise<Run> {
+  async function performInvestigation(targetUri: vscode.Uri, cwe?: string): Promise<Run> {
     supported();
     if (active) throw new Error('An investigation is already running.');
-    if (!/^CWE-[1-9]\d*$/.test(cwe)) throw new Error('Enter a CWE ID such as CWE-287.');
     if (targetUri.scheme !== 'file') throw new Error('Select a local folder.');
     const target = await realpath(targetUri.fsPath);
     const roots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
@@ -177,8 +176,12 @@ export async function activate(context: vscode.ExtensionContext) {
     await access(executable, constants.X_OK);
     const connection = profile(config().get<string>('model', 'antares-1b'));
     await checkServer(connection);
-    const budget = config().get<number>('toolBudget', 10), seconds = config().get<number>('timeoutSeconds', 300);
-    if (!Number.isInteger(budget) || budget < 1 || budget > 50 || !Number.isInteger(seconds) || seconds < 1 || seconds > 1800) throw new Error('Invalid tool budget or timeout.');
+    const sweep = cwe === undefined;
+    const label = cwe ?? 'Automatic sweep';
+    const budget = config().get<number>('toolBudget', 10);
+    const seconds = sweep ? config().get<number>('sweepTimeoutSeconds', 900) : config().get<number>('timeoutSeconds', 300);
+    const request = scanRequest(target, connection, budget, cwe, config().get<number>('sweepMaxCwes', 3));
+    if (!Number.isInteger(budget) || budget < 1 || budget > 50 || !Number.isInteger(seconds) || seconds < 1 || seconds > (sweep ? 3600 : 1800)) throw new Error('Invalid tool budget or timeout.');
     const storage = context.globalStorageUri.fsPath;
     await mkdir(storage, { recursive: true, mode: 0o700 });
     if (inside(target, await realpath(storage))) throw new Error('Extension storage must be outside the target.');
@@ -186,16 +189,14 @@ export async function activate(context: vscode.ExtensionContext) {
     await mkdir(history, { recursive: true, mode: 0o700 });
     const started = new Date().toISOString();
     const abort = new AbortController(); active = abort;
-    candidates.update(`Running ${cwe} · ${connection.model}`, last);
+    candidates.update(`Running ${label} · ${connection.model}`, last);
     try {
-      return await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: `Antares ${connection.model}: ${cwe}`, cancellable: true }, async (progress, token) => {
+      return await vscode.window.withProgress({ location: vscode.ProgressLocation.Notification, title: `Antares ${connection.model}: ${label}`, cancellable: true }, async (progress, token) => {
         const cancel = token.onCancellationRequested(() => abort.abort());
         try {
-          progress.report({ message: 'Investigating saved source files…' });
-          const result = await runCli(executable, ['tool', 'query', '--stdin'], {
-            target, cwe_ids: [cwe], ...connection, backend: 'remote', tool_budget: budget
-          }, storage, childEnvironment(history), seconds * 1000, abort.signal);
-          const run: Run = { target, model: connection.model, cwe, started, finished: new Date().toISOString(), status: result.stopped ?? 'failed' };
+          progress.report({ message: sweep ? 'Selecting weakness categories and investigating them sequentially…' : 'Investigating saved source files…' });
+          const result = await runCli(executable, ['tool', request.mode, '--stdin'], request.payload, storage, childEnvironment(history), seconds * 1000, abort.signal);
+          const run: Run = { target, model: connection.model, cwe: label, mode: sweep ? 'sweep' : 'query', started, finished: new Date().toISOString(), status: result.stopped ?? 'failed' };
           if (!result.stopped) {
             run.report = cliReport(result);
             if (run.report.metadata.model !== connection.model) throw new Error('Result model does not match selected model.');
@@ -214,6 +215,20 @@ export async function activate(context: vscode.ExtensionContext) {
     } catch (error) { candidates.update('Investigation failed; previous result retained', last); throw error; }
     finally { if (active === abort) active = undefined; }
   }
+  async function startSweep(uri?: vscode.Uri) {
+    supported();
+    if (!uri) {
+      const folder = await vscode.window.showWorkspaceFolderPick({ placeHolder: 'Select a folder to sweep' });
+      if (!folder) return; uri = folder.uri;
+    }
+    if (vscode.workspace.textDocuments.some(d => d.isDirty && d.uri.scheme === 'file' && inside(uri!.fsPath, d.uri.fsPath))) {
+      const choice = await vscode.window.showWarningMessage('The sweep scans saved files. Some target files have unsaved changes.', { modal: true }, 'Save All', 'Scan Saved Files');
+      if (!choice || (choice === 'Save All' && !await vscode.workspace.saveAll())) return;
+    }
+    const confirm = await vscode.window.showInformationMessage(`Sweep ${uri.fsPath} using local ${config().get('model')}? Antares will choose up to ${config().get('sweepMaxCwes', 3)} relevant weakness categories and scan them one at a time.`, { modal: true }, 'Start sweep');
+    if (confirm) await investigate(uri);
+  }
+  register('antares.sweep', startSweep);
   register('antares.investigate', async (uri?: vscode.Uri) => {
     supported();
     if (!uri) {
@@ -221,6 +236,7 @@ export async function activate(context: vscode.ExtensionContext) {
       if (!folder) return; uri = folder.uri;
     }
     const category = await vscode.window.showQuickPick([
+      { label: 'Automatic sweep', description: 'Recommended starting point', detail: 'Let Antares choose relevant weakness categories and investigate them sequentially.', cwe: 'sweep' },
       { label: 'SQL injection', description: 'CWE-89', detail: 'User input changes a database query.', cwe: 'CWE-89' },
       { label: 'Improper authentication', description: 'CWE-287', detail: 'Identity or token validation, including OAuth audience checks.', cwe: 'CWE-287' },
       { label: 'Missing authorization', description: 'CWE-862', detail: 'Operations lack required permission or scope checks.', cwe: 'CWE-862' },
@@ -231,6 +247,7 @@ export async function activate(context: vscode.ExtensionContext) {
       { label: 'Custom weakness category…', detail: 'Enter a different CWE identifier.', cwe: '' }
     ], { title: 'What should Antares investigate?', placeHolder: 'Choose a weakness to focus the scan. CWE IDs are standard category labels.', matchOnDescription: true, matchOnDetail: true });
     if (!category) return;
+    if (category.cwe === 'sweep') { await startSweep(uri); return; }
     const cwe = category.cwe || await vscode.window.showInputBox({ title: 'Custom weakness category', prompt: 'Enter a Common Weakness Enumeration identifier.', placeHolder: 'CWE-287', validateInput: v => /^CWE-[1-9]\d*$/.test(v) ? null : 'Use a CWE ID such as CWE-287.' });
     if (!cwe) return;
     const dirty = vscode.workspace.textDocuments.some(d => d.isDirty && d.uri.scheme === 'file' && inside(uri!.fsPath, d.uri.fsPath));

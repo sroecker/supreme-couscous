@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.2.1.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
+In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.3.0.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
 
 ## Use
 
@@ -27,8 +27,8 @@ ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
 1. Open the source workspace and trust it.
 2. Run **Antares: Configure Local CLI** and paste the path to this POC's `.venv/bin/antares` executable. Hidden directories work normally, and `~/` is supported. When the POC is an open workspace folder, the installed executable is suggested automatically. The path is validated before saving; use the executable, not `scripts/antares.sh`.
 3. Run **Antares: Select Local Model**. 1B uses port 8082; 350M uses 8086.
-4. Right-click a target folder and choose **Antares: Investigate CWE**, or use the Command Palette to scan a workspace root.
-5. Choose a plain-language weakness category such as **SQL injection** or **Improper authentication**, then confirm the target. The plugin supplies its CWE identifier automatically. **Custom weakness category…** lets you enter another identifier. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
+4. Right-click a target folder and choose **Antares: Sweep Code Automatically**, then confirm the target. Antares chooses up to three relevant weakness categories and investigates them sequentially. No CWE input is required.
+5. For a focused scan instead, use **Antares: Investigate CWE** and choose a named weakness. That picker also offers **Automatic sweep** as its first option. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
 6. The **Antares Review** panel opens when the scan finishes. Follow the review workflow below. You can reopen it with **Antares: Review Last Scan** or by clicking a candidate in Explorer.
 
 For the bundled SQL demo, right-click `examples/demo`. For an OAuth variant, select its individual directory, such as `examples/fastmcp-oauth/audience/vulnerable`, to avoid scanning its corrected sibling.
@@ -49,15 +49,27 @@ The latest result and decisions survive reloads in the same editor profile when 
 
 An incomplete investigation remains incomplete even when you have reviewed all returned candidates. Neither an empty result nor a completed review proves the repository is secure.
 
-## Why choose a weakness?
+## Automatic sweeps and focused investigations
 
-CWE means Common Weakness Enumeration: a standard name and number for a class of software weakness. Antares is trained to locate files relevant to a selected weakness, so each investigation needs a focus. You can select the category without knowing its number. This MVP does not automatically discover every applicable category or run a broad sweep.
+CWE means Common Weakness Enumeration: a standard name and number for a class of software weakness. A focused investigation checks one selected category. A sweep uses Antares's repository-aware selection to choose categories automatically, then runs one investigation per category. It does not check every possible weakness or guarantee complete coverage.
+
+The extension invokes `antares tool sweep --stdin`, equivalent in purpose to the repository's `sweep --max-cwes 3 --workers 1` workflow. Default settings:
+
+| Setting | Default | Behavior |
+| --- | --- | --- |
+| `antares.sweepMaxCwes` | 3 | Maximum selected categories; configurable from 1 to 10. |
+| `antares.sweepTimeoutSeconds` | 900 | Deadline for the whole sweep, configurable up to 3,600 seconds. |
+| `antares.toolBudget` | 10 | Terminal-call budget for each category. |
+
+Sweeps always use one worker to match the local server's single slot. The existing `antares.timeoutSeconds` setting applies to focused queries only. Progress shows the investigation stage; the CLI returns the final JSON result rather than live per-category progress. Cancel stops the owned CLI process group and retains the previous result. A timed-out sweep may not have emitted a report yet.
+
+The review panel lists the investigated categories, their candidate counts or errors, and each candidate's CWE. Per-category errors keep the run incomplete. Review decisions remain associated with individual findings, including different weaknesses in the same file.
 
 ## Scope
 
-Version 0.2.1 supports local macOS workspaces, one manual CWE query at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeout (default 300 seconds). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
+Version 0.3.0 supports local macOS workspaces, one focused investigation or automatic sweep at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeouts (300 seconds for a query, 900 seconds for a sweep). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
 
-Remote SSH/containers, browser editors, Windows/Linux execution, sweeps, automatic server/model installation, SARIF export, and permanent suppressions are future work. Original plan milestones beyond this MVP remain proposals.
+Remote SSH/containers, browser editors, Windows/Linux execution, automatic server/model installation, SARIF export, and permanent suppressions are future work. Original plan milestones beyond this MVP remain proposals.
 
 The extension persists the latest completed/partial result and review decisions under private extension global storage and restores them for the matching workspace. CLI history is also stored there and may contain source excerpts. There is no extension telemetry. Source paths and text go to the selected localhost inference server through Antares. `.antares.toml` controls exclusions; `.gitignore` is not automatically applied. No MCP servers or fixture applications are started.
 
