@@ -159,7 +159,7 @@ npm run package
 
 Install `antares-local-0.3.0.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and paste the path to this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor. Right-click a source folder and choose **Antares: Sweep Code Automatically** to scan without selecting a CWE.
 
-See [editor validation](docs/vscode-extension-validation.md) for VSCodium test results and current limits. The [integration plan](docs/vscode-integration-plan.md) records the longer-term roadmap.
+See [editor validation](docs/vscode-extension-validation.md) for VSCodium test results and current limits. The [improvement plan](docs/reliability-improvement-plan.md) defines the next fixes and acceptance tests; the [integration plan](docs/vscode-integration-plan.md) records the original roadmap.
 
 ## License
 
