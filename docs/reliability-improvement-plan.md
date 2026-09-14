@@ -135,3 +135,8 @@ All five reviewed defects have targeted regressions, acknowledged review work su
 ## Follow-up: 0.4.2
 
 Implemented immediate delivery of note edits with host-side batched persistence, render-scoped save acknowledgements, guarded review/history/export transitions, dynamic workspace watchers, stable folder-filtered history with compatibility for old records, and process-group cleanup before the leader PID is reaped. Regression coverage includes rapid typing followed by panel closure, folder removal/re-addition, old-record conflicts, history/scan overlap, and exited tool leaders with surviving descendants. Native keyboard and visual checks remain release-validation follow-up work.
+
+
+## Follow-up: 0.4.3
+
+Track failed draft saves independently of panel lifetime; provide Retry Draft Save for transient storage errors and retain conflict recovery through History. Give every older workspace-scoped record a stable location-derived editor ID while preserving its original disk ID and revision lock. Defer main-thread cancellation until tool registration completes. Regression tests cover closed-panel failure/recovery, legacy ID collisions, and injected SIGTERM/SIGINT during registration.

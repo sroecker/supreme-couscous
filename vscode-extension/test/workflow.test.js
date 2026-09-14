@@ -126,3 +126,22 @@ test('rapid note edits batch disk writes while retaining the latest text on clos
  const pending=[...h.current.pending];h.panels[0].dispose();await Promise.all(pending);
  assert.equal(writes,1);assert.equal((await h.api.store.list())[0].drafts[0].note,'Note 19');
 });
+
+for (const failure of ['conflict','disk']) test(`closed panel retains a failed ${failure} draft until recovery or retry`,async t=>{
+ const h=await harness(t);await h.api.showReview();const oldId=h.api.getLastRun().id;
+ const next={...structuredClone(h.run),started:'2026-09-14T00:00:00Z'};await h.api.store.save(next);
+ const save=h.api.store.save.bind(h.api.store);let failing=true;
+ t.mock.method(h.api.store,'save',async run=>{if(failing&&run.id===oldId)throw failure==='conflict'?new (require('../dist/store').ConflictError)():new Error('Disk unavailable');return save(run)});
+ h.current.note.value='Draft retained after failure';h.current.note.input();const pending=[...h.current.pending];h.panels[0].dispose();await Promise.all(pending);
+ h.vscode.window.showQuickPick=async items=>items.find(i=>i.run.id===next.id);
+ await h.vscode.commands.executeCommand('antares.history');
+ if(failure==='conflict'){
+  assert.equal(h.api.getLastRun().id,next.id);
+  const recovery=(await h.api.store.list()).find(r=>r.parentRunId===oldId);
+  assert.equal(recovery.drafts[0].note,'Draft retained after failure');
+ }else{
+  assert.equal(h.api.getLastRun().id,oldId);assert.match(h.errors.join(' '),/Disk unavailable/);
+  failing=false;await h.vscode.commands.executeCommand('antares.retryDraftSave');await h.vscode.commands.executeCommand('antares.history');
+  assert.equal(h.api.getLastRun().id,next.id);assert.equal((await h.api.store.list()).find(r=>r.id===oldId).drafts[0].note,'Draft retained after failure');
+ }
+});

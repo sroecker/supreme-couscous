@@ -30,7 +30,7 @@ export function validateRun(value: any): Run {
 // Runs are immutable in identity; review updates use optimistic revisions under a process lock.
 export class RunStore {
   readonly directory: string;
-  private locations = new Map<string, string>();
+  private locations = new Map<string, { file: string; diskId: string }>();
   setRoots(roots: string[]) { this.roots = roots; }
   constructor(private base: string, private roots: string[]) {
     this.directory = path.join(base, 'runs');
@@ -52,7 +52,11 @@ export class RunStore {
           const location = path.join(directory, file);
           const r = validateRun(JSON.parse(await readFile(location, 'utf8')));
           if (r.id && file === `${r.id}.json` && this.roots.some(root => inside(root, r.target))) {
-            this.locations.set(r.id, location); runs.push(r);
+            const diskId = r.id;
+            // Namespace older records by their original storage location. Do not
+            // rewrite disk IDs: older windows must still use the same revision lock.
+            if (directory !== this.directory) r.id = `stored-${createHash('sha256').update(path.relative(this.base, location)).digest('hex')}`;
+            this.locations.set(r.id!, { file: location, diskId }); runs.push(r);
           }
         } catch { /* Retain corrupt records for recovery. */ }
       }
@@ -64,7 +68,9 @@ export class RunStore {
     validateRun(run);
     await mkdir(this.directory, { recursive: true, mode: 0o700 });
     if (run.revision && !this.locations.has(run.id)) await this.list();
-    const file = this.locations.get(run.id) ?? path.join(this.directory, `${run.id}.json`), lock = `${file}.lock`;
+    const location = this.locations.get(run.id);
+    if (run.revision && !location) throw new ConflictError();
+    const file = location?.file ?? path.join(this.directory, `${run.id}.json`), lock = `${file}.lock`;
     let owned = false;
     for (let attempt = 0; attempt < 40; attempt++) {
       try {
@@ -94,10 +100,11 @@ export class RunStore {
       try { revision = validateRun(JSON.parse(await readFile(file, 'utf8'))).revision ?? 0; }
       catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
       if ((run.revision ?? 0) !== revision) throw new ConflictError();
-      const next = { ...run, schemaVersion: 2, revision: revision + 1 };
+      const next = { ...run, id: location?.diskId ?? run.id, schemaVersion: 2, revision: revision + 1 };
       const handle = await open(temporary, 'wx', 0o600);
       try { await handle.writeFile(JSON.stringify(next, null, 2)); await handle.sync(); } finally { await handle.close(); }
       await rename(temporary, file);
+      this.locations.set(run.id!, { file, diskId: next.id! });
       run.revision = next.revision; run.schemaVersion = 2;
     } finally { await unlink(temporary).catch(() => {}); await unlink(lock).catch(() => {}); }
   }
@@ -107,7 +114,8 @@ export class RunStore {
     catch (e) { if ((e as NodeJS.ErrnoException).code === 'ENOENT') return; throw e; }
     if (!this.roots.some(root => inside(root, legacy.target))) return;
     legacy.id = `legacy-${createHash('sha256').update(`${legacy.started}:${legacy.target}`).digest('hex')}`;
-    if ((await this.list()).some(r => r.id === legacy.id)) return;
+    await this.list();
+    if ([...this.locations.values()].some(location => location.diskId === legacy.id)) return;
     legacy.revision = 0;
     try { await this.save(legacy); } catch (e) { if (!(e instanceof ConflictError)) throw e; }
   }

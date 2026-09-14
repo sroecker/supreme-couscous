@@ -73,6 +73,35 @@ class ProcessCleanupTests(unittest.TestCase):
                         except ProcessLookupError:
                             pass
 
+    def test_signal_during_registration_cleans_new_tool(self):
+        for sig in (signal.SIGTERM, signal.SIGINT):
+            with self.subTest(signal=sig), tempfile.TemporaryDirectory() as temporary:
+                root = Path(temporary)
+                pid_file = root / 'pid'
+                cli = root / 'cli.py'
+                driver = root / 'driver.py'
+                cli.write_text("import subprocess,sys\nsubprocess.Popen([sys.executable,'-c','import time; time.sleep(60)'],start_new_session=True,stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL)\n")
+                driver.write_text("import subprocess,os,signal,runpy\nr=runpy.run_path(" + repr(str(RUNTIME)) + ")\noriginal=subprocess.Popen.__init__\ndef interrupted(self,*a,**kw):\n original(self,*a,**kw)\n open(" + repr(str(pid_file)) + ",'w').write(str(self.pid))\n os.kill(os.getpid()," + str(int(sig)) + ")\nsubprocess.Popen.__init__=interrupted\nr['main']([" + repr(str(cli)) + "])\n")
+                pid = None
+                independent = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])
+                try:
+                    result = subprocess.run([sys.executable, str(driver)], capture_output=True, text=True, timeout=5)
+                    pid = int(pid_file.read_text())
+                    self.assertEqual(result.returncode, 128 + sig, result.stderr)
+                    with self.assertRaises(ProcessLookupError):
+                        os.kill(pid, 0)
+                    self.assertIsNone(independent.poll())
+                finally:
+                    independent.kill()
+                    independent.wait()
+                    if pid is None and pid_file.exists():
+                        pid = int(pid_file.read_text())
+                    if pid is not None:
+                        try:
+                            os.killpg(pid, signal.SIGKILL)
+                        except ProcessLookupError:
+                            pass
+
     def test_native_tools_preserve_output_and_exit_status(self):
         with tempfile.TemporaryDirectory() as temporary:
             cli = Path(temporary) / 'cli.py'

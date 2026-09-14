@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {
@@ -75,6 +75,10 @@
       {
         "command": "antares.startServer",
         "title": "Antares: Start Local Server"
+      },
+      {
+        "command": "antares.retryDraftSave",
+        "title": "Antares: Retry Draft Save"
       }
     ],
     "views": {

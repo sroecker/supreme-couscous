@@ -48,10 +48,17 @@ export async function activate(context: vscode.ExtensionContext) {
     writes = pending.catch(() => {});
     return pending;
   }
+  const failedDrafts = new Map<Run, unknown>();
   const draftSaves = new Map<Run, Promise<void>>();
   async function flushDrafts() {
     await review.flush();
     await Promise.all([...draftSaves.values()]);
+    await writes;
+    if (last && failedDrafts.has(last)) {
+      const error = failedDrafts.get(last);
+      if (error instanceof ConflictError) throw error;
+      throw new Error(`Draft is still unsaved: ${error instanceof Error ? error.message : String(error)}. Run Antares: Retry Draft Save after resolving the storage problem.`);
+    }
   }
   async function saveDraft(index: number, note: string) {
     if (!last?.report?.findings[index] || typeof note !== 'string' || note.length > 4000) throw new Error('Invalid draft.');
@@ -64,7 +71,7 @@ export async function activate(context: vscode.ExtensionContext) {
       pending = new Promise<void>((resolve, reject) => {
         setTimeout(() => {
           draftSaves.delete(run);
-          void persist(run).then(resolve, reject);
+          void persist(run).then(() => { failedDrafts.delete(run); resolve(); }, error => { failedDrafts.set(run, error); reject(error); });
         }, 150);
       });
       draftSaves.set(run, pending);
@@ -396,12 +403,22 @@ export async function activate(context: vscode.ExtensionContext) {
     if (!run) throw new Error('Run not found in this workspace.');
     last = run; if (await refreshDecisions(last)) await persist(last); refresh(); review.show(last);
   }
+  register('antares.retryDraftSave', async () => reviewOperation(async () => {
+    if (!last) throw new Error('No review draft to save.');
+    await persist(last);
+    failedDrafts.delete(last);
+    await flushDrafts();
+    refresh();
+    if (review.visible) review.show(last, review.selected, 'Draft saved.');
+    void vscode.window.showInformationMessage('Antares review saved.');
+  }));
   register('antares.history', async () => reviewOperation(async () => {
     try { await flushDrafts(); } catch (error) {
       if (!(error instanceof ConflictError) || !last) throw error;
       const recovery = structuredClone(last);
       recovery.parentRunId = last.id; delete recovery.id; recovery.revision = 0; recovery.cwe = `Draft recovery: ${last.cwe}`;
       recovery.started = new Date().toISOString(); await store.save(recovery);
+      failedDrafts.delete(last);
       last = recovery; refresh(); review.show(recovery);
       void vscode.window.showInformationMessage('Your local drafts were saved as a recovery run in history. Select a run to continue.');
     }

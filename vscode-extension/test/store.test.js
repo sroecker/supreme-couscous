@@ -52,3 +52,19 @@ test('legacy workspace records remain editable across changed root combinations'
  const reopened=new RunStore(base,['/a']);assert.equal((await reopened.list())[0].drafts[0].note,'edited');
  await assert.rejects(new RunStore(base,['/a']).save(r),ConflictError);
 });
+
+test('colliding legacy IDs have stable independent identities and keep original locks',async t=>{
+ const base=await fixture(t),files=[];
+ for(const namespace of ['a','b']){
+  const directory=path.join(base,'workspaces',namespace,'runs');await fs.mkdir(directory,{recursive:true});
+  const r=run('/a');r.id='legacy-same';r.revision=3;r.drafts[0].note=namespace;
+  const file=path.join(directory,'legacy-same.json');files.push(file);await fs.writeFile(file,JSON.stringify(r));
+ }
+ const store=new RunStore(base,['/a']);const rows=await store.list();assert.equal(new Set(rows.map(r=>r.id)).size,2);
+ const first=rows.find(r=>r.drafts[0].note==='a'),stale=structuredClone(first);first.drafts[0].note='edited a';await store.save(first);
+ assert.equal(JSON.parse(await fs.readFile(files[0],'utf8')).drafts[0].note,'edited a');
+ assert.equal(JSON.parse(await fs.readFile(files[1],'utf8')).drafts[0].note,'b');
+ assert.equal(JSON.parse(await fs.readFile(files[0],'utf8')).id,'legacy-same');
+ const reopened=new RunStore(base,['/a']);assert.deepEqual((await reopened.list()).map(r=>r.id).sort(),rows.map(r=>r.id).sort());
+ await assert.rejects(reopened.save(stale),ConflictError);
+});

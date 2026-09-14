@@ -58,6 +58,8 @@ def main(argv=None):
     processes = []
     lock = threading.RLock()
     stopping = False
+    creating_on_main = False
+    pending_signal = None
 
     def send(process, grouped, sig):
         if process.poll() is not None:
@@ -110,16 +112,26 @@ def main(argv=None):
             return self.returncode
 
         def __init__(self, *args, **kwargs):
-            with lock:
-                if stopping:
-                    raise RuntimeError('Antares is stopping; no new tools can start')
-                super().__init__(*args, **kwargs)
-                grouped = bool(kwargs.get('start_new_session'))
-                self._owned_group = grouped and os.name == 'posix'
-                processes.append((self, grouped))
-                # A signal can interrupt a main-thread Popen before registration.
-                if stopping:
-                    send(self, grouped, signal.SIGKILL)
+            nonlocal creating_on_main
+            on_main = threading.current_thread() is threading.main_thread()
+            if on_main:
+                creating_on_main = True
+            try:
+                with lock:
+                    if stopping:
+                        raise RuntimeError('Antares is stopping; no new tools can start')
+                    try:
+                        super().__init__(*args, **kwargs)
+                    finally:
+                        if getattr(self, '_child_created', False):
+                            grouped = bool(kwargs.get('start_new_session'))
+                            self._owned_group = grouped and os.name == 'posix'
+                            processes.append((self, grouped))
+            finally:
+                if on_main:
+                    creating_on_main = False
+                    if pending_signal is not None:
+                        terminate(pending_signal, None)
 
     def cleanup():
         nonlocal stopping
@@ -142,6 +154,13 @@ def main(argv=None):
                 process.wait(timeout=0.2)
 
     def terminate(signum, _frame):
+        nonlocal pending_signal, stopping
+        if creating_on_main:
+            # Do not raise through Popen before its child is registered. Keep
+            # signal masks unchanged so the new tool can still receive SIGTERM.
+            pending_signal = signum
+            stopping = True
+            return
         cleanup()
         raise SystemExit(128 + signum)
 

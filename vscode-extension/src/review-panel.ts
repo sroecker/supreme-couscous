@@ -3,7 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { failedCategories, categoryCoverage } from './core';
 import { counts, decision, escapeHtml as e, guidance, Run } from './review-model';
 export interface ReviewMessage { run: string; action: string; index: number; status?: string; note?: string }
-export function runKey(run: Run) { return `${run.started}:${run.target}`; }
+export function runKey(run: Run) { return run.id ?? `${run.started}:${run.target}`; }
 export function reviewHtml(run: Run, index: number, nonce: string, message = '') {
   const findings = run.report?.findings ?? [], f = findings[index], d = decision(run, index), c = counts(run);
   const steps = guidance[f?.cwe_ids[0] ?? run.cwe] ?? ['Trace untrusted input and the relevant sensitive operation.', 'Check controls in this file and its callers or middleware.', 'Record concrete evidence before confirming or dismissing the candidate.'];

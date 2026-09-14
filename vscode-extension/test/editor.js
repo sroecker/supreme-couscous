@@ -7,7 +7,7 @@ exports.run=async()=>{
  if(!root)throw Error('Set ANTARES_TEST_ROOT');
  const extension=vscode.extensions.getExtension('sroecker.antares-local');assert.ok(extension);
  const api=await extension.activate();
- const commands=await vscode.commands.getCommands();assert.ok(commands.includes('antares.investigate'));
+ const commands=await vscode.commands.getCommands();assert.ok(commands.includes('antares.investigate'));assert.ok(commands.includes('antares.retryDraftSave'));
  const config=vscode.workspace.getConfiguration('antares');
  await config.update('cliPath',path.join(root,'.venv/bin/antares'),vscode.ConfigurationTarget.Global);
  const results=[];

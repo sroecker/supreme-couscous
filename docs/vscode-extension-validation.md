@@ -179,3 +179,17 @@ Validation on 2026-09-14:
 The normal VSCodium profile was not updated. Model scan records are in ignored `logs/vscodium-extension-test.json`; review evidence is in `logs/reliability-editor-test.json`.
 
 Final packaged smoke results: antares-350m: completed, app.py returned, 9.5 seconds; antares-1b: completed, app.py returned, 23.8 seconds. Model-generated empty/duplicate commands can still count as failed tool calls; these are distinct from runtime execution failures.
+
+
+## Version 0.4.3: durable failure state and collision-safe legacy history
+
+- All **41 extension tests** passed, including closed-panel draft conflicts, disk failure followed by the public Retry Draft Save command, and independent updates to old records sharing one on-disk ID.
+- All **10 Python tests** passed with the CLI’s Python 3.12.14 and system Python 3.14. SIGTERM and SIGINT injected after child creation but before registration now clean up the tool and leave an unrelated process running. Native output/exit status and exited-leader cleanup checks continue to pass.
+- Older workspace records receive stable editor/export identities derived from their original storage paths. Their original JSON IDs, files and locks remain unchanged, maintaining revision checks with older editor windows. Review messages now identify the run by its unique editor ID.
+- Failed draft writes remain tracked independently of panel lifetime. Run History recovers conflicting drafts; Retry Draft Save retries temporary storage failures.
+
+The first packaged VSCodium 1.95.3 run passed review checks but failed the SQL-candidate smoke assertion: 350M returned an incomplete report after empty/duplicate calls and requesting nonexistent `utils.py`. Its trace showed successful repository listing and `app.py` reading, with no runtime exception. This is retained as an incomplete model result rather than counted as a successful scan. A fresh smoke run follows below.
+
+Native keyboard/visual validation and Microsoft VS Code testing remain pending. The normal VSCodium profile was not updated.
+
+Fresh packaged run: antares-350m: completed, 8.6s, findings app.py; antares-1b: completed, 24.3s, findings app.py. Both passed the successful-tool and known-candidate assertions; the editor test exited 0. Raw smoke records are in ignored `logs/vscodium-extension-test.json`; review evidence is in `logs/reliability-editor-test.json`.
