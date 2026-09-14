@@ -158,3 +158,24 @@ The packaged `test/release-editor.js` passed in isolated **VSCodium 1.95.3**, ex
 | Antares 1B | completed | `app.py` | 30.14 seconds |
 
 Logs: `logs/reliability-editor-test.json` and `logs/vscodium-extension-test.json`. Editor exit code was 0. VSCodium emitted its existing update-service/shutdown diagnostics; extension test assertions passed. The broader 0.4.0 profile evaluation remains unchanged, including its false positives and incomplete runs. No new visual/keyboard or VS Code execution claims are made; those previously recorded validation limits remain.
+
+
+## Version 0.4.2: panel lifetime, workspace changes, and descendant cleanup
+
+- Extension regression tests cover immediate panel closure after typing, batched host-owned draft saves, added/removed/re-added workspace roots and watcher disposal, old history records with revision conflicts, and history selection overlapping scan requests and note edits.
+- Python process tests cover a session leader exiting before its child on both normal CLI exit and cancellation. The child is terminated before the leader PID is reaped; existing cancellation tests still verify that unrelated processes survive.
+- Review navigation, history loading, and export snapshot creation now reserve the same operation guard used by scans. Save acknowledgements are scoped to the webview render.
+- New history uses a stable global `runs/` directory with current-folder filtering. Older workspace-scoped records are read and updated in place, avoiding a copy that could bypass an older window’s revision lock.
+
+The draft tests execute the generated panel script in a simulated DOM. They are not a native keyboard/visual validation. Full keyboard/accessibility checks and testing in Microsoft VS Code remain pending.
+
+Validation on 2026-09-14:
+
+- All **38 extension tests** passed with `ANTARES_TEST_PYTHON=/Users/sroecker/code/antares/.venv/bin/python` (CPython 3.12.14).
+- All **9 Python tests** passed under the same interpreter. The process regressions also passed under system Python 3.14 during development.
+- Packaged `antares-local-0.4.2.vsix` includes the Python runtime (13 files). Installed into the isolated VSCodium test profile and ran `test/release-editor.js`: review persistence/freshness checks and real scans with both local models passed; editor host exited 0.
+- The initial package check exposed missing `os.waitid` on the CLI’s Python 3.12 macOS build. The final runtime uses Darwin libc with the SDK’s `siginfo_t` layout in that case; Native-command testing also exposed Darwin’s `EPERM` response when signaling a zombie-only group; that case now permits normal reaping. Final package validation was repeated after both corrections, with stronger assertions requiring successful repository tools and the known SQL candidate.
+
+The normal VSCodium profile was not updated. Model scan records are in ignored `logs/vscodium-extension-test.json`; review evidence is in `logs/reliability-editor-test.json`.
+
+Final packaged smoke results: antares-350m: completed, app.py returned, 9.5 seconds; antares-1b: completed, app.py returned, 23.8 seconds. Model-generated empty/duplicate commands can still count as failed tool calls; these are distinct from runtime execution failures.

@@ -34,11 +34,11 @@ ${findings.length ? `<div class="layout"><nav aria-label="Candidates"><h2>Files 
 <p class="muted">Drafts save automatically and export separately from review decisions.</p><p id="feedback" role="status">${e(message)}</p><div class="actions">${run.report && failedCategories(run.report, run.categories).length ? '<button data-action="retry" data-index="0">Retry failed categories</button>' : ''}<button class="secondary" data-action="export" data-index="${index}">Export result and review</button><button class="secondary" data-action="raw" data-index="${index}">Raw result</button></div>
 <script nonce="${nonce}">
 const api=acquireVsCodeApi(), note=document.getElementById('note'), key=document.body.dataset.run+':'+${index};
-let timer, sequence=0, dirty=false;
+let sequence=0, dirty=false;
 const cached=api.getState();if(note&&cached?.key===key&&cached.dirty){note.value=cached.note;dirty=true;}
-function sendDraft(flush){clearTimeout(timer);if(note&&dirty){api.setState({key,note:note.value,dirty:true});api.postMessage({run:document.body.dataset.run,action:'draft',index:${index},note:note.value,sequence:++sequence,flush});}else api.postMessage({action:'flushed',flush});}
-note?.addEventListener('input',()=>{dirty=true;++sequence;api.setState({key,note:note.value,dirty:true});document.getElementById('feedback').textContent='Saving draft…';clearTimeout(timer);timer=setTimeout(()=>sendDraft(),150);});
-window.addEventListener('message',event=>{const m=event.data;if(m.action==='flush')sendDraft(m.id);if(m.action==='stale')document.getElementById('stale').textContent='Source changed. Re-scan to refresh. ';if(m.action==='saved'&&m.sequence===sequence){dirty=false;api.setState(undefined);document.getElementById('feedback').textContent='Draft saved.';}if(m.action==='error'){document.getElementById('feedback').textContent=m.message;document.querySelectorAll('button,textarea').forEach(b=>b.disabled=false);}});
+function sendDraft(flush){if(note&&dirty){api.setState({key,note:note.value,dirty:true});api.postMessage({run:document.body.dataset.run,action:'draft',index:${index},note:note.value,sequence:++sequence,render:'${nonce}',flush});}else api.postMessage({action:'flushed',flush});}
+note?.addEventListener('input',()=>{dirty=true;++sequence;api.setState({key,note:note.value,dirty:true});document.getElementById('feedback').textContent='Saving draft…';sendDraft();});
+window.addEventListener('message',event=>{const m=event.data;if(m.action==='flush')sendDraft(m.id);if(m.action==='stale')document.getElementById('stale').textContent='Source changed. Re-scan to refresh. ';if(m.action==='saved'&&m.render==='${nonce}'&&m.sequence===sequence){dirty=false;api.setState(undefined);document.getElementById('feedback').textContent='Draft saved.';}if(m.action==='error'){document.getElementById('feedback').textContent=m.message;document.querySelectorAll('button,textarea').forEach(b=>b.disabled=false);}});
 document.querySelectorAll('button[data-action]').forEach(b=>b.addEventListener('click',()=>{sendDraft();if(b.dataset.action==='decide'){api.setState(undefined);document.querySelectorAll('button,textarea').forEach(el=>el.disabled=true);}api.postMessage({run:document.body.dataset.run,action:b.dataset.action,index:Number(b.dataset.index),status:b.dataset.status,note:note?.value??''});}));
 api.postMessage({action:'ready',render:'${nonce}'});
 </script></body></html>`;
@@ -65,13 +65,13 @@ export class ReviewPanel {
     this.selected = Math.max(0, Math.min(index, (run.report?.findings.length ?? 1) - 1));
     if (!this.panel) {
       this.panel = vscode.window.createWebviewPanel('antares.review', 'Antares Review', vscode.ViewColumn.Two, { enableScripts: true, localResourceRoots: [], retainContextWhenHidden: true });
-      this.panel.onDidDispose(() => this.panel = undefined);
+      this.panel.onDidDispose(() => { this.panel = undefined; this.ready = false; for (const pending of this.pending.values()) pending.reject(new Error('Review panel closed. Reopen it to continue.')); this.pending.clear(); });
       this.panel.webview.onDidReceiveMessage(async m => {
         if (m.action === 'ready') { if (m.render !== this.renderNonce) return; this.ready = true; for (const id of this.pending.keys()) void this.panel?.webview.postMessage({ action: 'flush', id }); return; }
         const execute = async () => {
           try {
             if (m.action !== 'flushed') await this.handler(m);
-            if (m.action === 'draft') void this.panel?.webview.postMessage({ action: 'saved', sequence: m.sequence });
+            if (m.action === 'draft') void this.panel?.webview.postMessage({ action: 'saved', sequence: m.sequence, render: m.render });
             if (m.flush) { this.pending.get(m.flush)?.resolve(); this.pending.delete(m.flush); }
           } catch (error) {
             const failure = error instanceof Error ? error : new Error(String(error));
@@ -80,7 +80,8 @@ export class ReviewPanel {
             else void vscode.window.showErrorMessage(`Antares: ${failure.message}`);
           }
         };
-        if (m.action === 'draft' || m.action === 'flushed') { this.drafts = this.drafts.then(execute); await this.drafts; }
+        if (m.action === 'draft') { this.drafts = Promise.all([this.drafts, execute()]).then(() => {}); await this.drafts; }
+        else if (m.action === 'flushed') { this.drafts = this.drafts.then(execute); await this.drafts; }
         else { await this.drafts; await execute(); }
       });
     }

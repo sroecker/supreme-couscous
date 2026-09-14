@@ -35,7 +35,7 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(servers, serverOutput);
   const candidates = new Candidates();
   context.subscriptions.push(candidates, vscode.window.registerTreeDataProvider('antares.candidates', candidates));
-  const workspaceRoots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
+  let workspaceRoots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
   const store = new RunStore(context.globalStorageUri.fsPath, workspaceRoots);
   let last: Run | undefined;
   let savingReview = false;
@@ -48,12 +48,28 @@ export async function activate(context: vscode.ExtensionContext) {
     writes = pending.catch(() => {});
     return pending;
   }
+  const draftSaves = new Map<Run, Promise<void>>();
+  async function flushDrafts() {
+    await review.flush();
+    await Promise.all([...draftSaves.values()]);
+  }
   async function saveDraft(index: number, note: string) {
     if (!last?.report?.findings[index] || typeof note !== 'string' || note.length > 4000) throw new Error('Invalid draft.');
-    last.drafts ??= {};
-    if (last.drafts[String(index)]?.note === note) { await persist(last); return; }
-    last.drafts[String(index)] = { note, updated: new Date().toISOString() };
-    await persist(last);
+    const run = last;
+    run.drafts ??= {};
+    run.drafts[String(index)] = { note, updated: new Date().toISOString() };
+    // Text belongs to the extension immediately; only disk writes are batched.
+    let pending = draftSaves.get(run);
+    if (!pending) {
+      pending = new Promise<void>((resolve, reject) => {
+        setTimeout(() => {
+          draftSaves.delete(run);
+          void persist(run).then(resolve, reject);
+        }, 150);
+      });
+      draftSaves.set(run, pending);
+    }
+    await pending;
   }
   function refresh() {
     if (last) candidates.update(`${last.sourceChanged ? 'Source changed · ' : ''}${last.status} · ${reviewSummary(last)}`, last);
@@ -109,13 +125,17 @@ export async function activate(context: vscode.ExtensionContext) {
       default: throw new Error('Unknown review action.');
     }
   }
-  async function showReview(index = 0) {
-    if (!last) throw new Error('Run an investigation first.');
-    await review.flush();
+  async function reviewOperation<T>(operation: () => Promise<T>): Promise<T> {
     if (busy || savingReview) throw new Error('Wait for the current operation to finish.');
-    await prepareSnapshot(false);
-    refresh();
-    review.show(last, index);
+    busy = true;
+    try { return await operation(); } finally { busy = false; }
+  }
+  async function showReview(index = 0) {
+    return reviewOperation(async () => {
+      if (!last) throw new Error('Run an investigation first.');
+      await prepareSnapshotUnlocked(false);
+      refresh(); review.show(last, index);
+    });
   }
   const config = () => vscode.workspace.getConfiguration('antares');
   const supported = () => {
@@ -219,7 +239,7 @@ export async function activate(context: vscode.ExtensionContext) {
     if (busy || savingReview) throw new Error('An investigation or review save is already running.');
     busy = true;
     try {
-      await review.flush();
+      await flushDrafts();
       return await performInvestigation(targetUri, cwe, options);
     } finally { busy = false; scanning = undefined; }
   }
@@ -270,7 +290,7 @@ export async function activate(context: vscode.ExtensionContext) {
           else {
             // Save successful work even when the previous panel cannot release its draft.
             await persist(run);
-            try { await review.flush(); } catch (error) {
+            try { await flushDrafts(); } catch (error) {
               candidates.update(`${run.status} scan saved to Run History; previous review retained`, last);
               void vscode.window.showWarningMessage(`Antares saved the new scan to Run History, but kept your previous review open: ${error instanceof Error ? error.message : String(error)}`);
               return run;
@@ -348,8 +368,11 @@ export async function activate(context: vscode.ExtensionContext) {
     await vscode.window.showTextDocument(await vscode.workspace.openTextDocument({ content: JSON.stringify(last, null, 2), language: 'json' }));
   });
   async function prepareSnapshot(render = true): Promise<Run> {
+    return reviewOperation(() => prepareSnapshotUnlocked(render));
+  }
+  async function prepareSnapshotUnlocked(render = true): Promise<Run> {
     if (!last) throw new Error('No result to export.');
-    await review.flush();
+    await flushDrafts();
     await writes;
     await refreshDecisions(last);
     last.freshness = { checked: new Date().toISOString(), scope: 'Reviewed candidate file hashes only; dependencies are not comprehensively tracked.', dirtyFiles: vscode.workspace.textDocuments.filter(d => d.isDirty && d.uri.scheme === 'file' && inside(last!.target, d.uri.fsPath)).map(d => path.relative(last!.target, d.uri.fsPath)) };
@@ -366,22 +389,25 @@ export async function activate(context: vscode.ExtensionContext) {
     if (uri) await vscode.workspace.fs.writeFile(uri, Buffer.from(JSON.stringify(snapshot, null, 2)));
   });
   async function loadRun(id: string) {
+    return reviewOperation(async () => { await flushDrafts(); await loadRunUnlocked(id); });
+  }
+  async function loadRunUnlocked(id: string) {
     const run = (await store.list()).find(r => r.id === id);
     if (!run) throw new Error('Run not found in this workspace.');
     last = run; if (await refreshDecisions(last)) await persist(last); refresh(); review.show(last);
   }
-  register('antares.history', async () => {
-    if (busy || savingReview) throw new Error('Wait for the current operation to finish.');
-    try { await review.flush(); } catch (error) {
+  register('antares.history', async () => reviewOperation(async () => {
+    try { await flushDrafts(); } catch (error) {
       if (!(error instanceof ConflictError) || !last) throw error;
       const recovery = structuredClone(last);
       recovery.parentRunId = last.id; delete recovery.id; recovery.revision = 0; recovery.cwe = `Draft recovery: ${last.cwe}`;
       recovery.started = new Date().toISOString(); await store.save(recovery);
+      last = recovery; refresh(); review.show(recovery);
       void vscode.window.showInformationMessage('Your local drafts were saved as a recovery run in history. Select a run to continue.');
     }
     const choice = await vscode.window.showQuickPick((await store.list()).map(run => ({ label: `${run.started} · ${run.cwe}`, description: `${run.model} · ${run.status}`, detail: `${run.target} · ${reviewSummary(run)}`, run })), { title: 'Antares Run History' });
-    if (choice) await loadRun(choice.run.id!);
-  });
+    if (choice) { await flushDrafts(); await loadRunUnlocked(choice.run.id!); }
+  }));
   function markChanged(file: string) {
     if (scanning && inside(scanning.target, file)) scanning.sourceChanged = true;
     if (savingReview) { deferredChanges.add(file); return; }
@@ -397,10 +423,26 @@ export async function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(event => {
     if (event.contentChanges.length && event.document.uri.scheme === 'file') markChanged(event.document.uri.fsPath);
   }));
-  for (const root of workspaceRoots) {
-    const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(root, '**/*'));
-    context.subscriptions.push(watcher, watcher.onDidChange(uri => markChanged(uri.fsPath)), watcher.onDidCreate(uri => markChanged(uri.fsPath)), watcher.onDidDelete(uri => markChanged(uri.fsPath)));
+  const watchers = new Map<string, vscode.Disposable[]>();
+  function syncWatchers() {
+    for (const [root, subscriptions] of watchers) if (!workspaceRoots.includes(root)) {
+      subscriptions.forEach(s => s.dispose()); watchers.delete(root);
+    }
+    for (const root of workspaceRoots) if (!watchers.has(root)) {
+      const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(root, '**/*'));
+      watchers.set(root, [watcher, watcher.onDidChange(uri => markChanged(uri.fsPath)), watcher.onDidCreate(uri => markChanged(uri.fsPath)), watcher.onDidDelete(uri => markChanged(uri.fsPath))]);
+    }
   }
+  let folderUpdates = Promise.resolve();
+  context.subscriptions.push({ dispose: () => { for (const subscriptions of watchers.values()) subscriptions.forEach(s => s.dispose()); watchers.clear(); } });
+  context.subscriptions.push(vscode.workspace.onDidChangeWorkspaceFolders(() => {
+    folderUpdates = folderUpdates.then(async () => {
+      workspaceRoots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
+      store.setRoots(workspaceRoots); syncWatchers();
+    }).catch(error => { void vscode.window.showErrorMessage(`Antares could not update workspace folders: ${error.message}`); });
+    return folderUpdates;
+  }));
+  syncWatchers();
   try {
     try { await store.migrate(); } catch (error) { void vscode.window.showWarningMessage(`Antares legacy result could not be migrated: ${error instanceof Error ? error.message : String(error)}`); }
     last = (await store.list())[0];

@@ -42,3 +42,13 @@ test('known dead-owner locks are reclaimed without losing the prior revision',as
  const base=await fixture(t),store=new RunStore(base,['/a']),r=run('/a');await store.save(r);
  await fs.writeFile(path.join(store.directory,`${r.id}.json.lock`),String(child.pid));await store.save(r);assert.equal(r.revision,2);
 });
+
+test('legacy workspace records remain editable across changed root combinations',async t=>{
+ const base=await fixture(t),r=run('/a');r.id='old-run';r.revision=3;
+ const directory=path.join(base,'workspaces',workspaceKey(['/a']), 'runs');await fs.mkdir(directory,{recursive:true});
+ const file=path.join(directory,'old-run.json');await fs.writeFile(file,JSON.stringify(r));
+ const store=new RunStore(base,['/a','/b']);const loaded=(await store.list())[0];loaded.drafts[0].note='edited';await store.save(loaded);
+ assert.equal(JSON.parse(await fs.readFile(file,'utf8')).revision,4);
+ const reopened=new RunStore(base,['/a']);assert.equal((await reopened.list())[0].drafts[0].note,'edited');
+ await assert.rejects(new RunStore(base,['/a']).save(r),ConflictError);
+});

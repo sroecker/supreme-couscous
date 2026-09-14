@@ -30,16 +30,32 @@ export function validateRun(value: any): Run {
 // Runs are immutable in identity; review updates use optimistic revisions under a process lock.
 export class RunStore {
   readonly directory: string;
+  private locations = new Map<string, string>();
+  setRoots(roots: string[]) { this.roots = roots; }
   constructor(private base: string, private roots: string[]) {
-    this.directory = path.join(base, 'workspaces', workspaceKey(roots), 'runs');
+    this.directory = path.join(base, 'runs');
   }
   async list(): Promise<Run[]> {
     await mkdir(this.directory, { recursive: true, mode: 0o700 });
     const runs: Run[] = [];
-    for (const file of await readdir(this.directory)) {
-      if (!file.endsWith('.json')) continue;
-      // A corrupt record must not hide other history. It remains on disk for recovery.
-      try { const r = validateRun(JSON.parse(await readFile(path.join(this.directory, file), 'utf8'))); if (this.roots.some(root => inside(root, r.target))) runs.push(r); } catch { /* retained */ }
+    // Read older workspace-scoped records in place, preserving their revision locks.
+    const directories = [this.directory];
+    try { for (const entry of await readdir(path.join(this.base, 'workspaces'), { withFileTypes: true })) {
+      if (entry.isDirectory()) directories.push(path.join(this.base, 'workspaces', entry.name, 'runs'));
+    } } catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+    for (const directory of directories) {
+      let files: string[];
+      try { files = await readdir(directory); } catch (error) { if ((error as NodeJS.ErrnoException).code === 'ENOENT') continue; throw error; }
+      for (const file of files) {
+        if (!file.endsWith('.json')) continue;
+        try {
+          const location = path.join(directory, file);
+          const r = validateRun(JSON.parse(await readFile(location, 'utf8')));
+          if (r.id && file === `${r.id}.json` && this.roots.some(root => inside(root, r.target))) {
+            this.locations.set(r.id, location); runs.push(r);
+          }
+        } catch { /* Retain corrupt records for recovery. */ }
+      }
     }
     return runs.sort((a, b) => b.started.localeCompare(a.started));
   }
@@ -47,7 +63,8 @@ export class RunStore {
     run.id ??= randomUUID();
     validateRun(run);
     await mkdir(this.directory, { recursive: true, mode: 0o700 });
-    const file = path.join(this.directory, `${run.id}.json`), lock = `${file}.lock`;
+    if (run.revision && !this.locations.has(run.id)) await this.list();
+    const file = this.locations.get(run.id) ?? path.join(this.directory, `${run.id}.json`), lock = `${file}.lock`;
     let owned = false;
     for (let attempt = 0; attempt < 40; attempt++) {
       try {

@@ -16,6 +16,8 @@ exports.run=async()=>{
   const run=await api.investigate(vscode.Uri.file(path.join(root,'examples/demo')),'CWE-89');
   assert.equal(run.model,model);assert.equal(run.report.metadata.model,model);
   assert.ok(['completed','incomplete'].includes(run.status));
+  assert.ok(run.report.summary.tool_call_count > (run.report.summary.failed_tool_calls ?? 0),'SQL smoke scan must include successful repository tool calls');
+  assert.ok(run.report.findings.some(f=>f.file_path==='app.py'),'SQL smoke scan must return the known candidate');
   assert.equal(api.getCandidates().length,run.report.findings.length+1);
   if(run.report.findings.some(f=>f.file_path==='app.py')){
    await vscode.commands.executeCommand('antares.openCandidate',run.target,'app.py');

@@ -130,3 +130,8 @@ Release gate:
 ## Completion criteria
 
 All five reviewed defects have targeted regressions, acknowledged review work survives navigation and project changes, exports reflect checked source state, fixture batches survive individual failures, and scripts/plugin agree on model defaults. Named profiles and retries work without CWE entry. Both editor validation results and model-quality results are documented separately, with any unresolved limitations stated explicitly.
+
+
+## Follow-up: 0.4.2
+
+Implemented immediate delivery of note edits with host-side batched persistence, render-scoped save acknowledgements, guarded review/history/export transitions, dynamic workspace watchers, stable folder-filtered history with compatibility for old records, and process-group cleanup before the leader PID is reaped. Regression coverage includes rapid typing followed by panel closure, folder removal/re-addition, old-record conflicts, history/scan overlap, and exited tool leaders with surviving descendants. Native keyboard and visual checks remain release-validation follow-up work.

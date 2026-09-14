@@ -1,6 +1,6 @@
 # Antares Local for VS Code and VSCodium
 
-Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.1 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.2 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
 ## Install and connect
 
@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-Run **Extensions: Install from VSIX…**, select `antares-local-0.4.1.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.2.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
 1. Complete the repository setup to install the CLI and convert weights.
 2. Open the source workspace and trust it.
@@ -46,15 +46,15 @@ These are bounded starting profiles, not complete security coverage. A category 
 
 For the SQL fixture, select `examples/demo`. For OAuth, select an individual variant such as `examples/fastmcp-oauth/audience/vulnerable`, so corrected and vulnerable siblings are not mixed. **Antares: Investigate CWE** still offers focused named checks and custom identifiers. CWE is the Common Weakness Enumeration label for a class of weakness; using a scan profile requires no CWE entry.
 
-The plugin scans saved files. Dirty target files trigger a save-or-scan-saved-files choice. Sweeps use `antares tool sweep --stdin` with one worker. Named profiles pass explicit category lists; automatic selection uses the CLI selector. Progress displays stages and elapsed time, not an invented percentage. Cancellation or timeout asks the bundled Python launcher to stop the CLI’s registered tool processes, including tools in separate POSIX sessions, before the outer runner forces CLI termination if needed. Prior results are retained. This requires cooperative SIGTERM handling; abrupt SIGKILL or an editor/OS crash cannot guarantee cleanup. A cancelled CLI may not have emitted partial JSON.
+The plugin scans saved files. Dirty target files trigger a save-or-scan-saved-files choice. Sweeps use `antares tool sweep --stdin` with one worker. Named profiles pass explicit category lists; automatic selection uses the CLI selector. Progress displays stages and elapsed time, not an invented percentage. Cancellation or timeout asks the bundled Python launcher to stop the CLI’s registered tool processes, including tools in separate POSIX sessions, before the outer runner forces CLI termination if needed. Prior results are retained. This requires cooperative SIGTERM handling; abrupt SIGKILL or an editor/OS crash cannot guarantee cleanup. A cancelled CLI may not have emitted partial JSON. On macOS, the runtime inspects tool exit with `waitid(WNOWAIT)` (via Darwin libc on Python 3.12 builds without `os.waitid`) and kills any remaining group members before reaping the leader, so it never retains an exited leader’s numeric process-group ID for later signaling. Tool children must not outlive their tool command. The runtime hooks CPython subprocess polling/waiting; test this integration when changing Python versions.
 
 ## Review and retry
 
-Each completed or partial result is saved before switching the review panel. If the previous draft conflicts or the panel does not respond, the new result remains available in Run History and the previous review stays open. Only one scan may start at a time, including while waiting for a draft flush. The review panel opens after a completed or partial result. Execution status is separate from review decisions.
+Each completed or partial result is saved before switching the review panel. If the previous draft conflicts or the panel does not respond, the new result remains available in Run History and the previous review stays open. Scans, review navigation, history loading, and export snapshot creation share an operation guard. History flushes notes again before switching to the selected run. The review panel opens after a completed or partial result. Execution status is separate from review decisions.
 
 1. Select a candidate and **Open source beside review**.
 2. Inspect the file and relevant callers or middleware using the general checklist. Antares supplies file-level candidates, without verified lines or detailed vulnerability explanations.
-3. Type review notes. Drafts save automatically; wait for **Draft saved** before closing the editor. Navigation and export request a final draft acknowledgement. Unacknowledged keystrokes are not guaranteed to survive abrupt shutdown.
+3. Type review notes. Each edit is sent immediately to extension memory; disk writes are batched over 150 ms. Closing and reopening the review panel retains delivered edits. Wait for **Draft saved** before closing the editor. Navigation and export request a final draft acknowledgement. Unacknowledged keystrokes are not guaranteed to survive abrupt shutdown.
 4. **Confirm issue**, **Dismiss candidate**, or **Save as unreviewed** records your assessment. Dismissal requires a reason. Saving a decision consumes that candidate's draft. These actions do not change source code.
 5. Use **Next unreviewed** or select another candidate. Explorer navigation also preserves acknowledged drafts.
 
@@ -64,9 +64,9 @@ Model candidates are not verified vulnerabilities. Neither a completed empty sca
 
 ## History, freshness, and export
 
-**Antares: Run History** lists scans for the current canonical set of workspace folders. Records include target, time, model, scan status, and review counts. Each run has an independent ID; its finding indices remain stable within that immutable report. New scans retain older results. Changing the set of roots selects a different history namespace; returning to the original roots restores it.
+**Antares: Run History** lists scans for the current canonical set of workspace folders. Records include target, time, model, scan status, and review counts. Each run has an independent ID; its finding indices remain stable within that immutable report. New scans retain older results. Adding or removing folders immediately updates history filtering and filesystem watchers. Removing a folder hides its runs without deleting them; adding it again restores access, including after restarting the editor.
 
-Storage is private extension global storage under `workspaces/<workspace-hash>/runs/`. Records use schema version 2, atomic replacement, revision checks, and per-run process locks. Concurrent conflicting saves do not silently overwrite data. Open Run History after a conflict: the local draft is retained as a separate recovery run before loading a saved version. The legacy `last-result.json` is migrated idempotently into matching workspaces and left untouched. Corrupt run files stay on disk for recovery and do not hide other valid history. No automatic history pruning occurs.
+New records live in private extension global storage under `runs/`, filtered by the currently open folders. Older `workspaces/<workspace-hash>/runs/` records remain readable and editable in place, retaining their original revision locks. Records use schema version 2, atomic replacement, revision checks, and per-run process locks. Concurrent conflicting saves do not silently overwrite data. Open Run History after a conflict: the local draft is retained as a separate recovery run before loading a saved version. The legacy `last-result.json` is migrated idempotently into matching workspaces and left untouched. Corrupt run files stay on disk for recovery and do not hide other valid history. No automatic history pruning occurs.
 
 Known-dead process locks are reclaimed automatically. An empty lock or interrupted reclamation can require recovery: close all editor instances first, back up the storage directory, and remove only the affected `.lock`/`.lock.reclaim` files before reopening. Never remove a live writer's lock or the run JSON as a recovery step.
 
