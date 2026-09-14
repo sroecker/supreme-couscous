@@ -8,4 +8,4 @@ export ANTARES_DATA_DIR="$ROOT/.antares-data"
 unset ANTARES_API_KEY
 umask 077
 mkdir -p "$ANTARES_DATA_DIR"
-exec "$ROOT/.venv/bin/antares" "$@"
+exec "$ROOT/.venv/bin/python" "$ROOT/vscode-extension/runtime/antares_runtime.py" "$ROOT/.venv/bin/antares" "$@"

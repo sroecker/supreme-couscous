@@ -1,6 +1,6 @@
 # Antares Local for VS Code and VSCodium
 
-Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.0 adds scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.1 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
 ## Install and connect
 
@@ -12,13 +12,13 @@ npm test
 npm run package
 ```
 
-Run **Extensions: Install from VSIX…**, select `antares-local-0.4.0.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.1.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
 1. Complete the repository setup to install the CLI and convert weights.
 2. Open the source workspace and trust it.
 3. Run **Antares: Configure Local CLI**. Paste the absolute path to this POC's `.venv/bin/antares`; hidden directories and `~/` work. Use the executable, not `scripts/antares.sh`.
 4. Run **Antares: Select Local Model** to choose 1B or 350M.
-5. Open **Antares: Setup and Server Status** to check CLI configuration and server availability. Select **Start local server** and supply the POC folder if you want the extension to launch the existing server script. No dependencies or weights are downloaded.
+5. Open **Antares: Setup and Server Status** to check CLI configuration and server availability. Select **Start local server** and supply the POC folder if you want the extension to launch the existing server script. No dependencies or weights are downloaded. The CLI must be the installed Python entry point with an absolute Python shebang; the extension uses that interpreter to run its bundled cleanup launcher.
 
 You can also keep a separately managed server running from the POC root:
 
@@ -46,11 +46,11 @@ These are bounded starting profiles, not complete security coverage. A category 
 
 For the SQL fixture, select `examples/demo`. For OAuth, select an individual variant such as `examples/fastmcp-oauth/audience/vulnerable`, so corrected and vulnerable siblings are not mixed. **Antares: Investigate CWE** still offers focused named checks and custom identifiers. CWE is the Common Weakness Enumeration label for a class of weakness; using a scan profile requires no CWE entry.
 
-The plugin scans saved files. Dirty target files trigger a save-or-scan-saved-files choice. Sweeps use `antares tool sweep --stdin` with one worker. Named profiles pass explicit category lists; automatic selection uses the CLI selector. Progress displays stages and elapsed time, not an invented percentage. Cancellation or timeout stops the owned CLI process group and retains prior results. A cancelled CLI may not have emitted partial JSON.
+The plugin scans saved files. Dirty target files trigger a save-or-scan-saved-files choice. Sweeps use `antares tool sweep --stdin` with one worker. Named profiles pass explicit category lists; automatic selection uses the CLI selector. Progress displays stages and elapsed time, not an invented percentage. Cancellation or timeout asks the bundled Python launcher to stop the CLI’s registered tool processes, including tools in separate POSIX sessions, before the outer runner forces CLI termination if needed. Prior results are retained. This requires cooperative SIGTERM handling; abrupt SIGKILL or an editor/OS crash cannot guarantee cleanup. A cancelled CLI may not have emitted partial JSON.
 
 ## Review and retry
 
-The review panel opens after a completed or partial result. Execution status is separate from review decisions.
+Each completed or partial result is saved before switching the review panel. If the previous draft conflicts or the panel does not respond, the new result remains available in Run History and the previous review stays open. Only one scan may start at a time, including while waiting for a draft flush. The review panel opens after a completed or partial result. Execution status is separate from review decisions.
 
 1. Select a candidate and **Open source beside review**.
 2. Inspect the file and relevant callers or middleware using the general checklist. Antares supplies file-level candidates, without verified lines or detailed vulnerability explanations.
@@ -70,7 +70,7 @@ Storage is private extension global storage under `workspaces/<workspace-hash>/r
 
 Known-dead process locks are reclaimed automatically. An empty lock or interrupted reclamation can require recovery: close all editor instances first, back up the storage directory, and remove only the affected `.lock`/`.lock.reclaim` files before reopening. Never remove a live writer's lock or the run JSON as a recovery step.
 
-Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
+Edits observed during inference mark the incoming run potentially stale, including the first scan. Repeated source-change events persist the transition to stale once rather than rewriting the full report for every keystroke. Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
 
 **Export result and review** flushes drafts and checks freshness before creating a snapshot. JSON includes execution state, decisions, drafts explicitly separate from decisions, the check timestamp/scope, and dirty-file paths. Draft notes never silently become confirmed or dismissed decisions. The snapshot represents the check time; edits after that time require another export or scan.
 
@@ -90,7 +90,7 @@ Opening review, recording decisions, and exporting check reviewed candidate-file
 
 ## Development checks
 
-`npm test` runs deterministic process, schema, storage/conflict, draft-script, freshness, profile, and server-status tests. `test/reliability-editor.js` exercises the packaged extension and its real webview messaging in an isolated VSCodium host. `test/profiles-live.js` is an opt-in local evaluation across both models, the SQL demo, and six OAuth variants; it resumes existing results under `logs/profiles-0.4.0` rather than replacing them. Move that evaluation directory aside before deliberately starting a new experiment.
+`npm test` requires Python 3 for the subprocess cleanup tests (`ANTARES_TEST_PYTHON` can select its absolute path) and runs deterministic process, schema, storage/conflict, draft-script, freshness, profile, and server-status tests. `test/reliability-editor.js` exercises the packaged extension and its real webview messaging in an isolated VSCodium host. `test/profiles-live.js` is an opt-in local evaluation across both models, the SQL demo, and six OAuth variants; it resumes existing results under `logs/profiles-0.4.0` rather than replacing them. Move that evaluation directory aside before deliberately starting a new experiment.
 
 From the repository root, `python3 -m unittest discover -s tests -v` checks the fixture runner and shell defaults. The separate FastMCP environment runs `examples/fastmcp-oauth/test_fixtures.py`. See the [validation report](../docs/vscode-extension-validation.md) for observed results and remaining manual checks.
 

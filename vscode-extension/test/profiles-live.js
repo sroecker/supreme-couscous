@@ -10,7 +10,7 @@ async function main(){
   for(const c of cases){
    if(results.some(r=>r.model===model&&r.id===c.id)){console.log(`Retaining existing ${model}/${c.id}`);continue;}
    const connection=profile(model),request=explicitSweepRequest(path.join(root,c.target),connection,10,scanProfiles[c.scanProfile].categories);
-   const started=Date.now();const result=await runCli(path.join(root,'.venv/bin/antares'),['tool','sweep','--stdin'],request.payload,output,childEnvironment(path.join(output,'history')),900000,new AbortController().signal);
+   const started=Date.now();const result=await runCli(path.join(root,'.venv/bin/antares'),['tool','sweep','--stdin'],request.payload,output,childEnvironment(path.join(output,'history')),900000,new AbortController().signal,path.join(__dirname,'../runtime/antares_runtime.py'));
    let report,error;try{report=cliReport(result)}catch(e){error=e.message}
    const complete=!result.stopped&&report&&isComplete(report,result.exitCode);
    const actual=[...new Set((report?.findings??[]).filter(f=>f.cwe_ids.includes(c.cwe)).map(f=>f.file_path))].sort();

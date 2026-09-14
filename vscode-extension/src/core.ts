@@ -1,6 +1,6 @@
 import modelProfiles from './model-profiles.json';
 import { spawn } from 'node:child_process';
-import { realpath, stat } from 'node:fs/promises';
+import { readFile, realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
 
 export interface Finding { file_path: string; cwe_ids: string[]; title: string; submission_rank?: number }
@@ -78,11 +78,12 @@ export async function checkServer(connection: { model: string; endpoint: string 
   }
   if (!response.ok) throw new LocalServerError(`The local ${connection.model} server is not ready (HTTP ${response.status}). Wait for it to finish loading, then retry.`, command);
 }
-export function runCli(executable: string, args: string[], request: unknown, cwd: string,
-  env: NodeJS.ProcessEnv, timeoutMs: number, signal: AbortSignal): Promise<ProcessResult> {
+export async function runCli(executable: string, args: string[], request: unknown, cwd: string,
+  env: NodeJS.ProcessEnv, timeoutMs: number, signal: AbortSignal, runtimePath?: string): Promise<ProcessResult> {
+  const invocation = runtimePath ? await pythonCliInvocation(executable, args, runtimePath) : { executable, args };
   return new Promise((resolve, reject) => {
     if (signal.aborted) return resolve({ stdout: '', stderr: '', exitCode: null, stopped: 'cancelled' });
-    const child = spawn(executable, args, { cwd, env, shell: false, detached: process.platform !== 'win32' });
+    const child = spawn(invocation.executable, invocation.args, { cwd, env, shell: false, detached: process.platform !== 'win32' });
     let stdout = '', stderr = '', bytes = 0, stopped: ProcessResult['stopped'], force: NodeJS.Timeout | undefined;
     const kill = (sig: NodeJS.Signals) => {
       if (!child.pid) return;
@@ -152,4 +153,13 @@ export function categoryCoverage(report: Report, requested?: string[]) {
     const result = results.find(r => r.cwe_id === id);
     return { id, label: categoryLabel(id), status: !result ? 'not run' : result.error_message ? `incomplete: ${result.error_message}` : `completed · ${result.finding_count} candidate(s)` };
   });
+}
+
+export async function pythonCliInvocation(executable: string, args: string[], runtimePath: string) {
+  const shebang = (await readFile(executable, 'utf8')).split('\n', 1)[0].trim();
+  const interpreter = shebang.startsWith('#!') ? shebang.slice(2).trim() : '';
+  if (!path.isAbsolute(interpreter) || !/^python(?:[0-9.]+)?$/.test(path.basename(interpreter))) {
+    throw new Error('Configure the installed Antares Python entry point (.venv/bin/antares), with an absolute Python shebang. Shell wrappers and env-based launchers are not supported.');
+  }
+  return { executable: interpreter, args: [runtimePath, executable, ...args] };
 }

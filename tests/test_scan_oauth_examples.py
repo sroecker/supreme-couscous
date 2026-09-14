@@ -60,18 +60,19 @@ class LauncherTests(unittest.TestCase):
         import sys
         with tempfile.TemporaryDirectory(prefix='antares launcher ') as temporary:
             root=Path(temporary)
-            for directory in ['scripts','.venv/bin','build/llama.cpp/bin','models','vscode-extension/src']:
+            for directory in ['scripts','.venv/bin','build/llama.cpp/bin','models','vscode-extension/src','vscode-extension/runtime']:
                 (root/directory).mkdir(parents=True)
             for filename in ['serve.sh','antares.sh','model_profile.sh']:
                 shutil.copy(scan.ROOT/'scripts'/filename,root/'scripts'/filename)
             shutil.copy(scan.ROOT/'vscode-extension/src/model-profiles.json',root/'vscode-extension/src/model-profiles.json')
+            shutil.copy(scan.ROOT/'vscode-extension/runtime/antares_runtime.py',root/'vscode-extension/runtime/antares_runtime.py')
             (root/'.venv/bin/python').symlink_to(sys.executable)
             for model in ['antares-350m','antares-1b']:
                 (root/f'models/{model}-bf16.gguf').touch()
             server=root/'build/llama.cpp/bin/llama-server'
             server.write_text('#!/bin/sh\nprintf "%s\\n" "$@"\n');server.chmod(0o755)
             cli=root/'.venv/bin/antares'
-            cli.write_text('#!/bin/sh\nprintf "%s\\n" "$ANTARES_MODEL" "$ANTARES_ENDPOINT"\n');cli.chmod(0o755)
+            cli.write_text('import os\nprint(os.environ["ANTARES_MODEL"])\nprint(os.environ["ANTARES_ENDPOINT"])\n');cli.chmod(0o755)
             env={'PATH':'/usr/bin:/bin','ANTARES_MODEL':'antares-350m'}
             result=subprocess.run(['bash',str(root/'scripts/serve.sh')],env=env,capture_output=True,text=True,check=True)
             args=result.stdout.splitlines();self.assertEqual(args[args.index('--port')+1],'8086')

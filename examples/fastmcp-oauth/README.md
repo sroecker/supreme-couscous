@@ -87,3 +87,5 @@ ANTARES_MODEL=antares-350m .venv/bin/python scripts/scan_oauth_examples.py \
 ```
 
 The model-specific port default is shared with the editor extension: 1B uses 8082 and 350M uses 8086. Explicit endpoint/port overrides remain available. The [0.4.0 profile evaluation](../../docs/vscode-extension-validation.md#live-profile-evaluation) records broader MCP/OAuth sweeps separately from these focused fixture queries.
+
+Timeouts send SIGTERM to the CLI launcher, allowing its registered tool process groups to be cleaned up, then force CLI termination after a two-second grace period if necessary. `scripts/antares.sh` and the extension share `vscode-extension/runtime/antares_runtime.py`; the installed CLI package is not modified. Abrupt SIGKILL cannot run cooperative cleanup.

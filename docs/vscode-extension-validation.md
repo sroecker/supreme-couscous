@@ -135,3 +135,26 @@ The 350M model completed 5/7 sweeps; 1B completed 4/7. The Web profile scheduled
 - Native UI permissions became available, but computer-use selection kept binding to the existing normal-profile VSCodium process rather than the isolated development host. The normal profile's extension and review data were not changed. A visual/keyboard pass on 0.4.0 remains pending; do not interpret the automated host and DOM tests as that pass.
 - Local server startup is implemented with explicit ownership, bounded output, cancellation and timeout. Actual llama.cpp processes were separately managed during the 14-run evaluation; the setup UI's full startup path still needs a manual end-to-end pass.
 - Dependency freshness is deliberately limited. Hashes cover reviewed candidate files; filesystem/editor events only mark other observed changes potentially stale.
+
+## Version 0.4.1: scan lifecycle and cooperative cleanup
+
+Validated 14 September 2026. **33 extension tests and seven Python tests pass.** The release VSIX includes `runtime/antares_runtime.py`; bytecode/cache files are excluded. `scripts/antares.sh --version` returns `antares-cli 1.0.0` through that launcher. No vendor package files were patched.
+
+The new regressions verify:
+
+- Two simultaneous investigation calls produce one CLI launch, and the scan lock is released after failure. The lock is acquired before awaiting draft flushing.
+- A valid completed result is persisted even if the old review draft encounters a revision conflict. The previous panel/draft remains open; the new run is accessible through history.
+- Edits during a first scan mark its incoming result stale. A burst of 100 subsequent source-change events produces one freshness save.
+- Cancellation and timeout terminate a SIGTERM-ignoring tool in a separate POSIX session, while an unrelated process stays alive. Tests use real Python processes, not a mocked kill function.
+- The script runner grants cleanup a two-second grace period on timeout; the launcher preserves JSON stdout and partial-result exit code 2.
+
+The bundled launcher executes the configured Python CLI entry point in its own interpreter and registers subprocess handles created through `subprocess.Popen`. SIGTERM/SIGINT stop new tool starts and terminate registered tools, escalating their process groups after a short grace period. The plugin selects the interpreter from the installed entry point's absolute Python shebang; shell wrappers and env-based shebangs are rejected with an actionable message. This is cooperative cleanup for the pinned CLI's tool-launch mechanism, not an OS sandbox. SIGKILL, OS/editor crashes, or subprocesses created outside that mechanism cannot guarantee cleanup.
+
+The packaged `test/release-editor.js` passed in isolated **VSCodium 1.95.3**, exercising the review workflow and two real CWE-89 investigations through the new launcher:
+
+| Model | Result | Candidate | CLI-reported duration |
+| --- | --- | --- | --- |
+| Antares 350M | completed | `app.py` | 9.01 seconds |
+| Antares 1B | completed | `app.py` | 30.14 seconds |
+
+Logs: `logs/reliability-editor-test.json` and `logs/vscodium-extension-test.json`. Editor exit code was 0. VSCodium emitted its existing update-service/shutdown diagnostics; extension test assertions passed. The broader 0.4.0 profile evaluation remains unchanged, including its false positives and incomplete runs. No new visual/keyboard or VS Code execution claims are made; those previously recorded validation limits remain.

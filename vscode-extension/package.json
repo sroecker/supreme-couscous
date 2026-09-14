@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {

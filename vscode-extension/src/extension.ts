@@ -214,11 +214,14 @@ export async function activate(context: vscode.ExtensionContext) {
     if (choice) await config().update('model', choice, vscode.ConfigurationTarget.Global);
   });
   let busy = false;
+  let scanning: { target: string; sourceChanged: boolean } | undefined;
   async function investigate(targetUri: vscode.Uri, cwe?: string, options?: {categories?: string[]; label?: string; parent?: Run}): Promise<Run> {
     if (busy || savingReview) throw new Error('An investigation or review save is already running.');
-    await review.flush();
     busy = true;
-    try { return await performInvestigation(targetUri, cwe, options); } finally { busy = false; }
+    try {
+      await review.flush();
+      return await performInvestigation(targetUri, cwe, options);
+    } finally { busy = false; scanning = undefined; }
   }
   async function performInvestigation(targetUri: vscode.Uri, cwe?: string, options?: {categories?: string[]; label?: string; parent?: Run}): Promise<Run> {
     supported();
@@ -227,6 +230,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const target = await realpath(targetUri.fsPath);
     const roots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
     if (!roots.some(root => inside(root, target)) || !(await stat(target)).isDirectory()) throw new Error('Choose a directory within the open workspace.');
+    scanning = { target, sourceChanged: false };
     const executable = config().get<string>('cliPath', '');
     if (!path.isAbsolute(executable)) throw new Error('Run Antares: Configure Local CLI first.');
     await access(executable, constants.X_OK);
@@ -253,8 +257,8 @@ export async function activate(context: vscode.ExtensionContext) {
         const elapsed = setInterval(() => progress.report({ message: `Investigating saved source · ${Math.floor((Date.now() - progressStart) / 1000)}s elapsed` }), 1000);
         try {
           progress.report({ message: sweep ? 'Selecting weakness categories and investigating them sequentially…' : 'Investigating saved source files…' });
-          const result = await runCli(executable, ['tool', request.mode, '--stdin'], request.payload, storage, childEnvironment(history), seconds * 1000, abort.signal);
-          const run: Run = { toolBudget: budget, timeoutSeconds: seconds, scanProfile: label, categories: options?.categories, parentRunId: options?.parent?.id, target, model: connection.model, cwe: label, mode: sweep ? 'sweep' : 'query', started, finished: new Date().toISOString(), status: result.stopped ?? 'failed' };
+          const result = await runCli(executable, ['tool', request.mode, '--stdin'], request.payload, storage, childEnvironment(history), seconds * 1000, abort.signal, path.join(__dirname, '..', 'runtime', 'antares_runtime.py'));
+          const run: Run = { sourceChanged: scanning?.sourceChanged || undefined, toolBudget: budget, timeoutSeconds: seconds, scanProfile: label, categories: options?.categories, parentRunId: options?.parent?.id, target, model: connection.model, cwe: label, mode: sweep ? 'sweep' : 'query', started, finished: new Date().toISOString(), status: result.stopped ?? 'failed' };
           if (!result.stopped) {
             run.report = cliReport(result);
             if (run.report.metadata.model !== connection.model) throw new Error('Result model does not match selected model.');
@@ -264,8 +268,13 @@ export async function activate(context: vscode.ExtensionContext) {
           }
           if (result.stopped) candidates.update(`${run.status}; previous result retained`, last);
           else {
-            await review.flush();
+            // Save successful work even when the previous panel cannot release its draft.
             await persist(run);
+            try { await review.flush(); } catch (error) {
+              candidates.update(`${run.status} scan saved to Run History; previous review retained`, last);
+              void vscode.window.showWarningMessage(`Antares saved the new scan to Run History, but kept your previous review open: ${error instanceof Error ? error.message : String(error)}`);
+              return run;
+            }
             last = run;
             refresh();
             review.show(run);
@@ -374,11 +383,16 @@ export async function activate(context: vscode.ExtensionContext) {
     if (choice) await loadRun(choice.run.id!);
   });
   function markChanged(file: string) {
+    if (scanning && inside(scanning.target, file)) scanning.sourceChanged = true;
     if (savingReview) { deferredChanges.add(file); return; }
-    if (!last || !inside(last.target, file)) return;
+    if (!last || !inside(last.target, file) || last.sourceChanged) return;
     last.sourceChanged = true;
     refresh(); review.markStale();
-    void persist(last).catch(error => vscode.window.showErrorMessage(`Antares could not save freshness: ${error.message}`));
+    const run = last;
+    void persist(run).catch(error => {
+      // Keep the in-memory warning, but make the failure visible; export retries persistence.
+      void vscode.window.showErrorMessage(`Antares could not save freshness: ${error.message}`);
+    });
   }
   context.subscriptions.push(vscode.workspace.onDidChangeTextDocument(event => {
     if (event.contentChanges.length && event.document.uri.scheme === 'file') markChanged(event.document.uri.fsPath);

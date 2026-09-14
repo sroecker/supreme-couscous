@@ -5,6 +5,7 @@ import math
 import os
 from pathlib import Path
 import subprocess
+import signal
 import tempfile
 import time
 
@@ -48,7 +49,28 @@ def read_report(report_path):
     return report
 
 
-def evaluate_case(case, variant, destination, timeout, budget=10, runner=subprocess.run):
+def run_bounded(args, *, timeout, **kwargs):
+    """Give the CLI's cooperative tool cleanup time to run before forced exit."""
+    with subprocess.Popen(args, start_new_session=True, **kwargs) as process:
+        try:
+            return subprocess.CompletedProcess(args, process.wait(timeout=timeout))
+        except (subprocess.TimeoutExpired, KeyboardInterrupt):
+            try:
+                os.killpg(process.pid, signal.SIGTERM)
+            except ProcessLookupError:
+                pass
+            try:
+                process.wait(timeout=2)
+            except subprocess.TimeoutExpired:
+                try:
+                    os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass
+                process.wait()
+            raise
+
+
+def evaluate_case(case, variant, destination, timeout, budget=10, runner=run_bounded):
     target = FIXTURES / case['id'] / variant
     destination.mkdir(parents=True)
     started = time.monotonic()
