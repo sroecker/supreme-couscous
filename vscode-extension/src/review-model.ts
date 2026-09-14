@@ -2,6 +2,10 @@ import { Report } from './core';
 export type ReviewStatus = 'unreviewed' | 'confirmed' | 'dismissed';
 export interface Decision { status: ReviewStatus; note: string; updated: string; sourceHash?: string }
 export interface Run {
+  id?: string; revision?: number; schemaVersion?: number;
+  drafts?: Record<string, { note: string; updated: string }>;
+  freshness?: { checked: string; scope: string; dirtyFiles: string[] };
+  parentRunId?: string; scanProfile?: string; categories?: string[]; toolBudget?: number; timeoutSeconds?: number;
   target: string; model: string; cwe: string; status: string; started: string; finished: string;
   mode?: 'query' | 'sweep'; report?: Report; reviews?: Record<string, Decision>; sourceChanged?: boolean;
 }

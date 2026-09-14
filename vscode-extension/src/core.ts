@@ -1,3 +1,4 @@
+import modelProfiles from './model-profiles.json';
 import { spawn } from 'node:child_process';
 import { realpath, stat } from 'node:fs/promises';
 import path from 'node:path';
@@ -40,7 +41,7 @@ export async function candidatePath(root: string, relative: string): Promise<str
 }
 export function profile(model: string) {
   if (model !== 'antares-1b' && model !== 'antares-350m') throw new Error('Unsupported local model.');
-  return { model, endpoint: `http://127.0.0.1:${model === 'antares-1b' ? 8082 : 8086}/v1/completions` };
+  return { model, endpoint: `http://127.0.0.1:${modelProfiles[model].port}/v1/completions` };
 }
 export function childEnvironment(dataDir: string): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {};
@@ -125,4 +126,30 @@ export function scanRequest(target: string, connection: { model: string; endpoin
   }
   if (!Number.isInteger(maxCwes) || maxCwes < 1 || maxCwes > 10) throw new Error('Sweep size must be between 1 and 10 categories.');
   return { mode: 'sweep', payload: { ...base, workers: 1, selection: { scope: 'auto', max_cwes: maxCwes } } };
+}
+
+export const scanProfiles = {
+  auto: { name: 'Automatic selection', categories: undefined as string[] | undefined },
+  web: { name: 'Web application', categories: ['CWE-89', 'CWE-79', 'CWE-78', 'CWE-22'] },
+  oauth: { name: 'MCP/OAuth', categories: ['CWE-287', 'CWE-862', 'CWE-441'] }
+};
+export function explicitSweepRequest(target: string, connection: {model: string; endpoint: string}, budget: number, categories: string[]) {
+  if (!categories.length || categories.length > 10 || new Set(categories).size !== categories.length) throw new Error('Select 1–10 distinct categories.');
+  categories.forEach(c => scanRequest(target, connection, budget, c));
+  return { mode: 'sweep', payload: { target, ...connection, backend: 'remote', tool_budget: budget, workers: 1, cwe_ids: categories } };
+}
+export function failedCategories(report: Report, requested: string[] = []) {
+  const results = report.per_cwe_results ?? [];
+  return [...new Set([...results.filter(r => r.error_message).map(r => r.cwe_id), ...requested.filter(id => !results.some(r => r.cwe_id === id))])];
+}
+export function categoryLabel(id: string) {
+  const names: Record<string, string> = { 'CWE-89': 'SQL injection', 'CWE-79': 'Cross-site scripting', 'CWE-78': 'OS command injection', 'CWE-22': 'Path traversal', 'CWE-287': 'Improper authentication', 'CWE-862': 'Missing authorization', 'CWE-441': 'Confused deputy / token forwarding' };
+  return names[id] ? `${names[id]} (${id})` : id;
+}
+export function categoryCoverage(report: Report, requested?: string[]) {
+  const results = report.per_cwe_results ?? [];
+  return [...new Set([...(requested ?? []), ...results.map(r => r.cwe_id)])].map(id => {
+    const result = results.find(r => r.cwe_id === id);
+    return { id, label: categoryLabel(id), status: !result ? 'not run' : result.error_message ? `incomplete: ${result.error_message}` : `completed · ${result.finding_count} candidate(s)` };
+  });
 }

@@ -95,3 +95,43 @@ All 16 unit tests passed. The VSCodium 1.95.3 integration test ran a real 350M s
 The final model run was **incomplete**, taking 31.26 seconds, with 1 candidates and 2 failed category worker(s). It selected CWE-79, CWE-20, and CWE-78. The extension preserved the partial result and category errors; this is an integration pass, not a successful security assessment. The original SQL injection CWE-89 was not selected in this bounded automatic portfolio.
 
 The local raw record is ignored at `logs/vscodium-sweep-test.json`. TypeScript compilation and 0.3.0 VSIX packaging passed. This release was tested through the Extension Development Host, not by installing its VSIX into the normal user profile.
+
+## Version 0.4.0: persistence, profiles, and setup
+
+Validated 12–14 September 2026. The deterministic extension suite has **27 passing tests**. Five Python runner/launcher tests and all eight offline FastMCP tests pass. The packaged extension ran successfully in the isolated VSCodium 1.95.3 Extension Development Host: legacy migration, run loading, webview flush acknowledgements, persisted drafts, decision saving, and direct export after an external source edit. The export reopened the stale decision and retained its note.
+
+The draft-script test executes the actual generated webview JavaScript against a minimal DOM/editor harness. It covers navigation and an older save acknowledgement arriving after newer keystrokes. Storage tests cover two independent writers, separate workspaces, migration, corrupt records, failed atomic replacement, and known-dead lock recovery. Server tests cover status, root validation, and preserving an independently running server. These checks do not establish model accuracy.
+
+The first packaged run exposed an unchanged panel buffer overwriting a host-side draft. Draft messages now carry dirty state; unchanged buffers only acknowledge flush. Subsequent packaged reliability checks passed.
+
+### Live profile evaluation
+
+The opt-in `vscode-extension/test/profiles-live.js` exercised the same explicit sweep requests used by the extension with both local models. Each model ran Web coverage on the SQL demo and MCP/OAuth coverage on all six fixture/control directories, at tool budget 10, one worker, and a 900-second whole-sweep deadline. The first five 350M runs were retained across the interruption; the remaining nine ran on resumption. No completed result was replaced to improve reported accuracy.
+
+[Machine-readable results](profiles-0.4.0-evaluation.json) include per-category results and available CLI reproducibility metadata. Raw reports remain locally under `logs/profiles-0.4.0`. Timings include CLI overhead and should not be treated as controlled benchmarks.
+
+| Model | Case | Whole sweep | Expected-category paths | Seconds |
+| --- | --- | --- | --- | --- |
+| antares-350m | sql-demo | incomplete | app.py | 36.8 |
+| antares-350m | audience-vulnerable | completed | server.py | 28.9 |
+| antares-350m | audience-fixed | completed | server.py | 29.5 |
+| antares-350m | token_passthrough-vulnerable | completed | server.py | 25.8 |
+| antares-350m | token_passthrough-fixed | completed | server.py | 30.9 |
+| antares-350m | tool_scope-vulnerable | completed | server.py | 28.5 |
+| antares-350m | tool_scope-fixed | incomplete | server.py | 26.7 |
+| antares-1b | sql-demo | completed | app.py | 117.3 |
+| antares-1b | audience-vulnerable | incomplete | none | 83.5 |
+| antares-1b | audience-fixed | incomplete | none | 77.0 |
+| antares-1b | token_passthrough-vulnerable | incomplete | server.py | 77.4 |
+| antares-1b | token_passthrough-fixed | completed | server.py | 102.1 |
+| antares-1b | tool_scope-vulnerable | completed | server.py | 77.7 |
+| antares-1b | tool_scope-fixed | completed | server.py | 77.9 |
+
+The 350M model completed 5/7 sweeps; 1B completed 4/7. The Web profile scheduled CWE-89 for both models and both returned `app.py` for that category. The 350M SQL sweep remained incomplete because a different category failed. Both models produced false positives for fixed OAuth code. Among fully completed sweeps, 350M had three expected-category matches and two mismatches; 1B had two matches and two mismatches. Incomplete sweeps are not counted as correct negatives or ordinary misses, even when they return the expected-category path. The fixture expectations assess the named target CWE, not every other category reported by the model.
+
+### Remaining validation limits
+
+- VS Code is not installed on this machine. Compatibility uses standard APIs targeting editor 1.95+, but this release was executed in VSCodium only.
+- Native UI permissions became available, but computer-use selection kept binding to the existing normal-profile VSCodium process rather than the isolated development host. The normal profile's extension and review data were not changed. A visual/keyboard pass on 0.4.0 remains pending; do not interpret the automated host and DOM tests as that pass.
+- Local server startup is implemented with explicit ownership, bounded output, cancellation and timeout. Actual llama.cpp processes were separately managed during the 14-run evaluation; the setup UI's full startup path still needs a manual end-to-end pass.
+- Dependency freshness is deliberately limited. Hashes cover reviewed candidate files; filesystem/editor events only mark other observed changes potentially stale.

@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {
@@ -57,8 +57,24 @@
       },
       {
         "command": "antares.sweep",
-        "title": "Antares: Sweep Code Automatically",
+        "title": "Antares: Sweep Code",
         "icon": "$(search)"
+      },
+      {
+        "command": "antares.history",
+        "title": "Antares: Run History"
+      },
+      {
+        "command": "antares.retry",
+        "title": "Antares: Retry Failed Categories"
+      },
+      {
+        "command": "antares.status",
+        "title": "Antares: Setup and Server Status"
+      },
+      {
+        "command": "antares.startServer",
+        "title": "Antares: Start Local Server"
       }
     ],
     "views": {
@@ -90,6 +106,10 @@
           "command": "antares.review",
           "when": "view == antares.candidates",
           "group": "navigation"
+        },
+        {
+          "command": "antares.status",
+          "when": "view == antares.candidates"
         }
       ]
     },
@@ -137,6 +157,12 @@
           "minimum": 1,
           "maximum": 3600,
           "description": "Wall-clock timeout for the entire sweep, in seconds."
+        },
+        "antares.pocRoot": {
+          "type": "string",
+          "default": "",
+          "scope": "machine",
+          "description": "Absolute path to this Antares POC, used only for explicit local server startup."
         }
       }
     },

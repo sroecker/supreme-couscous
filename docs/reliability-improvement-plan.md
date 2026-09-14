@@ -1,6 +1,8 @@
 # Antares script and extension improvement plan
 
-Date: 12 September 2026. Status: proposed; implementation has not started.
+Date: 12 September 2026. Updated: 14 September 2026. Status: implementation delivered in 0.4.0; remaining manual validation gates are listed below.
+
+Implementation status: phases 1–4 and the phase 5 setup commands are implemented. Automated VSCodium validation and all 14 local model/profile runs are recorded in [validation](vscode-extension-validation.md). The visual/keyboard pass, actual setup-UI server-start pass, and execution in VS Code remain pending. Storage uses stable run IDs plus immutable finding indices; the setup/status surface is a command-driven picker. These are the concrete 0.4.0 choices for the proposed UI.
 
 This plan follows the review of extension 0.3.0 and the local scan scripts. It is the current implementation backlog; the [original integration plan](vscode-integration-plan.md) remains historical design context. The review reran all 16 extension unit tests successfully. Live inference and visual editor checks must be performed at the release gates below.
 

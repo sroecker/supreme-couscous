@@ -1,0 +1,760 @@
+[
+  {
+    "id": "sql-demo",
+    "scanProfile": "web",
+    "cwe": "CWE-89",
+    "expected": [
+      "app.py"
+    ],
+    "model": "antares-350m",
+    "complete": false,
+    "exitCode": 2,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 36.766,
+    "actual": [
+      "app.py"
+    ],
+    "matchesExpected": null,
+    "categories": [
+      {
+        "cwe_id": "CWE-89",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 8.834863332995155,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-79",
+        "finding_count": 1,
+        "tool_call_count": 7,
+        "duration_seconds": 6.87734783400083,
+        "error_message": null,
+        "failed_tool_calls": 4,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-78",
+        "finding_count": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 11.20182300000306,
+        "error_message": "Model submitted no valid repository file paths.",
+        "failed_tool_calls": 9,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-22",
+        "finding_count": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.395020290998218,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "75c8205f7d5aa16a4fdfbe9eab1c8daceeea2964d1f292a3c2d52d4b53b147f2",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "audience-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-287",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-350m",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 28.901,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": true,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 10.046866749995388,
+        "error_message": null,
+        "failed_tool_calls": 8,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 7.285402916997555,
+        "error_message": null,
+        "failed_tool_calls": 4,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.158856541995192,
+        "error_message": null,
+        "failed_tool_calls": 7,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "9d853de3291d0c63097de6fe5f70c047eff5dbfdc147c8769b604f72bd25d97b",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "audience-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-287",
+    "expected": [],
+    "model": "antares-350m",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 29.455,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": false,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 8.275023290996614,
+        "error_message": null,
+        "failed_tool_calls": 6,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 9.100621958001284,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.62680583299516,
+        "error_message": null,
+        "failed_tool_calls": 7,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "e675a261fdfcbdc9846814da2c68a1c99a5fcb48da53e75e4e37d828ca3c159a",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "token_passthrough-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-441",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-350m",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 25.848,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": true,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 7.490821125000366,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 9.666247334003856,
+        "error_message": null,
+        "failed_tool_calls": 7,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 8.284718417002296,
+        "error_message": null,
+        "failed_tool_calls": 6,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "9d853de3291d0c63097de6fe5f70c047eff5dbfdc147c8769b604f72bd25d97b",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "token_passthrough-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-441",
+    "expected": [],
+    "model": "antares-350m",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 30.851,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": false,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 9.338181749997602,
+        "error_message": null,
+        "failed_tool_calls": 7,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 10.790080499995383,
+        "error_message": null,
+        "failed_tool_calls": 6,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 10.310031708999304,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "e675a261fdfcbdc9846814da2c68a1c99a5fcb48da53e75e4e37d828ca3c159a",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "tool_scope-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-862",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-350m",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 28.492,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": true,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 7.330254584005161,
+        "error_message": null,
+        "failed_tool_calls": 2,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 9.475054292001005,
+        "error_message": null,
+        "failed_tool_calls": 7,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.231583458000387,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "9d853de3291d0c63097de6fe5f70c047eff5dbfdc147c8769b604f72bd25d97b",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "tool_scope-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-862",
+    "expected": [],
+    "model": "antares-350m",
+    "complete": false,
+    "exitCode": 2,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 26.675,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": null,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 10.14329683300457,
+        "error_message": null,
+        "failed_tool_calls": 8,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 7.9590072499995586,
+        "error_message": null,
+        "failed_tool_calls": 4,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 8.181464957997377,
+        "error_message": "Model submitted no valid repository file paths.",
+        "failed_tool_calls": 8,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "e675a261fdfcbdc9846814da2c68a1c99a5fcb48da53e75e4e37d828ca3c159a",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "sql-demo",
+    "scanProfile": "web",
+    "cwe": "CWE-89",
+    "expected": [
+      "app.py"
+    ],
+    "model": "antares-1b",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 117.303,
+    "actual": [
+      "app.py"
+    ],
+    "matchesExpected": true,
+    "categories": [
+      {
+        "cwe_id": "CWE-89",
+        "finding_count": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 33.222799832998135,
+        "error_message": null,
+        "failed_tool_calls": 3,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-79",
+        "finding_count": 1,
+        "tool_call_count": 13,
+        "duration_seconds": 30.59763550000207,
+        "error_message": null,
+        "failed_tool_calls": 3,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-78",
+        "finding_count": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 25.5307145830011,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-22",
+        "finding_count": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 27.470312083001772,
+        "error_message": null,
+        "failed_tool_calls": 3,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "552582d675fe63b7283bf19dba0193c5acc23d3cb9705711af993f88874f2df3",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "audience-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-287",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-1b",
+    "complete": false,
+    "exitCode": 2,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 83.538,
+    "actual": [],
+    "matchesExpected": null,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 27.662926791002974,
+        "error_message": "Model submitted no valid repository file paths.",
+        "failed_tool_calls": 2,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 29.718015541999193,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 25.686432124995918,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "00d77d397bf9c8da95699f657ef32ccb3e1bb0bbbcfbe69eaef7c1a3ef769992",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "audience-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-287",
+    "expected": [],
+    "model": "antares-1b",
+    "complete": false,
+    "exitCode": 2,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 76.984,
+    "actual": [],
+    "matchesExpected": null,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 27.69216150000284,
+        "error_message": "Model submitted no valid repository file paths.",
+        "failed_tool_calls": 2,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.424661125005514,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 23.395410791999893,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "010bb2cb93127063f963fd559426292d5dfd623db3658624d7f2727e0b0b7b00",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "token_passthrough-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-441",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-1b",
+    "complete": false,
+    "exitCode": 2,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 77.353,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": null,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.49840787499852,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 26.29915416699805,
+        "error_message": "Model submitted no valid repository file paths.",
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 26.08649245899869,
+        "error_message": null,
+        "failed_tool_calls": 0,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "00d77d397bf9c8da95699f657ef32ccb3e1bb0bbbcfbe69eaef7c1a3ef769992",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "token_passthrough-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-441",
+    "expected": [],
+    "model": "antares-1b",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 102.088,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": false,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 38.55870070899982,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 2
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 29.070131667001988,
+        "error_message": null,
+        "failed_tool_calls": 0,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 34.01685933399858,
+        "error_message": null,
+        "failed_tool_calls": 5,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "010bb2cb93127063f963fd559426292d5dfd623db3658624d7f2727e0b0b7b00",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "tool_scope-vulnerable",
+    "scanProfile": "oauth",
+    "cwe": "CWE-862",
+    "expected": [
+      "server.py"
+    ],
+    "model": "antares-1b",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 77.711,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": true,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 20.392298958002357,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 26.390514083002927,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 30.43404174999887,
+        "error_message": null,
+        "failed_tool_calls": 3,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "00d77d397bf9c8da95699f657ef32ccb3e1bb0bbbcfbe69eaef7c1a3ef769992",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  },
+  {
+    "id": "tool_scope-fixed",
+    "scanProfile": "oauth",
+    "cwe": "CWE-862",
+    "expected": [],
+    "model": "antares-1b",
+    "complete": true,
+    "exitCode": 0,
+    "stopped": null,
+    "error": null,
+    "durationSeconds": 77.908,
+    "actual": [
+      "server.py"
+    ],
+    "matchesExpected": false,
+    "categories": [
+      {
+        "cwe_id": "CWE-287",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.49134320900339,
+        "error_message": null,
+        "failed_tool_calls": 1,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-862",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 27.272691082995152,
+        "error_message": null,
+        "failed_tool_calls": 0,
+        "retried_turns": 0
+      },
+      {
+        "cwe_id": "CWE-441",
+        "finding_count": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.724743375001708,
+        "error_message": null,
+        "failed_tool_calls": 0,
+        "retried_turns": 0
+      }
+    ],
+    "provenance": {
+      "request_hash": "010bb2cb93127063f963fd559426292d5dfd623db3658624d7f2727e0b0b7b00",
+      "deterministic_ordering": true,
+      "remote_provider_may_vary": true,
+      "safe_for_cache_reuse": false,
+      "cache_reuse_note": "Request identity excludes source contents and the deployed model revision."
+    }
+  }
+]

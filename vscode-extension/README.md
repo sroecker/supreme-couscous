@@ -1,10 +1,10 @@
 # Antares Local for VS Code and VSCodium
 
-Run local CWE investigations using your installed Antares CLI and llama.cpp server. This independent extension uses standard VS Code APIs and has no Microsoft Marketplace, Copilot, Cisco AI Defense, or cloud-model dependency at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.0 adds scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
-## Install
+## Install and connect
 
-Build from the `vscode-extension` directory with Node.js 22:
+Build with Node.js 22 from this directory:
 
 ```sh
 npm ci
@@ -12,77 +12,88 @@ npm test
 npm run package
 ```
 
-In VS Code or VSCodium, run **Extensions: Install from VSIX…** and select `antares-local-0.3.0.vsix`. Reload if requested. No Marketplace publisher account is needed for a local VSIX.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.0.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
-## Use
+1. Complete the repository setup to install the CLI and convert weights.
+2. Open the source workspace and trust it.
+3. Run **Antares: Configure Local CLI**. Paste the absolute path to this POC's `.venv/bin/antares`; hidden directories and `~/` work. Use the executable, not `scripts/antares.sh`.
+4. Run **Antares: Select Local Model** to choose 1B or 350M.
+5. Open **Antares: Setup and Server Status** to check CLI configuration and server availability. Select **Start local server** and supply the POC folder if you want the extension to launch the existing server script. No dependencies or weights are downloaded.
 
-Follow the repository setup to install the Antares CLI and convert model weights. Start one of these servers from the repository root in a separate terminal:
+You can also keep a separately managed server running from the POC root:
 
 ```sh
 ./scripts/serve.sh
-# Or:
-ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh
+# Or, with its model-specific default port:
+ANTARES_MODEL=antares-350m ./scripts/serve.sh
 ```
 
-1. Open the source workspace and trust it.
-2. Run **Antares: Configure Local CLI** and paste the path to this POC's `.venv/bin/antares` executable. Hidden directories work normally, and `~/` is supported. When the POC is an open workspace folder, the installed executable is suggested automatically. The path is validated before saving; use the executable, not `scripts/antares.sh`.
-3. Run **Antares: Select Local Model**. 1B uses port 8082; 350M uses 8086.
-4. Right-click a target folder and choose **Antares: Sweep Code Automatically**, then confirm the target. Antares chooses up to three relevant weakness categories and investigates them sequentially. No CWE input is required.
-5. For a focused scan instead, use **Antares: Investigate CWE** and choose a named weakness. That picker also offers **Automatic sweep** as its first option. The scan uses saved files; unsaved edits trigger a save-or-scan-saved-files choice.
-6. The **Antares Review** panel opens when the scan finishes. Follow the review workflow below. You can reopen it with **Antares: Review Last Scan** or by clicking a candidate in Explorer.
+1B defaults to port 8082 and 350M to 8086. The shell wrappers and extension consume the same model-profile JSON. Shell `ANTARES_PORT` overrides the default; `ANTARES_ENDPOINT` takes precedence for CLI requests. The extension uses fixed loopback endpoints.
 
-For the bundled SQL demo, right-click `examples/demo`. For an OAuth variant, select its individual directory, such as `examples/fastmcp-oauth/audience/vulnerable`, to avoid scanning its corrected sibling.
+The startup command validates `antares.pocRoot` before executing its launcher. An extension-started server is owned by that editor and stopped when the extension shuts down normally. Existing servers remain independently managed. Startup is cancellable, has a 60-second readiness deadline, and writes bounded output to **Antares Server**. A server-advertised model alias is not independent verification of loaded weights. Abrupt editor termination may require manual process cleanup.
 
-Results are candidate files for human review. They do not include verified source locations or confidence scores. Completed investigations can produce false positives. Incomplete runs stay visibly incomplete; cancellation or failure retains the previous result in the current session.
+## Scan code
 
-If the server is stopped, the plugin reports the selected model and port before starting an investigation. **Copy start command** copies the launcher command; run it from the Antares project directory and keep that terminal open. CLI failures show a bounded diagnostic message instead of a JSON parsing error. Diagnostics remain in memory and are not added to saved reports; common credential forms are redacted.
+Right-click a source folder and select **Antares: Sweep Code**, then choose coverage:
 
-## Review a scan
+| Profile | Scheduled checks |
+| --- | --- |
+| Automatic selection | Up to the configured number of repository-selected categories; default 3. |
+| Web application | SQL injection (89), XSS (79), command injection (78), path traversal (22). |
+| MCP/OAuth | Authentication (287), missing authorization (862), confused deputy/token forwarding (441). |
 
-1. Select a candidate in **Antares Review**. The header shows scan completion separately from how many candidates remain unreviewed.
-2. Click **Open source beside review**. Use the weakness-specific checklist to inspect the source and its relevant callers or middleware. The checklist is general guidance; Antares did not provide a verified vulnerable line or a detailed explanation.
-3. Record evidence or context in **Review notes**.
-4. Choose **Confirm issue** if your inspection supports the weakness, **Dismiss candidate** if you have a reason it does not apply, or **Save as unreviewed** if more investigation is needed. Dismissal requires a reason. These actions record your assessment; they never edit source code.
-5. Use **Next unreviewed** to continue. **Export result and review** includes your decisions and notes alongside the model output.
+These are bounded starting profiles, not complete security coverage. A category being scheduled does not mean the model successfully investigated it. The Web profile always includes SQL injection; automatic selection can omit it.
 
-The latest result and decisions survive reloads in the same editor profile when its target is inside an open workspace. Existing 0.1.x saved results can be restored after updating. Decisions apply to that run, not a permanent suppression rule; new scans start unreviewed. The extension checks reviewed file hashes when restoring or opening review and returns changed/deleted files to unreviewed while retaining notes. Save dirty source files before recording decisions. Changes in dependencies or other files are not comprehensively tracked.
+For the SQL fixture, select `examples/demo`. For OAuth, select an individual variant such as `examples/fastmcp-oauth/audience/vulnerable`, so corrected and vulnerable siblings are not mixed. **Antares: Investigate CWE** still offers focused named checks and custom identifiers. CWE is the Common Weakness Enumeration label for a class of weakness; using a scan profile requires no CWE entry.
 
-An incomplete investigation remains incomplete even when you have reviewed all returned candidates. Neither an empty result nor a completed review proves the repository is secure.
+The plugin scans saved files. Dirty target files trigger a save-or-scan-saved-files choice. Sweeps use `antares tool sweep --stdin` with one worker. Named profiles pass explicit category lists; automatic selection uses the CLI selector. Progress displays stages and elapsed time, not an invented percentage. Cancellation or timeout stops the owned CLI process group and retains prior results. A cancelled CLI may not have emitted partial JSON.
 
-## Automatic sweeps and focused investigations
+## Review and retry
 
-CWE means Common Weakness Enumeration: a standard name and number for a class of software weakness. A focused investigation checks one selected category. A sweep uses Antares's repository-aware selection to choose categories automatically, then runs one investigation per category. It does not check every possible weakness or guarantee complete coverage.
+The review panel opens after a completed or partial result. Execution status is separate from review decisions.
 
-The extension invokes `antares tool sweep --stdin`, equivalent in purpose to the repository's `sweep --max-cwes 3 --workers 1` workflow. Default settings:
+1. Select a candidate and **Open source beside review**.
+2. Inspect the file and relevant callers or middleware using the general checklist. Antares supplies file-level candidates, without verified lines or detailed vulnerability explanations.
+3. Type review notes. Drafts save automatically; wait for **Draft saved** before closing the editor. Navigation and export request a final draft acknowledgement. Unacknowledged keystrokes are not guaranteed to survive abrupt shutdown.
+4. **Confirm issue**, **Dismiss candidate**, or **Save as unreviewed** records your assessment. Dismissal requires a reason. Saving a decision consumes that candidate's draft. These actions do not change source code.
+5. Use **Next unreviewed** or select another candidate. Explorer navigation also preserves acknowledged drafts.
 
-| Setting | Default | Behavior |
+The category list distinguishes candidate counts from category errors. **Retry failed categories** creates a linked run for only the failed categories, retaining the original results and decisions. It reuses the recorded model, budget, timeout, and target; save dirty files before retrying. The new attempt scans the current saved source, not an archived snapshot. Retried findings start unreviewed. A result remains incomplete even if every returned candidate has a human decision.
+
+Model candidates are not verified vulnerabilities. Neither a completed empty scan nor a completed human review proves the repository secure. Recorded evaluations include false positives and incomplete investigations.
+
+## History, freshness, and export
+
+**Antares: Run History** lists scans for the current canonical set of workspace folders. Records include target, time, model, scan status, and review counts. Each run has an independent ID; its finding indices remain stable within that immutable report. New scans retain older results. Changing the set of roots selects a different history namespace; returning to the original roots restores it.
+
+Storage is private extension global storage under `workspaces/<workspace-hash>/runs/`. Records use schema version 2, atomic replacement, revision checks, and per-run process locks. Concurrent conflicting saves do not silently overwrite data. Open Run History after a conflict: the local draft is retained as a separate recovery run before loading a saved version. The legacy `last-result.json` is migrated idempotently into matching workspaces and left untouched. Corrupt run files stay on disk for recovery and do not hide other valid history. No automatic history pruning occurs.
+
+Known-dead process locks are reclaimed automatically. An empty lock or interrupted reclamation can require recovery: close all editor instances first, back up the storage directory, and remove only the affected `.lock`/`.lock.reclaim` files before reopening. Never remove a live writer's lock or the run JSON as a recovery step.
+
+Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
+
+**Export result and review** flushes drafts and checks freshness before creating a snapshot. JSON includes execution state, decisions, drafts explicitly separate from decisions, the check timestamp/scope, and dirty-file paths. Draft notes never silently become confirmed or dismissed decisions. The snapshot represents the check time; edits after that time require another export or scan.
+
+## Settings
+
+| Setting | Default | Purpose |
 | --- | --- | --- |
-| `antares.sweepMaxCwes` | 3 | Maximum selected categories; configurable from 1 to 10. |
-| `antares.sweepTimeoutSeconds` | 900 | Deadline for the whole sweep, configurable up to 3,600 seconds. |
-| `antares.toolBudget` | 10 | Terminal-call budget for each category. |
+| `antares.cliPath` | Empty | Installed executable path. |
+| `antares.pocRoot` | Empty | POC folder for explicit server startup. |
+| `antares.model` | `antares-1b` | Local model profile. |
+| `antares.toolBudget` | 10 | Terminal-call budget per category, 1–50. |
+| `antares.timeoutSeconds` | 300 | Focused-query deadline, up to 1,800 seconds. |
+| `antares.sweepTimeoutSeconds` | 900 | Entire sweep deadline, up to 3,600 seconds. |
+| `antares.sweepMaxCwes` | 3 | Automatic-selection limit, 1–10; named profiles have explicit lists. |
 
-Sweeps always use one worker to match the local server's single slot. The existing `antares.timeoutSeconds` setting applies to focused queries only. Progress shows the investigation stage; the CLI returns the final JSON result rather than live per-category progress. Cancel stops the owned CLI process group and retains the previous result. A timed-out sweep may not have emitted a report yet.
+`.antares.toml` controls exclusions; `.gitignore` is not automatically applied. CLI history may contain source excerpts. Model requests stay on the selected loopback endpoint; the extension has no telemetry. No MCP servers or fixture applications are started. Linux/Windows execution, remote workspaces, SARIF export, permanent suppressions, and automatic remediation remain outside this release.
 
-The review panel lists the investigated categories, their candidate counts or errors, and each candidate's CWE. Per-category errors keep the run incomplete. Review decisions remain associated with individual findings, including different weaknesses in the same file.
+## Development checks
 
-## Scope
+`npm test` runs deterministic process, schema, storage/conflict, draft-script, freshness, profile, and server-status tests. `test/reliability-editor.js` exercises the packaged extension and its real webview messaging in an isolated VSCodium host. `test/profiles-live.js` is an opt-in local evaluation across both models, the SQL demo, and six OAuth variants; it resumes existing results under `logs/profiles-0.4.0` rather than replacing them. Move that evaluation directory aside before deliberately starting a new experiment.
 
-Version 0.3.0 supports local macOS workspaces, one focused investigation or automatic sweep at a time, and the two fixed loopback model profiles. Settings expose a terminal-call budget (default 10) and wall-clock timeouts (300 seconds for a query, 900 seconds for a sweep). Cancel from the progress notification. The extension stops its CLI subprocess group, not your inference server.
-
-Remote SSH/containers, browser editors, Windows/Linux execution, automatic server/model installation, SARIF export, and permanent suppressions are future work. Original plan milestones beyond this MVP remain proposals.
-
-The extension persists the latest completed/partial result and review decisions under private extension global storage and restores them for the matching workspace. CLI history is also stored there and may contain source excerpts. There is no extension telemetry. Source paths and text go to the selected localhost inference server through Antares. `.antares.toml` controls exclusions; `.gitignore` is not automatically applied. No MCP servers or fixture applications are started.
-
-Model/server processes remain separately managed. The extension does not download weights or silently switch endpoints. Saved-file changes observed in the editor mark displayed results potentially stale; comprehensive disk/hash tracking is not implemented in this MVP.
-
-## Validation
-
-`npm test` checks report parsing, incomplete execution, path containment and escaping symlinks, subprocess stdin handling, timeout/cancellation, local profiles, environment filtering, and recorded report handling.
-
-`test/editor.js` runs inside an actual editor Extension Development Host. It activates the extension, checks command registration, invokes its scan service against both models, checks candidate rendering/navigation, and opens JSON details. It requires both local endpoints and `ANTARES_TEST_ROOT` pointing to the POC. It is excluded from the VSIX.
-
-The editor test uses an isolated user-data directory and disables Workspace Trust only in that test profile. Normal installations require a trusted workspace. See the repository's extension validation report for observed editor/version and run results.
+From the repository root, `python3 -m unittest discover -s tests -v` checks the fixture runner and shell defaults. The separate FastMCP environment runs `examples/fastmcp-oauth/test_fixtures.py`. See the [validation report](../docs/vscode-extension-validation.md) for observed results and remaining manual checks.
 
 ## License
 
-MIT. The installed Antares CLI, llama.cpp, and model weights retain their own licenses and are not included in the extension package.
+MIT. Antares CLI, llama.cpp, and model weights retain their own licenses and are not included in the VSIX.

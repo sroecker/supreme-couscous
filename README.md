@@ -148,7 +148,7 @@ Both models flagged all three vulnerable OAuth examples. The 350M model also fla
 
 ## VS Code and VSCodium
 
-The [Antares Local extension](vscode-extension/README.md) connects the editor to this POC's local CLI and model endpoints. It supports automatic category sweeps and focused CWE investigations, a guided review panel with persistent decisions and notes, candidate-file navigation, cancellation, and JSON export.
+The [Antares Local extension](vscode-extension/README.md) connects the editor to this POC's local CLI and model endpoints. It supports automatic category sweeps and focused CWE investigations, Web and MCP/OAuth profiles, a guided review panel with automatic draft saving, workspace run history, failed-category retries, freshness-aware JSON export, and explicit local server startup.
 
 ```sh
 cd vscode-extension
@@ -157,7 +157,7 @@ npm test
 npm run package
 ```
 
-Install `antares-local-0.3.0.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and paste the path to this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor. Right-click a source folder and choose **Antares: Sweep Code Automatically** to scan without selecting a CWE.
+Install `antares-local-0.4.0.vsix` using **Extensions: Install from VSIX…**, then run **Antares: Configure Local CLI** and paste the path to this project's `.venv/bin/antares`. Start a model server separately and select the matching model in the editor. Right-click a source folder and choose **Antares: Sweep Code** to scan without selecting a CWE.
 
 See [editor validation](docs/vscode-extension-validation.md) for VSCodium test results and current limits. The [improvement plan](docs/reliability-improvement-plan.md) defines the next fixes and acceptance tests; the [integration plan](docs/vscode-integration-plan.md) records the original roadmap.
 
