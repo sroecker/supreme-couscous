@@ -208,3 +208,7 @@ Validation on 2026-09-14: **45 extension tests** passed with the CLI Python inte
 Version 0.4.5 packages the unchanged 0.4.4 extension runtime alongside the new repository fixture suite. The version and installation references were updated. The 24 Python fixtures were evaluated with both models; see the [results and confusion matrices](python-security-evaluation.md). This release does not claim improved model accuracy. Native editor integration checks from 0.4.4 were not repeated for this packaging-only update.
 
 Validation: all 45 extension tests passed; VSIX manifest version is 0.4.5, and every packaged `dist/` and `runtime/` file is byte-identical to the 0.4.4 VSIX. The fixture work passed 41 Python tests and recorded all 48 model investigations, including seven incomplete runs.
+
+## 0.4.6 packaging and repeated evaluation
+
+All 45 extension tests passed. The packaged version is 0.4.6, and its compiled/runtime files are byte-identical to the 0.4.5 VSIX. Native editor checks were not repeated for this packaging-only update. The fixture and runner changes passed 71 Python tests and retained all 180 planned model investigations; see the [repeated evaluation](security-expansion-evaluation.md) for completion failures, confusion matrices and file-level scores. This release does not claim improved model accuracy.

@@ -1,6 +1,6 @@
 # Antares Local for VS Code and VSCodium
 
-Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.5 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.6 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
 ## Install and connect
 
@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-Run **Extensions: Install from VSIX…**, select `antares-local-0.4.5.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.6.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
 1. Complete the repository setup to install the CLI and convert weights.
 2. Open the source workspace and trust it.
