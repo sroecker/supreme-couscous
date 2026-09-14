@@ -202,3 +202,9 @@ Regression coverage adds unchanged review/export checks alongside an independent
 Focus and scroll checks use the simulated DOM. They do not replace the pending native keyboard/visual, accessibility, untrusted-workspace, or Microsoft VS Code validation.
 
 Validation on 2026-09-14: **45 extension tests** passed with the CLI Python interpreter selected, and **11 Python tests** passed under Python 3.12.14. Packaged `antares-local-0.4.4.vsix` was installed into the isolated VSCodium 1.95.3 profile; `test/reliability-editor.js` passed its real webview messaging, review persistence and source-freshness checks with exit 0. No model inference or model accuracy re-evaluation was performed for this UI/launcher patch. The normal editor profile was not updated.
+
+## 0.4.5 packaging and fixture evaluation
+
+Version 0.4.5 packages the unchanged 0.4.4 extension runtime alongside the new repository fixture suite. The version and installation references were updated. The 24 Python fixtures were evaluated with both models; see the [results and confusion matrices](python-security-evaluation.md). This release does not claim improved model accuracy. Native editor integration checks from 0.4.4 were not repeated for this packaging-only update.
+
+Validation: all 45 extension tests passed; VSIX manifest version is 0.4.5, and every packaged `dist/` and `runtime/` file is byte-identical to the 0.4.4 VSIX. The fixture work passed 41 Python tests and recorded all 48 model investigations, including seven incomplete runs.
