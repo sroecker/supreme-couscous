@@ -5,7 +5,7 @@ async function main(){
  const root=path.resolve(__dirname,'../..'),output=path.join(root,'logs/profiles-0.4.0');await fs.mkdir(output,{recursive:true});
  const oauth=JSON.parse(await fs.readFile(path.join(root,'examples/fastmcp-oauth/cases.json'),'utf8'));
  const cases=[{id:'sql-demo',target:'examples/demo',scanProfile:'web',cwe:'CWE-89',expected:['app.py']},...oauth.flatMap(c=>['vulnerable','fixed'].map(v=>({id:`${c.id}-${v}`,target:`examples/fastmcp-oauth/${c.id}/${v}`,scanProfile:'oauth',cwe:c.cwe,expected:v==='vulnerable'?['server.py']:[]})))];
- const results=JSON.parse(await fs.readFile(path.join(output,'summary.json'),'utf8').catch(()=> '[]')); 
+ const results=JSON.parse(await fs.readFile(path.join(output,'summary.json'),'utf8').catch(()=> '[]'));
  for(const model of process.argv.slice(2).length?process.argv.slice(2):['antares-350m','antares-1b']){
   for(const c of cases){
    if(results.some(r=>r.model===model&&r.id===c.id)){console.log(`Retaining existing ${model}/${c.id}`);continue;}
