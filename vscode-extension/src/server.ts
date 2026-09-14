@@ -14,12 +14,21 @@ export async function serverStatus(model: string) {
     return { ready: true, description: names.length ? `Ready · server advertises ${names.join(', ')} (weights not independently verified)` : 'Ready · model identity unverified' };
   } catch { return { ready: true, description: 'Ready · model identity unverified' }; }
 }
+async function selectDevice(root: string, model: string): Promise<'metal' | 'cpu'> {
+  const name = profile(model).model;
+  for (const [precision, device] of [['bf16', 'metal'], ['f16', 'cpu']] as const) {
+    try { if ((await stat(path.join(root, `models/${name}-${precision}.gguf`))).isFile()) return device; }
+    catch (error) { if ((error as NodeJS.ErrnoException).code !== 'ENOENT') throw error; }
+  }
+  throw new Error(`Missing models/${name}-bf16.gguf (or models/${name}-f16.gguf for CPU inference)`);
+}
 export async function validatePocRoot(input: string, model: string) {
   if (!path.isAbsolute(input)) throw new Error('Enter the absolute path to the Antares POC.');
   const root = await realpath(input);
-  for (const relative of ['scripts/serve.sh', 'scripts/model_profile.sh', `models/${profile(model).model}-bf16.gguf`]) {
+  for (const relative of ['scripts/serve.sh', 'scripts/model_profile.sh']) {
     if (!(await stat(path.join(root, relative))).isFile()) throw new Error(`Missing ${relative}`);
   }
+  await selectDevice(root, model);
   await access(path.join(root, 'build/llama.cpp/bin/llama-server'), constants.X_OK);
   await access(path.join(root, '.venv/bin/python'), constants.X_OK);
   return root;
@@ -37,7 +46,8 @@ export class LocalServers {
     root = await validatePocRoot(root, model);
     if ((await serverStatus(model)).ready) return 'A server is already running; it remains independently managed.';
     if (this.disposed || signal?.aborted) throw new Error('Server startup cancelled.');
-    const child = spawn('/bin/bash', [path.join(root, 'scripts/serve.sh')], { cwd: root, env: { ...childEnvironment(history), ANTARES_MODEL: model }, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
+    const device = await selectDevice(root, model);
+    const child = spawn('/bin/bash', [path.join(root, 'scripts/serve.sh')], { cwd: root, env: { ...childEnvironment(history), ANTARES_MODEL: model, ANTARES_DEVICE: device }, detached: true, stdio: ['ignore', 'pipe', 'pipe'] });
     this.owned.set(model, child);
     let error: string | undefined;
     child.on('error', e => { error = e.message; if (this.owned.get(model) === child) this.owned.delete(model); });

@@ -166,3 +166,28 @@ test('freshness save failure is retried even when the in-memory stale flag is al
  assert.equal(h.api.getLastRun().sourceChanged,true);assert.ok(!(await h.api.store.list())[0].sourceChanged);
  await h.api.prepareSnapshot(false);assert.equal((await h.api.store.list())[0].sourceChanged,true);
 });
+
+for (const outcome of ['failed', 'cancelled']) test(`external edits keep the retained result stale after a different scan is ${outcome}`, async t => {
+ const h=await harness(t);
+ await h.api.saveDecision(0,'confirmed','Reviewed candidate');
+ const previous=h.api.getLastRun().id;
+ const other=path.join(path.dirname(h.root),'other');await fs.mkdir(other);
+ h.vscode.workspace.workspaceFolders.push({uri:{fsPath:other,scheme:'file'}});await h.foldersChanged();
+ mockScan(t,async()=>{
+  const live=h.watchers.filter(w=>!w.disposed);
+  assert.deepEqual(new Set(live.map(w=>w.root)),new Set([h.root,other]));
+  // No editor text-change event: simulate an external edit to a non-candidate.
+  const file=path.join(h.root,'settings.py');await fs.writeFile(file,'changed externally');
+  live.find(w=>w.root===h.root).change({fsPath:file});
+  if(outcome==='failed')throw new Error('CLI failed');
+  return {stdout:'',stderr:'',exitCode:null,stopped:'cancelled'};
+ });
+ const scan=h.api.investigate(h.vscode.Uri.file(other),'CWE-89');
+ if(outcome==='failed')await assert.rejects(scan,/CLI failed/);else await scan;
+ assert.equal(h.api.getLastRun().id,previous);
+ const snapshot=await h.api.prepareSnapshot(false);
+ assert.equal(snapshot.sourceChanged,true);
+ assert.equal(snapshot.reviews[0].status,'confirmed'); // Candidate itself did not change.
+ assert.equal((await h.api.store.list()).find(r=>r.id===previous).sourceChanged,true);
+ assert.deepEqual(h.watchers.filter(w=>!w.disposed).map(w=>w.root),[h.root]);
+});

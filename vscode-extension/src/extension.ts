@@ -9,24 +9,7 @@ import { createHash } from 'node:crypto';
 import { counts, decision, invalidateDecision, nextPending, reviewSummary, ReviewStatus, Run, setDecision } from './review-model';
 import { ReviewMessage, ReviewPanel, reviewHtml, runKey } from './review-panel';
 import { candidatePath, checkServer, childEnvironment, cliReport, inside, isComplete, LocalServerError, profile, runCli, scanRequest, scanProfiles, explicitSweepRequest, failedCategories } from './core';
-class Candidates implements vscode.TreeDataProvider<vscode.TreeItem> {
-  private event = new vscode.EventEmitter<void>();
-  onDidChangeTreeData = this.event.event;
-  run?: Run;
-  message = 'Run Antares: Sweep Code or Setup and Server Status to begin.';
-  update(message: string, run?: Run) { this.message = message; this.run = run; this.event.fire(); }
-  getTreeItem(item: vscode.TreeItem) { return item; }
-  getChildren(): vscode.TreeItem[] {
-    return [new vscode.TreeItem(this.message), ...(this.run?.report?.findings ?? []).map((f, index) => {
-      const item = new vscode.TreeItem(`${f.cwe_ids.join(', ')} · ${f.file_path}`);
-      item.description = decision(this.run!, index).status; item.tooltip = f.title;
-      item.iconPath = new vscode.ThemeIcon(({unreviewed: 'circle-outline', confirmed: 'check', dismissed: 'circle-slash'})[decision(this.run!, index).status]);
-      item.command = { command: 'antares.review', title: 'Review candidate', arguments: [index] };
-      return item;
-    })];
-  }
-  dispose() { this.event.dispose(); }
-}
+import { Candidates } from './candidates';
 let active: AbortController | undefined;
 export function deactivate() { active?.abort(); }
 export async function activate(context: vscode.ExtensionContext) {
@@ -249,7 +232,7 @@ export async function activate(context: vscode.ExtensionContext) {
     try {
       await flushDrafts();
       return await performInvestigation(targetUri, cwe, options);
-    } finally { busy = false; scanning = undefined; }
+    } finally { busy = false; scanning = undefined; syncWatchers(); }
   }
   async function performInvestigation(targetUri: vscode.Uri, cwe?: string, options?: {categories?: string[]; label?: string; parent?: Run}): Promise<Run> {
     supported();
@@ -259,6 +242,7 @@ export async function activate(context: vscode.ExtensionContext) {
     const roots = await Promise.all((vscode.workspace.workspaceFolders ?? []).filter(f => f.uri.scheme === 'file').map(f => realpath(f.uri.fsPath)));
     if (!roots.some(root => inside(root, target)) || !(await stat(target)).isDirectory()) throw new Error('Choose a directory within the open workspace.');
     scanning = { target, sourceChanged: false };
+    syncWatchers();
     const executable = config().get<string>('cliPath', '');
     if (!path.isAbsolute(executable)) throw new Error('Run Antares: Configure Local CLI first.');
     await access(executable, constants.X_OK);
@@ -305,6 +289,7 @@ export async function activate(context: vscode.ExtensionContext) {
             }
             last = run;
             refresh();
+            syncWatchers();
             review.show(run);
           }
           return run;
@@ -405,7 +390,7 @@ export async function activate(context: vscode.ExtensionContext) {
   async function loadRunUnlocked(id: string) {
     const run = (await store.list()).find(r => r.id === id);
     if (!run) throw new Error('Run not found in this workspace.');
-    last = run; if (await refreshDecisions(last)) await persist(last); refresh(); review.show(last);
+    last = run; if (await refreshDecisions(last)) await persist(last); refresh(); syncWatchers(); review.show(last);
   }
   register('antares.retryDraftSave', async () => reviewOperation(async () => {
     if (!last) throw new Error('No review draft to save.');
@@ -445,11 +430,19 @@ export async function activate(context: vscode.ExtensionContext) {
     if (event.contentChanges.length && event.document.uri.scheme === 'file') markChanged(event.document.uri.fsPath);
   }));
   const watchers = new Map<string, vscode.Disposable[]>();
+  function desiredRoots() {
+    // A failed/cancelled scan retains the previous result, so both targets
+    // must keep receiving filesystem events throughout the investigation.
+    const targets = [...new Set([scanning?.target, last?.target].filter((target): target is string =>
+      !!target && workspaceRoots.some(root => inside(root, target))))];
+    return targets.length ? targets : workspaceRoots;
+  }
   function syncWatchers() {
-    for (const [root, subscriptions] of watchers) if (!workspaceRoots.includes(root)) {
+    const wanted = desiredRoots();
+    for (const [root, subscriptions] of watchers) if (!wanted.includes(root)) {
       subscriptions.forEach(s => s.dispose()); watchers.delete(root);
     }
-    for (const root of workspaceRoots) if (!watchers.has(root)) {
+    for (const root of wanted) if (!watchers.has(root)) {
       const watcher = vscode.workspace.createFileSystemWatcher(new vscode.RelativePattern(root, '**/*'));
       watchers.set(root, [watcher, watcher.onDidChange(uri => markChanged(uri.fsPath)), watcher.onDidCreate(uri => markChanged(uri.fsPath)), watcher.onDidDelete(uri => markChanged(uri.fsPath))]);
     }
@@ -467,7 +460,7 @@ export async function activate(context: vscode.ExtensionContext) {
   try {
     try { await store.migrate(); } catch (error) { void vscode.window.showWarningMessage(`Antares legacy result could not be migrated: ${error instanceof Error ? error.message : String(error)}`); }
     last = (await store.list())[0];
-    if (last) { if (await refreshDecisions(last)) await persist(last); refresh(); }
+    if (last) { if (await refreshDecisions(last)) await persist(last); refresh(); syncWatchers(); }
   } catch (error) {
     candidates.update(`Saved result unavailable: ${error instanceof Error ? error.message : String(error)}`);
   }

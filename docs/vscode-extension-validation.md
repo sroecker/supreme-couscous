@@ -212,3 +212,14 @@ Validation: all 45 extension tests passed; VSIX manifest version is 0.4.5, and e
 ## 0.4.6 packaging and repeated evaluation
 
 All 45 extension tests passed. The packaged version is 0.4.6, and its compiled/runtime files are byte-identical to the 0.4.5 VSIX. Native editor checks were not repeated for this packaging-only update. The fixture and runner changes passed 71 Python tests and retained all 180 planned model investigations; see the [repeated evaluation](security-expansion-evaluation.md) for completion failures, confusion matrices and file-level scores. This release does not claim improved model accuracy.
+
+## 0.4.7: retained-result freshness and CPU startup
+
+Validation on 2026-09-15:
+
+- All **50 extension tests** and **71 Python tests** passed. Regression cases simulate external changes to non-candidate files in a retained target while another target’s scan fails or is cancelled; the retained result and its persisted/exported state remain stale. Watchers cover both targets during the scan and release the finished target afterward.
+- Startup tests execute the real shell launcher with a fake llama-server and verify F16-only weights select CPU, while BF16 weights take precedence and select Metal. They check the selected GGUF and GPU/device arguments, including conflicting inherited device settings. These tests validate startup configuration, not model inference.
+- The packaged `antares-local-0.4.7.vsix` contains the extracted candidate view, model-profile JSON, and compiled fixes. Packaged compiled files match the local build.
+- `test/reliability-editor.js` passed in isolated **VSCodium 1.95.3**, exercising real webview messages, review persistence, and source freshness. The editor exited 0. Evidence is in ignored `logs/reliability-editor-test.json`; the normal editor profile was not updated. VSCodium emitted cache diagnostics without failing the test.
+
+No model accuracy evaluation was repeated. Microsoft VS Code and native keyboard/accessibility validation retain their previously documented limits.

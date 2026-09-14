@@ -10,10 +10,8 @@ case "${ANTARES_DEVICE:-metal}" in
   *) echo "ANTARES_DEVICE must be metal or cpu" >&2; exit 2 ;;
 esac
 MODEL_NAME="${ANTARES_MODEL:-antares-1b}"
-case "$MODEL_NAME" in
-  antares-1b|antares-350m) ;;
-  *) echo "ANTARES_MODEL must be antares-1b or antares-350m" >&2; exit 2 ;;
-esac
+"$ROOT/.venv/bin/python" -c 'import json,sys; profiles=json.load(open(sys.argv[1])); sys.exit(0 if sys.argv[2] in profiles else 1)' "$ROOT/vscode-extension/src/model-profiles.json" "$MODEL_NAME" \
+  || { echo "ANTARES_MODEL must be one of: $("$ROOT/.venv/bin/python" -c 'import json,sys; print(" ".join(sorted(json.load(open(sys.argv[1])).keys())))' "$ROOT/vscode-extension/src/model-profiles.json")" >&2; exit 2; }
 MODEL="${ANTARES_GGUF:-$ROOT/models/$MODEL_NAME-$PRECISION.gguf}"
 test -f "$MODEL" || { echo "Missing GGUF: $MODEL" >&2; exit 1; }
 exec "$ROOT/build/llama.cpp/bin/llama-server" --model "$MODEL" --alias "$MODEL_NAME" \

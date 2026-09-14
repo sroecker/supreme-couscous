@@ -1,6 +1,6 @@
 # Antares Local for VS Code and VSCodium
 
-Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.6 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.7 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
 ## Install and connect
 
@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-Run **Extensions: Install from VSIX…**, select `antares-local-0.4.6.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.7.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
 1. Complete the repository setup to install the CLI and convert weights.
 2. Open the source workspace and trust it.
@@ -30,7 +30,7 @@ ANTARES_MODEL=antares-350m ./scripts/serve.sh
 
 1B defaults to port 8082 and 350M to 8086. The shell wrappers and extension consume the same model-profile JSON. Shell `ANTARES_PORT` overrides the default; `ANTARES_ENDPOINT` takes precedence for CLI requests. The extension uses fixed loopback endpoints.
 
-The startup command validates `antares.pocRoot` before executing its launcher. An extension-started server is owned by that editor and stopped when the extension shuts down normally. Existing servers remain independently managed. Startup is cancellable, has a 60-second readiness deadline, and writes bounded output to **Antares Server**. A server-advertised model alias is not independent verification of loaded weights. Abrupt editor termination may require manual process cleanup.
+The startup command validates `antares.pocRoot` before executing its launcher. It prefers BF16 weights with Metal; when only F16 weights exist, it explicitly selects CPU inference. An extension-started server is owned by that editor and stopped when the extension shuts down normally. Existing servers remain independently managed. Startup is cancellable, has a 60-second readiness deadline, and writes bounded output to **Antares Server**. A server-advertised model alias is not independent verification of loaded weights. Abrupt editor termination may require manual process cleanup.
 
 ## Scan code
 
@@ -70,7 +70,7 @@ New records live in private extension global storage under `runs/`, filtered by 
 
 Known-dead process locks are reclaimed automatically. An empty lock or interrupted reclamation can require recovery: close all editor instances first, back up the storage directory, and remove only the affected `.lock`/`.lock.reclaim` files before reopening. Never remove a live writer's lock or the run JSON as a recovery step.
 
-Edits observed during inference mark the incoming run potentially stale, including the first scan. Repeated source-change events persist the transition to stale once rather than rewriting the full report for every keystroke. Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
+While a scan runs, filesystem watchers cover both its target and the retained result’s target. External changes to the retained target still mark that result stale if the new scan fails or is cancelled. Edits observed during inference mark the incoming run potentially stale, including the first scan. Repeated source-change events persist the transition to stale once rather than rewriting the full report for every keystroke. Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
 
 **Export result and review** flushes drafts and checks freshness before creating a snapshot. Merely opening an unchanged review or exporting it does not increment the stored revision; export-check timestamps belong to the snapshot. Actual stale-state transitions and invalidated decisions are still persisted, and failed writes remain eligible for retry. JSON includes execution state, decisions, drafts explicitly separate from decisions, the check timestamp/scope, and dirty-file paths. Draft notes never silently become confirmed or dismissed decisions. The snapshot represents the check time; edits after that time require another export or scan.
 

@@ -2,7 +2,7 @@
   "name": "antares-local",
   "displayName": "Antares Local",
   "description": "Local CWE investigations with Antares and llama.cpp.",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "publisher": "sroecker",
   "license": "MIT",
   "repository": {
@@ -26,7 +26,19 @@
     "virtualWorkspaces": false
   },
   "activationEvents": [
-    "onView:antares.candidates"
+    "onView:antares.candidates",
+    "onCommand:antares.configure",
+    "onCommand:antares.selectModel",
+    "onCommand:antares.investigate",
+    "onCommand:antares.export",
+    "onCommand:antares.details",
+    "onCommand:antares.review",
+    "onCommand:antares.sweep",
+    "onCommand:antares.history",
+    "onCommand:antares.retry",
+    "onCommand:antares.status",
+    "onCommand:antares.startServer",
+    "onCommand:antares.retryDraftSave"
   ],
   "contributes": {
     "commands": [
@@ -178,7 +190,7 @@
     ]
   },
   "scripts": {
-    "compile": "tsc -p .",
+    "compile": "tsc -p . && cp src/model-profiles.json dist/model-profiles.json",
     "test": "npm run compile && node --test test/*.test.js",
     "vscode:prepublish": "npm run compile",
     "package": "vsce package --no-dependencies"

@@ -40,8 +40,9 @@ export async function candidatePath(root: string, relative: string): Promise<str
   return resolved;
 }
 export function profile(model: string) {
-  if (model !== 'antares-1b' && model !== 'antares-350m') throw new Error('Unsupported local model.');
-  return { model, endpoint: `http://127.0.0.1:${modelProfiles[model].port}/v1/completions` };
+  const entry = (modelProfiles as Record<string, { port: number } | undefined>)[model];
+  if (!entry || !Number.isInteger(entry.port) || entry.port < 1 || entry.port > 65535) throw new Error('Unsupported local model.');
+  return { model, endpoint: `http://127.0.0.1:${entry.port}/v1/completions` };
 }
 export function childEnvironment(dataDir: string): NodeJS.ProcessEnv {
   const env: NodeJS.ProcessEnv = {};
