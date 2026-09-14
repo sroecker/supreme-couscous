@@ -74,3 +74,16 @@ Interpret `matches_expected` only when `complete` is true. A complete scan can s
 - Installed FastMCP 3.4.7 `fastmcp/server/auth/providers/jwt.py`: audience-validation behavior was checked against the installed source and the offline tests.
 - [MCP authorization specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization): resource-bound access tokens.
 - [MCP security best practices](https://modelcontextprotocol.io/docs/2025-11-25/tutorials/security/security_best_practices): audience validation and prohibition of token passthrough.
+
+## Evaluation runner behavior
+
+`scripts/scan_oauth_examples.py` writes per-case logs/reports, an atomically replaced `summary.json`, and `evaluation.json` with aggregate completion/accuracy metrics and available provenance. Missing or malformed reports mark that case incomplete and do not abort the remaining cases. Repeated variant flags are deduplicated.
+
+Use `--tool-budget` (1–50) and a finite positive `--timeout` to bound each query. Default exit status remains 0 when all queries complete, regardless of model accuracy. Add `--strict` to return 1 for completed expected-result mismatches. Incomplete/operational errors take precedence with exit 2; argument errors also return 2. Incomplete cases are excluded from ordinary false-positive/miss counts.
+
+```sh
+ANTARES_MODEL=antares-350m .venv/bin/python scripts/scan_oauth_examples.py \
+  --output reports/oauth-350m-evaluation --strict
+```
+
+The model-specific port default is shared with the editor extension: 1B uses 8082 and 350M uses 8086. Explicit endpoint/port overrides remain available. The [0.4.0 profile evaluation](../../docs/vscode-extension-validation.md#live-profile-evaluation) records broader MCP/OAuth sweeps separately from these focused fixture queries.

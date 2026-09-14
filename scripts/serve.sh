@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$ROOT/scripts/model_profile.sh"
 case "${ANTARES_DEVICE:-metal}" in
   metal) PRECISION=bf16; DEVICE_ARGS=(--gpu-layers all) ;;
   cpu) PRECISION=f16; DEVICE_ARGS=(--gpu-layers 0 --device none) ;;
