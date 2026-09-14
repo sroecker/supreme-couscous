@@ -124,6 +124,8 @@ With the selected model server running, scan all six variants:
 
 The runner records expected and actual findings separately from execution status. See the example README for case selection and timeout options.
 
+The [Python security examples](examples/python-security/README.md) add 24 variants covering path traversal, command injection, SSRF, deserialization, tenant authorization and XSS. Their offline checks and label-blinded evaluation runner support both local models. See the [recorded comparison](docs/python-security-evaluation.md).
+
 ## Recorded results
 
 | Report | Contents |

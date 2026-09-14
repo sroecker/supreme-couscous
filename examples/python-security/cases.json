@@ -1,0 +1,242 @@
+[
+  {
+    "id": "file_download-vulnerable",
+    "family": "file_download",
+    "variant": "vulnerable",
+    "title": "File download",
+    "cwe": "CWE-22",
+    "source": "file_download/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "file_download-fixed",
+    "family": "file_download",
+    "variant": "fixed",
+    "title": "File download",
+    "cwe": "CWE-22",
+    "source": "file_download/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "file_download-incomplete_fix",
+    "family": "file_download",
+    "variant": "incomplete_fix",
+    "title": "File download",
+    "cwe": "CWE-22",
+    "source": "file_download/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "file_download-protected_elsewhere",
+    "family": "file_download",
+    "variant": "protected_elsewhere",
+    "title": "File download",
+    "cwe": "CWE-22",
+    "source": "file_download/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "command_report-vulnerable",
+    "family": "command_report",
+    "variant": "vulnerable",
+    "title": "Report command",
+    "cwe": "CWE-78",
+    "source": "command_report/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "command_report-fixed",
+    "family": "command_report",
+    "variant": "fixed",
+    "title": "Report command",
+    "cwe": "CWE-78",
+    "source": "command_report/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "command_report-incomplete_fix",
+    "family": "command_report",
+    "variant": "incomplete_fix",
+    "title": "Report command",
+    "cwe": "CWE-78",
+    "source": "command_report/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "command_report-protected_elsewhere",
+    "family": "command_report",
+    "variant": "protected_elsewhere",
+    "title": "Report command",
+    "cwe": "CWE-78",
+    "source": "command_report/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "url_preview-vulnerable",
+    "family": "url_preview",
+    "variant": "vulnerable",
+    "title": "URL preview",
+    "cwe": "CWE-918",
+    "source": "url_preview/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "url_preview-fixed",
+    "family": "url_preview",
+    "variant": "fixed",
+    "title": "URL preview",
+    "cwe": "CWE-918",
+    "source": "url_preview/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "url_preview-incomplete_fix",
+    "family": "url_preview",
+    "variant": "incomplete_fix",
+    "title": "URL preview",
+    "cwe": "CWE-918",
+    "source": "url_preview/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "url_preview-protected_elsewhere",
+    "family": "url_preview",
+    "variant": "protected_elsewhere",
+    "title": "URL preview",
+    "cwe": "CWE-918",
+    "source": "url_preview/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "job_config-vulnerable",
+    "family": "job_config",
+    "variant": "vulnerable",
+    "title": "Job configuration",
+    "cwe": "CWE-502",
+    "source": "job_config/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "job_config-fixed",
+    "family": "job_config",
+    "variant": "fixed",
+    "title": "Job configuration",
+    "cwe": "CWE-502",
+    "source": "job_config/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "job_config-incomplete_fix",
+    "family": "job_config",
+    "variant": "incomplete_fix",
+    "title": "Job configuration",
+    "cwe": "CWE-502",
+    "source": "job_config/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "job_config-protected_elsewhere",
+    "family": "job_config",
+    "variant": "protected_elsewhere",
+    "title": "Job configuration",
+    "cwe": "CWE-502",
+    "source": "job_config/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "tenant_invoice-vulnerable",
+    "family": "tenant_invoice",
+    "variant": "vulnerable",
+    "title": "Tenant invoice",
+    "cwe": "CWE-639",
+    "source": "tenant_invoice/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "tenant_invoice-fixed",
+    "family": "tenant_invoice",
+    "variant": "fixed",
+    "title": "Tenant invoice",
+    "cwe": "CWE-639",
+    "source": "tenant_invoice/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "tenant_invoice-incomplete_fix",
+    "family": "tenant_invoice",
+    "variant": "incomplete_fix",
+    "title": "Tenant invoice",
+    "cwe": "CWE-639",
+    "source": "tenant_invoice/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "tenant_invoice-protected_elsewhere",
+    "family": "tenant_invoice",
+    "variant": "protected_elsewhere",
+    "title": "Tenant invoice",
+    "cwe": "CWE-639",
+    "source": "tenant_invoice/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "html_report-vulnerable",
+    "family": "html_report",
+    "variant": "vulnerable",
+    "title": "HTML report",
+    "cwe": "CWE-79",
+    "source": "html_report/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "html_report-fixed",
+    "family": "html_report",
+    "variant": "fixed",
+    "title": "HTML report",
+    "cwe": "CWE-79",
+    "source": "html_report/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "html_report-incomplete_fix",
+    "family": "html_report",
+    "variant": "incomplete_fix",
+    "title": "HTML report",
+    "cwe": "CWE-79",
+    "source": "html_report/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "html_report-protected_elsewhere",
+    "family": "html_report",
+    "variant": "protected_elsewhere",
+    "title": "HTML report",
+    "cwe": "CWE-79",
+    "source": "html_report/protected_elsewhere",
+    "expected_paths": []
+  }
+]
