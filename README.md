@@ -124,7 +124,7 @@ With the selected model server running, scan all six variants:
 
 The runner records expected and actual findings separately from execution status. See the example README for case selection and timeout options.
 
-The [Python security examples](examples/python-security/README.md) add 24 variants covering path traversal, command injection, SSRF, deserialization, tenant authorization and XSS. Their offline checks and label-blinded evaluation runner support both local models. See the [recorded comparison](docs/python-security-evaluation.md).
+The [Python security examples](examples/python-security/README.md) provide 48 variants across twelve weakness families, including logging leaks, credential redirects, TLS verification, template injection, decompression limits and async batch limits. Their offline checks and label-blinded evaluation runner support both local models. See the [initial comparison](docs/python-security-evaluation.md), [repeated evaluation](docs/security-expansion-evaluation.md), and [real repository pairs](examples/real-repositories/README.md).
 
 ## Recorded results
 

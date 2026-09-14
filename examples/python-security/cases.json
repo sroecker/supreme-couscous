@@ -238,5 +238,245 @@
     "cwe": "CWE-79",
     "source": "html_report/protected_elsewhere",
     "expected_paths": []
+  },
+  {
+    "id": "secret_logging-vulnerable",
+    "family": "secret_logging",
+    "variant": "vulnerable",
+    "title": "Request logging",
+    "cwe": "CWE-532",
+    "source": "secret_logging/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "secret_logging-fixed",
+    "family": "secret_logging",
+    "variant": "fixed",
+    "title": "Request logging",
+    "cwe": "CWE-532",
+    "source": "secret_logging/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "secret_logging-incomplete_fix",
+    "family": "secret_logging",
+    "variant": "incomplete_fix",
+    "title": "Request logging",
+    "cwe": "CWE-532",
+    "source": "secret_logging/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "secret_logging-protected_elsewhere",
+    "family": "secret_logging",
+    "variant": "protected_elsewhere",
+    "title": "Request logging",
+    "cwe": "CWE-532",
+    "source": "secret_logging/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "redirect_credentials-vulnerable",
+    "family": "redirect_credentials",
+    "variant": "vulnerable",
+    "title": "Authenticated redirects",
+    "cwe": "CWE-200",
+    "source": "redirect_credentials/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "redirect_credentials-fixed",
+    "family": "redirect_credentials",
+    "variant": "fixed",
+    "title": "Authenticated redirects",
+    "cwe": "CWE-200",
+    "source": "redirect_credentials/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "redirect_credentials-incomplete_fix",
+    "family": "redirect_credentials",
+    "variant": "incomplete_fix",
+    "title": "Authenticated redirects",
+    "cwe": "CWE-200",
+    "source": "redirect_credentials/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "redirect_credentials-protected_elsewhere",
+    "family": "redirect_credentials",
+    "variant": "protected_elsewhere",
+    "title": "Authenticated redirects",
+    "cwe": "CWE-200",
+    "source": "redirect_credentials/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "tls_validation-vulnerable",
+    "family": "tls_validation",
+    "variant": "vulnerable",
+    "title": "TLS verification",
+    "cwe": "CWE-295",
+    "source": "tls_validation/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "tls_validation-fixed",
+    "family": "tls_validation",
+    "variant": "fixed",
+    "title": "TLS verification",
+    "cwe": "CWE-295",
+    "source": "tls_validation/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "tls_validation-incomplete_fix",
+    "family": "tls_validation",
+    "variant": "incomplete_fix",
+    "title": "TLS verification",
+    "cwe": "CWE-295",
+    "source": "tls_validation/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "tls_validation-protected_elsewhere",
+    "family": "tls_validation",
+    "variant": "protected_elsewhere",
+    "title": "TLS verification",
+    "cwe": "CWE-295",
+    "source": "tls_validation/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "template_rendering-vulnerable",
+    "family": "template_rendering",
+    "variant": "vulnerable",
+    "title": "Template rendering",
+    "cwe": "CWE-1336",
+    "source": "template_rendering/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "template_rendering-fixed",
+    "family": "template_rendering",
+    "variant": "fixed",
+    "title": "Template rendering",
+    "cwe": "CWE-1336",
+    "source": "template_rendering/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "template_rendering-incomplete_fix",
+    "family": "template_rendering",
+    "variant": "incomplete_fix",
+    "title": "Template rendering",
+    "cwe": "CWE-1336",
+    "source": "template_rendering/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "template_rendering-protected_elsewhere",
+    "family": "template_rendering",
+    "variant": "protected_elsewhere",
+    "title": "Template rendering",
+    "cwe": "CWE-1336",
+    "source": "template_rendering/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "compressed_attachment-vulnerable",
+    "family": "compressed_attachment",
+    "variant": "vulnerable",
+    "title": "Compressed attachment",
+    "cwe": "CWE-409",
+    "source": "compressed_attachment/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "compressed_attachment-fixed",
+    "family": "compressed_attachment",
+    "variant": "fixed",
+    "title": "Compressed attachment",
+    "cwe": "CWE-409",
+    "source": "compressed_attachment/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "compressed_attachment-incomplete_fix",
+    "family": "compressed_attachment",
+    "variant": "incomplete_fix",
+    "title": "Compressed attachment",
+    "cwe": "CWE-409",
+    "source": "compressed_attachment/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "compressed_attachment-protected_elsewhere",
+    "family": "compressed_attachment",
+    "variant": "protected_elsewhere",
+    "title": "Compressed attachment",
+    "cwe": "CWE-409",
+    "source": "compressed_attachment/protected_elsewhere",
+    "expected_paths": []
+  },
+  {
+    "id": "batch_jobs-vulnerable",
+    "family": "batch_jobs",
+    "variant": "vulnerable",
+    "title": "Batch execution",
+    "cwe": "CWE-770",
+    "source": "batch_jobs/vulnerable",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "batch_jobs-fixed",
+    "family": "batch_jobs",
+    "variant": "fixed",
+    "title": "Batch execution",
+    "cwe": "CWE-770",
+    "source": "batch_jobs/fixed",
+    "expected_paths": []
+  },
+  {
+    "id": "batch_jobs-incomplete_fix",
+    "family": "batch_jobs",
+    "variant": "incomplete_fix",
+    "title": "Batch execution",
+    "cwe": "CWE-770",
+    "source": "batch_jobs/incomplete_fix",
+    "expected_paths": [
+      "app.py"
+    ]
+  },
+  {
+    "id": "batch_jobs-protected_elsewhere",
+    "family": "batch_jobs",
+    "variant": "protected_elsewhere",
+    "title": "Batch execution",
+    "cwe": "CWE-770",
+    "source": "batch_jobs/protected_elsewhere",
+    "expected_paths": []
   }
 ]

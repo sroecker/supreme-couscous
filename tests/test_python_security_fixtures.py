@@ -10,7 +10,8 @@ import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1] / 'examples/python-security'
-CASES = json.loads((ROOT/'cases.json').read_text())
+ORIGINAL_FAMILIES = {'file_download', 'command_report', 'url_preview', 'job_config', 'tenant_invoice', 'html_report'}
+CASES = [c for c in json.loads((ROOT/'cases.json').read_text()) if c['family'] in ORIGINAL_FAMILIES]
 
 
 def load_app(source):

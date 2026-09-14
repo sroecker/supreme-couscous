@@ -44,8 +44,8 @@ def score(report, expected, cwe, model, exit_code, error):
                 missed_paths=sorted(set(expected) - set(actual)) if complete else None)
 
 
-def evaluate(case, model, output, timeout, budget):
-    destination = output / model / case['id']
+def evaluate(case, model, output, timeout, budget, *, repeat=1, stage=stage_source):
+    destination = output / model / f'run-{repeat}' / case['id']
     destination.mkdir(parents=True)
     env = os.environ.copy()
     endpoint = f"http://127.0.0.1:{PROFILES[model]['port']}/v1/completions"
@@ -54,7 +54,7 @@ def evaluate(case, model, output, timeout, budget):
     started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix='antares-eval-') as temporary:
         target = Path(temporary) / 'repository'
-        hashes = stage_source(case, target)
+        hashes = stage(case, target)
         with (destination / 'run.log').open('w') as log:
             try:
                 result = run_bounded([str(ROOT / 'scripts/antares.sh'), 'query', str(target),
@@ -71,11 +71,11 @@ def evaluate(case, model, output, timeout, budget):
                 error = 'Report model does not match requested model'
         except (OSError, ValueError, TypeError) as exc:
             error = f'{error or ""} Report unavailable or invalid: {exc}'.strip()
-    return dict(case=case['id'], family=case['family'], variant=case['variant'], cwe=case['cwe'],
+    return dict(repeat=repeat, case=case['id'], family=case['family'], variant=case['variant'], cwe=case['cwe'],
                 model=model, reported_model=report.get('metadata', {}).get('model'), endpoint=endpoint,
                 source_sha256=hashes, exit_code=exit_code, error=error, timed_out=timed_out,
                 duration_seconds=round(time.monotonic()-started, 3), summary=report.get('summary', {}),
-                warnings=report.get('warnings', []), report=f"{model}/{case['id']}/report.json",
+                warnings=report.get('warnings', []), report=f"{model}/run-{repeat}/{case['id']}/report.json",
                 **score(report, case['expected_paths'], case['cwe'], model, exit_code, error))
 
 
@@ -95,43 +95,90 @@ def confusion_matrix(rows):
     return counts
 
 
-def main(argv=None):
-    cases = json.loads((FIXTURES / 'cases.json').read_text())
-    parser = argparse.ArgumentParser(description=__doc__)
+def file_metrics(rows):
+    """Micro file precision/recall on completed unsafe cases (Phase A)."""
+    selected = [r for r in rows if r['complete'] and r['expected_paths']]
+    tp = fp = fn = 0
+    for row in selected:
+        expected, actual = set(row['expected_paths']), set(row['actual_paths'])
+        tp += len(expected & actual)
+        fp += len(actual - expected)
+        fn += len(expected - actual)
+    return dict(completed_unsafe_cases=len(selected), true_positive_files=tp,
+                false_positive_files=fp, missed_files=fn,
+                precision=tp/(tp+fp) if tp+fp else None,
+                recall=tp/(tp+fn) if tp+fn else None,
+                f1=2*tp/(2*tp+fp+fn) if 2*tp+fp+fn else None)
+
+
+def summarize(rows):
+    return dict(metrics=aggregate(rows), confusion_matrix=confusion_matrix(rows),
+                phase_a_file_metrics=file_metrics(rows))
+
+
+def snapshot(metadata, rows):
+    return dict(**metadata, **summarize(rows), results=rows,
+                per_model={model: summarize([r for r in rows if r['model'] == model])
+                           for model in metadata['models']},
+                per_repeat={str(repeat): {model: summarize([r for r in rows if r['model'] == model and r['repeat'] == repeat])
+                                         for model in metadata['models']}
+                            for repeat in range(1, metadata['repeats']+1)})
+
+
+def run_suite(cases, args, *, stage=stage_source, provenance=None):
+    output = args.output.resolve()
+    output.mkdir(parents=True, exist_ok=False)
+    models = list(dict.fromkeys(args.model or PROFILES))
+    metadata = dict(schema_version=2, started_at=datetime.now(timezone.utc).isoformat(),
+                    tool_budget=args.tool_budget, timeout_seconds=args.timeout, repeats=args.repeats,
+                    planned_runs=len(cases)*len(models)*args.repeats, models=models,
+                    model_weights_verified=False, provenance=provenance or {}, label_blinded=True)
+    rows = []
+    atomic_json(output / 'evaluation.json', snapshot(metadata, rows))
+    for repeat in range(1, args.repeats+1):
+        for model in models:
+            for case in cases:
+                print(f"Run {repeat}/{args.repeats} {model}: {case['id']} ({case['cwe']})", flush=True)
+                row = evaluate(case, model, output, args.timeout, args.tool_budget, repeat=repeat, stage=stage)
+                rows.append(row)
+                atomic_json(output / 'evaluation.json', snapshot(metadata, rows))
+                print(f"  complete={row['complete']} match={row['matches_expected']} {row['duration_seconds']}s", flush=True)
+    metadata['finished_at'] = datetime.now(timezone.utc).isoformat()
+    atomic_json(output / 'evaluation.json', snapshot(metadata, rows))
+    return result_exit(rows, args.strict)
+
+
+def add_arguments(parser):
     parser.add_argument('--output', required=True, type=Path)
     parser.add_argument('--model', action='append', choices=list(PROFILES))
-    parser.add_argument('--family', action='append', choices=sorted({c['family'] for c in cases}))
     parser.add_argument('--timeout', type=float, default=300)
     parser.add_argument('--tool-budget', type=int, default=10)
+    parser.add_argument('--repeats', type=int, default=3)
     parser.add_argument('--strict', action='store_true')
-    args = parser.parse_args(argv)
+
+
+def validate_arguments(parser, args):
     if not math.isfinite(args.timeout) or args.timeout <= 0 or not 1 <= args.tool_budget <= 50:
         parser.error('Use a finite positive timeout and a tool budget from 1 to 50')
+    if not 1 <= args.repeats <= 10:
+        parser.error('Use between 1 and 10 repeats')
     output = args.output.resolve()
     if output == FIXTURES or FIXTURES in output.parents:
         parser.error('Output must be outside the fixtures')
+
+
+def main(argv=None):
+    cases = json.loads((FIXTURES / 'cases.json').read_text())
+    parser = argparse.ArgumentParser(description=__doc__)
+    add_arguments(parser)
+    parser.add_argument('--family', action='append', choices=sorted({c['family'] for c in cases}))
+    args = parser.parse_args(argv)
+    validate_arguments(parser, args)
+    selected = [c for c in cases if not args.family or c['family'] in args.family]
     try:
-        output.mkdir(parents=True, exist_ok=False)
+        return run_suite(selected, args)
     except OSError as exc:
         parser.error(str(exc))
-    selected = [c for c in cases if not args.family or c['family'] in args.family]
-    models = list(dict.fromkeys(args.model or PROFILES))
-    metadata = dict(schema_version=1, started_at=datetime.now(timezone.utc).isoformat(),
-                    tool_budget=args.tool_budget, timeout_seconds=args.timeout,
-                    planned_runs=len(selected)*len(models), models=models,
-                    model_weights_verified=False, label_blinded=True)
-    rows = []
-    atomic_json(output / 'evaluation.json', dict(**metadata, metrics=aggregate(rows), results=rows,
-                    confusion_matrices={model: confusion_matrix([r for r in rows if r['model'] == model]) for model in models}))
-    for model in models:
-        for case in selected:
-            print(f"Running {model}: {case['id']} ({case['cwe']})", flush=True)
-            row = evaluate(case, model, output, args.timeout, args.tool_budget)
-            rows.append(row)
-            atomic_json(output / 'evaluation.json', dict(**metadata, metrics=aggregate(rows), results=rows,
-                    confusion_matrices={model: confusion_matrix([r for r in rows if r['model'] == model]) for model in models}))
-            print(f"  complete={row['complete']} match={row['matches_expected']} {row['duration_seconds']}s", flush=True)
-    return result_exit(rows, args.strict)
 
 
 if __name__ == '__main__':

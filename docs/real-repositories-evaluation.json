@@ -1,0 +1,2003 @@
+{
+  "schema_version": 2,
+  "started_at": "2026-09-14T12:52:43.017782+00:00",
+  "tool_budget": 15,
+  "timeout_seconds": 300,
+  "repeats": 3,
+  "planned_runs": 36,
+  "models": [
+    "antares-1b",
+    "antares-350m"
+  ],
+  "model_weights_verified": false,
+  "provenance": {
+    "benchmark_revision": "9ea70b1a937f266ace41f9477d705edbe7af1313",
+    "cases": [
+      {
+        "id": "urllib3_redirect-vulnerable",
+        "family": "urllib3_redirect",
+        "variant": "vulnerable",
+        "cwe": "CWE-200",
+        "repository": "urllib3/urllib3",
+        "revision": "c4f123dcdcad3582561373278d2772f819ec3cb8",
+        "archive_url": "https://codeload.github.com/urllib3/urllib3/zip/c4f123dcdcad3582561373278d2772f819ec3cb8",
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74",
+        "expected_paths": [
+          "urllib3/poolmanager.py",
+          "urllib3/util/retry.py"
+        ],
+        "benchmark_case": "1oaxMlAO",
+        "advisory": "GHSA-www2-v7xj-xrc6",
+        "patch": "https://github.com/urllib3/urllib3/pull/1346",
+        "license": "MIT"
+      },
+      {
+        "id": "urllib3_redirect-fixed",
+        "family": "urllib3_redirect",
+        "variant": "fixed",
+        "cwe": "CWE-200",
+        "repository": "urllib3/urllib3",
+        "revision": "560bd227b90f74417ffaedebf5f8d05a8ee4f532",
+        "archive_url": "https://codeload.github.com/urllib3/urllib3/zip/560bd227b90f74417ffaedebf5f8d05a8ee4f532",
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305",
+        "expected_paths": [],
+        "benchmark_case": "1oaxMlAO",
+        "advisory": "GHSA-www2-v7xj-xrc6",
+        "patch": "https://github.com/urllib3/urllib3/pull/1346",
+        "license": "MIT"
+      },
+      {
+        "id": "haystack_template-vulnerable",
+        "family": "haystack_template",
+        "variant": "vulnerable",
+        "cwe": "CWE-1336",
+        "repository": "deepset-ai/haystack",
+        "revision": "1f58ec20a8d5d5f75327eb90b78d3af9cd7167a2",
+        "archive_url": "https://codeload.github.com/deepset-ai/haystack/zip/1f58ec20a8d5d5f75327eb90b78d3af9cd7167a2",
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94",
+        "expected_paths": [
+          "haystack/components/builders/chat_prompt_builder.py",
+          "haystack/components/builders/prompt_builder.py",
+          "haystack/components/converters/output_adapter.py",
+          "haystack/components/routers/conditional_router.py",
+          "haystack/core/pipeline/template.py"
+        ],
+        "benchmark_case": "98DuMBNY",
+        "advisory": "GHSA-hx9v-6r9f-w677",
+        "patch": "https://github.com/deepset-ai/haystack/pull/8095",
+        "license": "Apache-2.0"
+      },
+      {
+        "id": "haystack_template-fixed",
+        "family": "haystack_template",
+        "variant": "fixed",
+        "cwe": "CWE-1336",
+        "repository": "deepset-ai/haystack",
+        "revision": "3fed1366c448b02189851bf08166c1f6477a02b0",
+        "archive_url": "https://codeload.github.com/deepset-ai/haystack/zip/3fed1366c448b02189851bf08166c1f6477a02b0",
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2",
+        "expected_paths": [],
+        "benchmark_case": "98DuMBNY",
+        "advisory": "GHSA-hx9v-6r9f-w677",
+        "patch": "https://github.com/deepset-ai/haystack/pull/8095",
+        "license": "Apache-2.0"
+      },
+      {
+        "id": "wlc_tls-vulnerable",
+        "family": "wlc_tls",
+        "variant": "vulnerable",
+        "cwe": "CWE-295",
+        "repository": "WeblateOrg/wlc",
+        "revision": "aafdb507a9e66574ade1f68c50c4fe75dbe80797",
+        "archive_url": "https://codeload.github.com/WeblateOrg/wlc/zip/aafdb507a9e66574ade1f68c50c4fe75dbe80797",
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9",
+        "expected_paths": [
+          "wlc/__init__.py"
+        ],
+        "benchmark_case": "FqTdl1mm",
+        "advisory": "GHSA-2mmv-7rrp-g8xh",
+        "patch": "https://github.com/WeblateOrg/wlc/pull/1097",
+        "license": "GPL-3.0"
+      },
+      {
+        "id": "wlc_tls-fixed",
+        "family": "wlc_tls",
+        "variant": "fixed",
+        "cwe": "CWE-295",
+        "repository": "WeblateOrg/wlc",
+        "revision": "a513864ec4daad00146e6d6e039559726e256fa3",
+        "archive_url": "https://codeload.github.com/WeblateOrg/wlc/zip/a513864ec4daad00146e6d6e039559726e256fa3",
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127",
+        "expected_paths": [],
+        "benchmark_case": "FqTdl1mm",
+        "advisory": "GHSA-2mmv-7rrp-g8xh",
+        "patch": "https://github.com/WeblateOrg/wlc/pull/1097",
+        "license": "GPL-3.0"
+      }
+    ],
+    "snapshot_content": "Full regular-file repository snapshot; .git and .antares* excluded",
+    "ground_truth": "Benchmark patch-touched files; fixed means recorded vulnerability addressed"
+  },
+  "label_blinded": true,
+  "finished_at": "2026-09-14T13:51:50.959985+00:00",
+  "metrics": {
+    "cases": 36,
+    "completed": 18,
+    "incomplete": 18,
+    "completed_matches": 3,
+    "false_positive_paths": 19,
+    "missed_paths": 16,
+    "duration_seconds": 1733.297
+  },
+  "confusion_matrix": {
+    "true_positive": 10,
+    "false_negative": 0,
+    "false_positive": 8,
+    "true_negative": 0,
+    "incomplete_unsafe": 8,
+    "incomplete_safe": 10
+  },
+  "phase_a_file_metrics": {
+    "completed_unsafe_cases": 10,
+    "true_positive_files": 10,
+    "false_positive_files": 6,
+    "missed_files": 16,
+    "precision": 0.625,
+    "recall": 0.38461538461538464,
+    "f1": 0.47619047619047616
+  },
+  "results": [
+    {
+      "repeat": 1,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 91.298,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 15,
+        "duration_seconds": 90.81099237500166,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/urllib3_redirect-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [
+        "urllib3/_collections.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/_collections.py"
+      ],
+      "missed_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ]
+    },
+    {
+      "repeat": 1,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 72.655,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 15,
+        "duration_seconds": 72.06495287500002,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 2,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/urllib3_redirect-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "urllib3/util/url.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/util/url.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 69.521,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 17,
+        "duration_seconds": 68.53920412500156,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/haystack_template-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [
+        "haystack/core/pipeline/template.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [],
+      "missed_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py"
+      ]
+    },
+    {
+      "repeat": 1,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 78.028,
+      "summary": {
+        "total_findings": 5,
+        "tool_call_count": 15,
+        "duration_seconds": 77.12697354100237,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/haystack_template-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 69.168,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 16,
+        "duration_seconds": 68.62375591599994,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/wlc_tls-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [
+        "wlc/__init__.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 108.344,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 107.81689595899661,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/wlc_tls-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "wlc/__init__.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "wlc/__init__.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.048,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.387038124994433,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/urllib3_redirect-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [
+        "urllib3/util/request.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/util/request.py"
+      ],
+      "missed_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ]
+    },
+    {
+      "repeat": 1,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 16.489,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 12,
+        "duration_seconds": 15.742849458001729,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 11,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/urllib3_redirect-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.029,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 14,
+        "duration_seconds": 22.588743874999636,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 12,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/haystack_template-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 19.79,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 18.529782584002533,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 10,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/haystack_template-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 18.065,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 12,
+        "duration_seconds": 17.295436792002874,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 10,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/wlc_tls-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.291,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 14.380020999997214,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/wlc_tls-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 76.354,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 15,
+        "duration_seconds": 75.73713408299955,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/urllib3_redirect-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [
+        "urllib3/packages/six.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/packages/six.py"
+      ],
+      "missed_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ]
+    },
+    {
+      "repeat": 2,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": null,
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 2,
+      "error": "Report unavailable or invalid: [Errno 2] No such file or directory: '/Users/sroecker/code/antares/reports/real-repositories-3runs/antares-1b/run-2/urllib3_redirect-fixed/report.json'",
+      "timed_out": false,
+      "duration_seconds": 100.851,
+      "summary": {},
+      "warnings": [],
+      "report": "antares-1b/run-2/urllib3_redirect-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 72.843,
+      "summary": {
+        "total_findings": 6,
+        "tool_call_count": 14,
+        "duration_seconds": 71.64047241699882,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 1,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/haystack_template-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/dynamic_chat_prompt_builder.py",
+        "haystack/components/builders/dynamic_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "haystack/components/builders/dynamic_chat_prompt_builder.py",
+        "haystack/components/builders/dynamic_prompt_builder.py"
+      ],
+      "missed_paths": [
+        "haystack/components/routers/conditional_router.py"
+      ]
+    },
+    {
+      "repeat": 2,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 56.948,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 14,
+        "duration_seconds": 56.009943958000804,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/haystack_template-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "haystack/components/converters/output_adapter.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "haystack/components/converters/output_adapter.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 98.976,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 16,
+        "duration_seconds": 98.4288018330044,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/wlc_tls-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [
+        "wlc/__init__.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 81.72,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 24,
+        "duration_seconds": 81.12877175000176,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 11,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/wlc_tls-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "wlc/__init__.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "wlc/__init__.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.122,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 11.490931290994922,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 10,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/urllib3_redirect-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.931,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 9.305477417001384,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/urllib3_redirect-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.937,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 14.712200082998606,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/haystack_template-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 16.618,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 15.382642000004125,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 10,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/haystack_template-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.35,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 11.577977916997042,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/wlc_tls-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.001,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 14.238959250003973,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/wlc_tls-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 98.55,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 16,
+        "duration_seconds": 97.91432120799436,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/urllib3_redirect-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [
+        "urllib3/contrib/_securetransport/low_level.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/contrib/_securetransport/low_level.py"
+      ],
+      "missed_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ]
+    },
+    {
+      "repeat": 3,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 70.069,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 14,
+        "duration_seconds": 69.53125074999843,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/urllib3_redirect-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "urllib3/contrib/ntlmpool.py",
+        "urllib3/contrib/securetransport.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/contrib/ntlmpool.py",
+        "urllib3/contrib/securetransport.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 77.958,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 17,
+        "duration_seconds": 76.81044641599874,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/haystack_template-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [],
+      "missed_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py"
+      ]
+    },
+    {
+      "repeat": 3,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 93.621,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 21,
+        "duration_seconds": 92.54546475000097,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/haystack_template-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "haystack/core/pipeline/template.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "haystack/core/pipeline/template.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 89.185,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 16,
+        "duration_seconds": 88.58694904200092,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/wlc_tls-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [
+        "wlc/__init__.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": null,
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 2,
+      "error": "Report unavailable or invalid: [Errno 2] No such file or directory: '/Users/sroecker/code/antares/reports/real-repositories-3runs/antares-1b/run-3/wlc_tls-fixed/report.json'",
+      "timed_out": false,
+      "duration_seconds": 50.451,
+      "summary": {},
+      "warnings": [],
+      "report": "antares-1b/run-3/wlc_tls-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "urllib3_redirect-vulnerable",
+      "family": "urllib3_redirect",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "9bd397093fa7fd7f31c14f96c8ae65c3baadc5f9bbf04e0db4732f948a9f32fc",
+        "files": 137,
+        "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.679,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 14,
+        "duration_seconds": 12.167907250004646,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 13,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/urllib3_redirect-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "urllib3/poolmanager.py",
+        "urllib3/util/retry.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "urllib3_redirect-fixed",
+      "family": "urllib3_redirect",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "668767faba7aa9207c2afa20f047a8d50989941cd7e20cb79e2ae26f6e7999c6",
+        "files": 137,
+        "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.654,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 13.223141624999698,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/urllib3_redirect-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "urllib3/util/request.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "urllib3/util/request.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "haystack_template-vulnerable",
+      "family": "haystack_template",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "70544750503fdb2405aa4ee4a30979b3fb0818db3d369c90c395ffc3d855fbea",
+        "files": 972,
+        "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.391,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 10.541559041994333,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/haystack_template-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "haystack/components/builders/chat_prompt_builder.py",
+        "haystack/components/builders/prompt_builder.py",
+        "haystack/components/converters/output_adapter.py",
+        "haystack/components/routers/conditional_router.py",
+        "haystack/core/pipeline/template.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "haystack_template-fixed",
+      "family": "haystack_template",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "da6cc963bb145463561b280ba44df657a4226886fedea98b95309c4783338f04",
+        "files": 971,
+        "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.96,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 11,
+        "duration_seconds": 12.10882033300004,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 10,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/haystack_template-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "wlc_tls-vulnerable",
+      "family": "wlc_tls",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "e74b74d5b022e9fa4c6e106f662df55207358612d66bd3a99c241162193075c9",
+        "files": 144,
+        "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.166,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 13,
+        "duration_seconds": 14.672711415994854,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 11,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/wlc_tls-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "wlc/__init__.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "wlc_tls-fixed",
+      "family": "wlc_tls",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "tree_sha256": "8a07ce6ac8bf8438e40685235c6a3d712e956b73f12505039a6e38f7e7903092",
+        "files": 144,
+        "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.236,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 9.608528042001126,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/wlc_tls-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    }
+  ],
+  "per_model": {
+    "antares-1b": {
+      "metrics": {
+        "cases": 18,
+        "completed": 16,
+        "incomplete": 2,
+        "completed_matches": 3,
+        "false_positive_paths": 17,
+        "missed_paths": 14,
+        "duration_seconds": 1456.54
+      },
+      "confusion_matrix": {
+        "true_positive": 9,
+        "false_negative": 0,
+        "false_positive": 7,
+        "true_negative": 0,
+        "incomplete_unsafe": 0,
+        "incomplete_safe": 2
+      },
+      "phase_a_file_metrics": {
+        "completed_unsafe_cases": 9,
+        "true_positive_files": 10,
+        "false_positive_files": 5,
+        "missed_files": 14,
+        "precision": 0.6666666666666666,
+        "recall": 0.4166666666666667,
+        "f1": 0.5128205128205128
+      }
+    },
+    "antares-350m": {
+      "metrics": {
+        "cases": 18,
+        "completed": 2,
+        "incomplete": 16,
+        "completed_matches": 0,
+        "false_positive_paths": 2,
+        "missed_paths": 2,
+        "duration_seconds": 276.757
+      },
+      "confusion_matrix": {
+        "true_positive": 1,
+        "false_negative": 0,
+        "false_positive": 1,
+        "true_negative": 0,
+        "incomplete_unsafe": 8,
+        "incomplete_safe": 8
+      },
+      "phase_a_file_metrics": {
+        "completed_unsafe_cases": 1,
+        "true_positive_files": 0,
+        "false_positive_files": 1,
+        "missed_files": 2,
+        "precision": 0.0,
+        "recall": 0.0,
+        "f1": 0.0
+      }
+    }
+  },
+  "per_repeat": {
+    "1": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 6,
+          "completed": 6,
+          "incomplete": 0,
+          "completed_matches": 1,
+          "false_positive_paths": 8,
+          "missed_paths": 6,
+          "duration_seconds": 489.014
+        },
+        "confusion_matrix": {
+          "true_positive": 3,
+          "false_negative": 0,
+          "false_positive": 3,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 0
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 3,
+          "true_positive_files": 2,
+          "false_positive_files": 1,
+          "missed_files": 6,
+          "precision": 0.6666666666666666,
+          "recall": 0.25,
+          "f1": 0.36363636363636365
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 6,
+          "completed": 1,
+          "incomplete": 5,
+          "completed_matches": 0,
+          "false_positive_paths": 1,
+          "missed_paths": 2,
+          "duration_seconds": 118.712
+        },
+        "confusion_matrix": {
+          "true_positive": 1,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_negative": 0,
+          "incomplete_unsafe": 2,
+          "incomplete_safe": 3
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 1,
+          "true_positive_files": 0,
+          "false_positive_files": 1,
+          "missed_files": 2,
+          "precision": 0.0,
+          "recall": 0.0,
+          "f1": 0.0
+        }
+      }
+    },
+    "2": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 6,
+          "completed": 5,
+          "incomplete": 1,
+          "completed_matches": 1,
+          "false_positive_paths": 5,
+          "missed_paths": 3,
+          "duration_seconds": 487.692
+        },
+        "confusion_matrix": {
+          "true_positive": 3,
+          "false_negative": 0,
+          "false_positive": 2,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 1
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 3,
+          "true_positive_files": 5,
+          "false_positive_files": 3,
+          "missed_files": 3,
+          "precision": 0.625,
+          "recall": 0.625,
+          "f1": 0.625
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 6,
+          "completed": 0,
+          "incomplete": 6,
+          "completed_matches": 0,
+          "false_positive_paths": 0,
+          "missed_paths": 0,
+          "duration_seconds": 81.959
+        },
+        "confusion_matrix": {
+          "true_positive": 0,
+          "false_negative": 0,
+          "false_positive": 0,
+          "true_negative": 0,
+          "incomplete_unsafe": 3,
+          "incomplete_safe": 3
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 0,
+          "true_positive_files": 0,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      }
+    },
+    "3": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 6,
+          "completed": 5,
+          "incomplete": 1,
+          "completed_matches": 1,
+          "false_positive_paths": 4,
+          "missed_paths": 5,
+          "duration_seconds": 479.834
+        },
+        "confusion_matrix": {
+          "true_positive": 3,
+          "false_negative": 0,
+          "false_positive": 2,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 1
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 3,
+          "true_positive_files": 3,
+          "false_positive_files": 1,
+          "missed_files": 5,
+          "precision": 0.75,
+          "recall": 0.375,
+          "f1": 0.5
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 6,
+          "completed": 1,
+          "incomplete": 5,
+          "completed_matches": 0,
+          "false_positive_paths": 1,
+          "missed_paths": 0,
+          "duration_seconds": 76.086
+        },
+        "confusion_matrix": {
+          "true_positive": 0,
+          "false_negative": 0,
+          "false_positive": 1,
+          "true_negative": 0,
+          "incomplete_unsafe": 3,
+          "incomplete_safe": 2
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 0,
+          "true_positive_files": 0,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": null,
+          "recall": null,
+          "f1": null
+        }
+      }
+    }
+  }
+}

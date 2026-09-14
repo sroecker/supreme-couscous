@@ -1,0 +1,103 @@
+[
+  {
+    "id": "urllib3_redirect-vulnerable",
+    "family": "urllib3_redirect",
+    "variant": "vulnerable",
+    "cwe": "CWE-200",
+    "repository": "urllib3/urllib3",
+    "revision": "c4f123dcdcad3582561373278d2772f819ec3cb8",
+    "archive_url": "https://codeload.github.com/urllib3/urllib3/zip/c4f123dcdcad3582561373278d2772f819ec3cb8",
+    "archive_sha256": "744471b8f483ab072dd5e70f46d9b41093f5d2d00a7029c1395ccd34ea204a74",
+    "expected_paths": [
+      "urllib3/poolmanager.py",
+      "urllib3/util/retry.py"
+    ],
+    "benchmark_case": "1oaxMlAO",
+    "advisory": "GHSA-www2-v7xj-xrc6",
+    "patch": "https://github.com/urllib3/urllib3/pull/1346",
+    "license": "MIT"
+  },
+  {
+    "id": "urllib3_redirect-fixed",
+    "family": "urllib3_redirect",
+    "variant": "fixed",
+    "cwe": "CWE-200",
+    "repository": "urllib3/urllib3",
+    "revision": "560bd227b90f74417ffaedebf5f8d05a8ee4f532",
+    "archive_url": "https://codeload.github.com/urllib3/urllib3/zip/560bd227b90f74417ffaedebf5f8d05a8ee4f532",
+    "archive_sha256": "5f8078967010c1401894e41ae7b8e9ba09672c3db5460f1d044118a5e86f5305",
+    "expected_paths": [],
+    "benchmark_case": "1oaxMlAO",
+    "advisory": "GHSA-www2-v7xj-xrc6",
+    "patch": "https://github.com/urllib3/urllib3/pull/1346",
+    "license": "MIT"
+  },
+  {
+    "id": "haystack_template-vulnerable",
+    "family": "haystack_template",
+    "variant": "vulnerable",
+    "cwe": "CWE-1336",
+    "repository": "deepset-ai/haystack",
+    "revision": "1f58ec20a8d5d5f75327eb90b78d3af9cd7167a2",
+    "archive_url": "https://codeload.github.com/deepset-ai/haystack/zip/1f58ec20a8d5d5f75327eb90b78d3af9cd7167a2",
+    "archive_sha256": "f5c1b7f0ebf04895c4c950db1f30938ae8bcd4684f35c84feccd148b89c18c94",
+    "expected_paths": [
+      "haystack/components/builders/chat_prompt_builder.py",
+      "haystack/components/builders/prompt_builder.py",
+      "haystack/components/converters/output_adapter.py",
+      "haystack/components/routers/conditional_router.py",
+      "haystack/core/pipeline/template.py"
+    ],
+    "benchmark_case": "98DuMBNY",
+    "advisory": "GHSA-hx9v-6r9f-w677",
+    "patch": "https://github.com/deepset-ai/haystack/pull/8095",
+    "license": "Apache-2.0"
+  },
+  {
+    "id": "haystack_template-fixed",
+    "family": "haystack_template",
+    "variant": "fixed",
+    "cwe": "CWE-1336",
+    "repository": "deepset-ai/haystack",
+    "revision": "3fed1366c448b02189851bf08166c1f6477a02b0",
+    "archive_url": "https://codeload.github.com/deepset-ai/haystack/zip/3fed1366c448b02189851bf08166c1f6477a02b0",
+    "archive_sha256": "a908b29d7e3aa8b875b608cb630d3b7f72095c6efb5f6b48c498829968819bd2",
+    "expected_paths": [],
+    "benchmark_case": "98DuMBNY",
+    "advisory": "GHSA-hx9v-6r9f-w677",
+    "patch": "https://github.com/deepset-ai/haystack/pull/8095",
+    "license": "Apache-2.0"
+  },
+  {
+    "id": "wlc_tls-vulnerable",
+    "family": "wlc_tls",
+    "variant": "vulnerable",
+    "cwe": "CWE-295",
+    "repository": "WeblateOrg/wlc",
+    "revision": "aafdb507a9e66574ade1f68c50c4fe75dbe80797",
+    "archive_url": "https://codeload.github.com/WeblateOrg/wlc/zip/aafdb507a9e66574ade1f68c50c4fe75dbe80797",
+    "archive_sha256": "25c265f47fa4ceb67ceed6adf93ecd32e84cc120c8610fa9fbd17b62ccf67ff9",
+    "expected_paths": [
+      "wlc/__init__.py"
+    ],
+    "benchmark_case": "FqTdl1mm",
+    "advisory": "GHSA-2mmv-7rrp-g8xh",
+    "patch": "https://github.com/WeblateOrg/wlc/pull/1097",
+    "license": "GPL-3.0"
+  },
+  {
+    "id": "wlc_tls-fixed",
+    "family": "wlc_tls",
+    "variant": "fixed",
+    "cwe": "CWE-295",
+    "repository": "WeblateOrg/wlc",
+    "revision": "a513864ec4daad00146e6d6e039559726e256fa3",
+    "archive_url": "https://codeload.github.com/WeblateOrg/wlc/zip/a513864ec4daad00146e6d6e039559726e256fa3",
+    "archive_sha256": "a9f9cdc5374c74990794cdc3f871f08c04d3096e6b24619bc164e3c8b2cb0127",
+    "expected_paths": [],
+    "benchmark_case": "FqTdl1mm",
+    "advisory": "GHSA-2mmv-7rrp-g8xh",
+    "patch": "https://github.com/WeblateOrg/wlc/pull/1097",
+    "license": "GPL-3.0"
+  }
+]

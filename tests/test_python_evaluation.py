@@ -53,3 +53,40 @@ class EvaluationTests(unittest.TestCase):
         result = confusion_matrix(rows)
         self.assertEqual(result, dict(true_positive=0, false_negative=0, false_positive=0,
                                       true_negative=0, incomplete_unsafe=2, incomplete_safe=2))
+
+    def test_file_metrics_use_intersection_and_exclude_incomplete_and_safe(self):
+        from scan_python_examples import file_metrics
+        rows = [dict(complete=True, expected_paths=['a.py', 'b.py'], actual_paths=['a.py', 'c.py']),
+                dict(complete=False, expected_paths=['d.py'], actual_paths=[]),
+                dict(complete=True, expected_paths=[], actual_paths=['safe.py'])]
+        result = file_metrics(rows)
+        self.assertEqual(result['precision'], 0.5)
+        self.assertEqual(result['recall'], 0.5)
+        self.assertEqual(result['f1'], 0.5)
+        self.assertEqual(result['completed_unsafe_cases'], 1)
+        self.assertIsNone(file_metrics([])['recall'])
+
+    def test_repeats_preserve_every_run_and_separate_aggregates(self):
+        from argparse import Namespace
+        from unittest.mock import patch
+        from scan_python_examples import run_suite
+        rows = []
+        def evaluate(case, model, output, timeout, budget, **kwargs):
+            repeat = kwargs['repeat']
+            rows.append(repeat)
+            return dict(case=case['id'], model=model, repeat=repeat, complete=repeat != 2,
+                        expected_paths=['app.py'], actual_paths=['app.py'],
+                        matches_expected=True if repeat != 2 else None,
+                        false_positive_paths=[] if repeat != 2 else None,
+                        missed_paths=[] if repeat != 2 else None, duration_seconds=1)
+        with tempfile.TemporaryDirectory() as temporary:
+            args = Namespace(output=Path(temporary)/'results', model=['antares-1b'],
+                             repeats=3, timeout=5, tool_budget=10, strict=True)
+            with patch('scan_python_examples.evaluate', side_effect=evaluate):
+                self.assertEqual(run_suite([dict(id='case', cwe='CWE-22')], args), 2)
+            data = json.loads((args.output/'evaluation.json').read_text())
+            self.assertEqual(rows, [1, 2, 3])
+            self.assertEqual(data['planned_runs'], 3)
+            self.assertEqual(len(data['results']), 3)
+            self.assertEqual(data['per_repeat']['2']['antares-1b']['metrics']['incomplete'], 1)
+            self.assertEqual(data['per_model']['antares-1b']['phase_a_file_metrics']['completed_unsafe_cases'], 2)

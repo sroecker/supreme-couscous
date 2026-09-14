@@ -1,0 +1,6494 @@
+{
+  "schema_version": 2,
+  "started_at": "2026-09-14T11:34:14.163782+00:00",
+  "tool_budget": 10,
+  "timeout_seconds": 300,
+  "repeats": 3,
+  "planned_runs": 144,
+  "models": [
+    "antares-1b",
+    "antares-350m"
+  ],
+  "model_weights_verified": false,
+  "provenance": {},
+  "label_blinded": true,
+  "finished_at": "2026-09-14T12:52:41.200071+00:00",
+  "metrics": {
+    "cases": 144,
+    "completed": 130,
+    "incomplete": 14,
+    "completed_matches": 65,
+    "false_positive_paths": 80,
+    "missed_paths": 0,
+    "duration_seconds": 2723.495
+  },
+  "confusion_matrix": {
+    "true_positive": 65,
+    "false_negative": 0,
+    "false_positive": 65,
+    "true_negative": 0,
+    "incomplete_unsafe": 7,
+    "incomplete_safe": 7
+  },
+  "phase_a_file_metrics": {
+    "completed_unsafe_cases": 65,
+    "true_positive_files": 65,
+    "false_positive_files": 0,
+    "missed_files": 0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0
+  },
+  "results": [
+    {
+      "repeat": 1,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.553,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 23.065312582999468,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 21.807,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 21.363730165998277,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/secret_logging-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 17.613,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 7,
+        "duration_seconds": 17.16383974999917,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/secret_logging-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.698,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 23.25144941599865,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.012,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.582140374994196,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/redirect_credentials-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.477,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.05759883399878,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/redirect_credentials-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 20.361,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 19.934154832997592,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/redirect_credentials-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.846,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 10,
+        "duration_seconds": 22.460497542000667,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/redirect_credentials-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.692,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 22.253108707998763,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/tls_validation-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.881,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 25.450152500001423,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/tls_validation-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.438,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 22.018482665997,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.879,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 22.467990165998344,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.004,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 21.661284875001,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/template_rendering-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.423,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 25.07651241699932,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.585,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.224494290996518,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 26.706,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 10,
+        "duration_seconds": 26.27360479199706,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/template_rendering-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.305,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 22.875676041003317,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 21.844,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 7,
+        "duration_seconds": 21.447186749996035,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.245,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 22.771274875005474,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/compressed_attachment-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.34,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.869017832999816,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 20.7,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 20.249392417004856,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.52,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 28.050975541002117,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.34,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 21.89901112500229,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 27.848,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 27.412962582995533,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-1/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.109,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 9.54486254099902,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.642,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 9.08010899999499,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/secret_logging-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 8.68,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 8,
+        "duration_seconds": 8.064088500002981,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/secret_logging-incomplete_fix/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.149,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 11,
+        "duration_seconds": 10.536189582999214,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.978,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 9.321596875000978,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/redirect_credentials-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.658,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 12.125498166002217,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/redirect_credentials-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.126,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.576299583000946,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/redirect_credentials-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.561,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 11,
+        "duration_seconds": 12.989914750003663,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/redirect_credentials-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.252,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 11.637759082994307,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/tls_validation-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.114,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 12.399201459003962,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/tls_validation-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.382,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 10.611369875005039,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.047,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 9,
+        "duration_seconds": 9.408167917004903,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.106,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 12.476786416998948,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/template_rendering-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.598,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 13.89128520799568,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.257,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 12.463154832999862,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.922,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 8,
+        "duration_seconds": 12.10356879200117,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-1/template_rendering-protected_elsewhere/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.495,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.90400020800007,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.068,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.4969312500034,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.844,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 12.276444667004398,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/compressed_attachment-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.839,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 9,
+        "duration_seconds": 10.269076541997492,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.469,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.907571333002124,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.705,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 10.121693500004767,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.035,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.462761583999963,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 1,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.748,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.171278333000373,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-1/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 26.799,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 26.27071650000289,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 29.138,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 28.633301457994094,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/secret_logging-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 21.708,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 21.18673920800211,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/secret_logging-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.539,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.053250082994055,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.483,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 21.955068416995346,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/redirect_credentials-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 29.646,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 28.899213040996983,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/redirect_credentials-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 21.915,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 21.273633708995476,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/redirect_credentials-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.45,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 10,
+        "duration_seconds": 23.944119291998504,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/redirect_credentials-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 35.983,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 15,
+        "duration_seconds": 35.531921624999086,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/tls_validation-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.7,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 22.203632541000843,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/tls_validation-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 30.079,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 29.61216404199513,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 33.31,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 32.86348554200231,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.279,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 24.859637292000116,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/template_rendering-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 32.093,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 31.70176804199582,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.539,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 24.14330675000383,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.453,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 10,
+        "duration_seconds": 28.040307249997568,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/template_rendering-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.602,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 28.240185666996695,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 32.585,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 32.18958812500205,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.926,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 28.547460416994,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/compressed_attachment-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 27.862,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 27.395014000001538,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 21.554,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 21.146688917004212,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 26.895,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 26.42588416599756,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 22.299,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 21.847389540998847,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.258,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 23.88767620800354,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-2/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.401,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 10.878855000002659,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.503,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 10.932839833003527,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/secret_logging-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.94,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.293274708004901,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/secret_logging-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.76,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 9,
+        "duration_seconds": 9.096066416997928,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.801,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 13.111126374999003,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/redirect_credentials-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.477,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 9.932466708996799,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/redirect_credentials-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.678,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 12.066481708003266,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/redirect_credentials-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.052,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 11,
+        "duration_seconds": 14.49293295800453,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/redirect_credentials-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.094,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 8.494005583001126,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/tls_validation-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.453,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 9.888857707999705,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/tls_validation-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.717,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 11.10280329100351,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.191,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 9,
+        "duration_seconds": 10.597283666000294,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.843,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 15.249985624999681,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/template_rendering-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.98,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 14.379315541998949,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 15.14,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 14.4560307080028,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.906,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 8,
+        "duration_seconds": 12.264196292002453,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/template_rendering-protected_elsewhere/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.14,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.45681445900118,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.322,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 11.761728500001482,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.254,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 11.636741209003958,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-2/compressed_attachment-incomplete_fix/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 2,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.523,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.823131500001182,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.339,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 12.589620083002956,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.666,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.023352707998129,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.32,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.751341082999716,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 2,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.789,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.116662458000064,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-2/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.326,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 27.842424250004115,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.79,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 23.296705875000043,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/secret_logging-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 27.753,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 27.27225712499785,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/secret_logging-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.483,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 23.940346082999895,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 31.495,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 30.996529415999248,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/redirect_credentials-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 32.6,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 32.11810883299768,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/redirect_credentials-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 30.56,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 30.081335666996893,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/redirect_credentials-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.986,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 25.455043832997035,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/redirect_credentials-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 31.106,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 30.61949112500588,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 3,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/tls_validation-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 33.376,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 32.909388625004794,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/tls_validation-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 26.411,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.97581558299862,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.14,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.71321999999782,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.838,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.457867208002426,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/template_rendering-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.039,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.668178625004657,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 17.895,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 17.486351749997993,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.29,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 23.906475166004384,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/template_rendering-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 20.039,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 19.581264207998174,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 23.351,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 22.95358637499885,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.772,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 24.332228999999643,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/compressed_attachment-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 24.3,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 23.882115459004126,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 0,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 25.908,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 25.455461541998375,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 32.13,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 31.660896790999686,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 26.74,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 26.303984083002433,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 1,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-1b",
+      "reported_model": "antares-1b",
+      "endpoint": "http://127.0.0.1:8082/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 28.124,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 27.45038258400018,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-1b/run-3/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-vulnerable",
+      "family": "secret_logging",
+      "variant": "vulnerable",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "318d67da5e89062bc40265573df4a30b226c6804c08a65953bef395d255af8a7"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.987,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 12.198572125002102,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/secret_logging-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-fixed",
+      "family": "secret_logging",
+      "variant": "fixed",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "48177719cc9bd45951300219f2a1741a35fab8eac97ee7bf5a67971409467481"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.449,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 11.773514291999163,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/secret_logging-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-incomplete_fix",
+      "family": "secret_logging",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "247c1f73cb1a56461d27227355a5b9b906b2c64803f26822df38b3431e73e718"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.638,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 13.986649458005559,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 9,
+        "retried_turns": 1,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/secret_logging-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "secret_logging-protected_elsewhere",
+      "family": "secret_logging",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-532",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "69839315234f96a491c9df0d4f47346a5fdfbbdd4afc2b6696d4cc58a30b25d1",
+        "policy.py": "1325d3e597fbb3345661366ef83fa0a962abf48fa7d3dac7704db8d8ca1b0c4f"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 8.866,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 8,
+        "duration_seconds": 8.231521749999956,
+        "cwe_ids_triggered": [
+          "CWE-532"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/secret_logging-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-vulnerable",
+      "family": "redirect_credentials",
+      "variant": "vulnerable",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "b6faf8bcfc5be2533d69cd127da812a7e0ae91b5c8fa235d9602b5c1fe317bfb"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.312,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 10.570998750001309,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/redirect_credentials-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-fixed",
+      "family": "redirect_credentials",
+      "variant": "fixed",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "2d5630ee08a005c73a01fd9caf874ef906b610eaf48ef63da63ffdd6b53f202e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.097,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 13.461209083994618,
+        "cwe_ids_triggered": [
+          "CWE-200"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/redirect_credentials-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-incomplete_fix",
+      "family": "redirect_credentials",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7cfc9634cbea8dbe24b5e767215c7ac5fd5a0527cb8446ce0db38d662171751d"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.895,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 14.242864708001434,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/redirect_credentials-incomplete_fix/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "redirect_credentials-protected_elsewhere",
+      "family": "redirect_credentials",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-200",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "262007ede1f2853eb31ff89a5463f6650e8e28a46ec1f7efd46e641d8fcf6b72",
+        "policy.py": "11366991ba148dd34af0b233506dfbca84816204b2e68dc890e800744c38b660"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.237,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 12.641567709004448,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 9,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/redirect_credentials-protected_elsewhere/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-vulnerable",
+      "family": "tls_validation",
+      "variant": "vulnerable",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "7b474fdb4fb820c87d974994e669110bf95e007d66bdffd29561a5ba0b30566f"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.571,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 10,
+        "duration_seconds": 11.948536000003514,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/tls_validation-vulnerable/report.json",
+      "complete": false,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-fixed",
+      "family": "tls_validation",
+      "variant": "fixed",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "a13ed6d3dbd55cfacd27482f74479920f19ff6be428ff56ddbf0e778090db757"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 9.571,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 9,
+        "duration_seconds": 8.90698970900121,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/tls_validation-fixed/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-incomplete_fix",
+      "family": "tls_validation",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ab171b315b33466bb72764817985d54d6bf6638a55518e90c4e8d69d87959b9a"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.982,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 12,
+        "duration_seconds": 13.38917187500192,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/tls_validation-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "tls_validation-protected_elsewhere",
+      "family": "tls_validation",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-295",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "4d19c077b53aeea0ced67b58d9bae2bf0adee6fb53cc730fa8651a1765a7484f",
+        "policy.py": "2b2252ad0a63b92ef4cc26fcc38eab85fd775ee89db76892013c0f6432d5edba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.842,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 11,
+        "duration_seconds": 12.171061583001574,
+        "cwe_ids_triggered": [
+          "CWE-295"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/tls_validation-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-vulnerable",
+      "family": "template_rendering",
+      "variant": "vulnerable",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "ae9dc1b9a8fe12ff314508e4d66891bdbc913ea39de0095220c20ad0944f7c97"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.488,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 11.851506291000987,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/template_rendering-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-fixed",
+      "family": "template_rendering",
+      "variant": "fixed",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "04b7e4f7f51a4a8f65b5c58b414f0a027a6eb8cccf645b61e0fd293e7ffa7fc1"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 13.291,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 12.686296500003664,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/template_rendering-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-incomplete_fix",
+      "family": "template_rendering",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "8ec50f9d398e394ec548da0c3cd1764d806efa5b15411a9d3b355932a9fd6fba"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.709,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 11.08456662500248,
+        "cwe_ids_triggered": [
+          "CWE-1336"
+        ],
+        "failed_tool_calls": 4,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/template_rendering-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "template_rendering-protected_elsewhere",
+      "family": "template_rendering",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-1336",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "557faab1e625b3872a57ccd2a83df9650817281db50bd216134cb36760970c1a",
+        "policy.py": "97977d5f73c5826749e5a39efca07be6b8351c1b9c04d21f3506b6c1226b5bfd"
+      },
+      "exit_code": 2,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 19.137,
+      "summary": {
+        "total_findings": 0,
+        "tool_call_count": 12,
+        "duration_seconds": 18.460063500002434,
+        "cwe_ids_triggered": [],
+        "failed_tool_calls": 11,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": "Model submitted no valid repository file paths."
+      },
+      "warnings": [
+        "Model submitted no valid repository file paths."
+      ],
+      "report": "antares-350m/run-3/template_rendering-protected_elsewhere/report.json",
+      "complete": false,
+      "expected_paths": [],
+      "actual_paths": [],
+      "matches_expected": null,
+      "false_positive_paths": null,
+      "missed_paths": null
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-vulnerable",
+      "family": "compressed_attachment",
+      "variant": "vulnerable",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "95b849bccb7188bf8ca4c0d0cc26fa35c5115f2f8dbdc06282bc1ee7d568147e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.884,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 9,
+        "duration_seconds": 11.18074075000186,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/compressed_attachment-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-fixed",
+      "family": "compressed_attachment",
+      "variant": "fixed",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "bcb5bd7c362dc91b98b2cbc6d8d61ea2f6db2090e5316e3de7e75db207b0490e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.707,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 11,
+        "duration_seconds": 14.068297791003715,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/compressed_attachment-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-incomplete_fix",
+      "family": "compressed_attachment",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f2e8178e8fd6c29276d1392f4c6e287e0189d6302ecb20cbf60a78ec17a2a866"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 11.128,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 10.520656125001551,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/compressed_attachment-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "compressed_attachment-protected_elsewhere",
+      "family": "compressed_attachment",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-409",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f54c752d85a2734a11d2295380ca2fa723fdc80fe74fd2373507f2e62ec1871a",
+        "policy.py": "2c76eb6aa860035fcde5af1b6cc462dbcd59de1d06dec9b4a875cb5d8c578924"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 14.009,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 11,
+        "duration_seconds": 13.408377332998498,
+        "cwe_ids_triggered": [
+          "CWE-409"
+        ],
+        "failed_tool_calls": 6,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/compressed_attachment-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-vulnerable",
+      "family": "batch_jobs",
+      "variant": "vulnerable",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fad1b55b66632f51ef769242a009ff30fc56e6035cf1a0470d3bc3847df013ef"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.078,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 9.400164958002279,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 2,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/batch_jobs-vulnerable/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-fixed",
+      "family": "batch_jobs",
+      "variant": "fixed",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "fe67cb74dbe50d8913130a6559de98a755530ed742efda264acc1786ef0a964e"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 12.562,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 10,
+        "duration_seconds": 12.128826542000752,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 7,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/batch_jobs-fixed/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py"
+      ],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-incomplete_fix",
+      "family": "batch_jobs",
+      "variant": "incomplete_fix",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "6bc55e9a2d71afd44321e47a7ad0e99a465ccd32f86c6c29a747dff774073a17"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 7.759,
+      "summary": {
+        "total_findings": 1,
+        "tool_call_count": 8,
+        "duration_seconds": 7.351914165999915,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 5,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/batch_jobs-incomplete_fix/report.json",
+      "complete": true,
+      "expected_paths": [
+        "app.py"
+      ],
+      "actual_paths": [
+        "app.py"
+      ],
+      "matches_expected": true,
+      "false_positive_paths": [],
+      "missed_paths": []
+    },
+    {
+      "repeat": 3,
+      "case": "batch_jobs-protected_elsewhere",
+      "family": "batch_jobs",
+      "variant": "protected_elsewhere",
+      "cwe": "CWE-770",
+      "model": "antares-350m",
+      "reported_model": "antares-350m",
+      "endpoint": "http://127.0.0.1:8086/v1/completions",
+      "source_sha256": {
+        "app.py": "f4e157d88dfa68dc60a8a38b7be2d778e7e2fa21e50fc9cfeecfb9e23f8ca23a",
+        "policy.py": "6455e83d9132c7531999cf7d50147acdf5637cb4eaf8e217d92fe6bf5eb22d77"
+      },
+      "exit_code": 0,
+      "error": null,
+      "timed_out": false,
+      "duration_seconds": 10.559,
+      "summary": {
+        "total_findings": 2,
+        "tool_call_count": 10,
+        "duration_seconds": 10.228928582997469,
+        "cwe_ids_triggered": [
+          "CWE-770"
+        ],
+        "failed_tool_calls": 8,
+        "retried_turns": 0,
+        "generation_errors": 0,
+        "failed_workers": 0,
+        "total_workers": 0,
+        "incomplete_reason": null
+      },
+      "warnings": [],
+      "report": "antares-350m/run-3/batch_jobs-protected_elsewhere/report.json",
+      "complete": true,
+      "expected_paths": [],
+      "actual_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "matches_expected": false,
+      "false_positive_paths": [
+        "app.py",
+        "policy.py"
+      ],
+      "missed_paths": []
+    }
+  ],
+  "per_model": {
+    "antares-1b": {
+      "metrics": {
+        "cases": 72,
+        "completed": 72,
+        "incomplete": 0,
+        "completed_matches": 36,
+        "false_positive_paths": 40,
+        "missed_paths": 0,
+        "duration_seconds": 1852.664
+      },
+      "confusion_matrix": {
+        "true_positive": 36,
+        "false_negative": 0,
+        "false_positive": 36,
+        "true_negative": 0,
+        "incomplete_unsafe": 0,
+        "incomplete_safe": 0
+      },
+      "phase_a_file_metrics": {
+        "completed_unsafe_cases": 36,
+        "true_positive_files": 36,
+        "false_positive_files": 0,
+        "missed_files": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    },
+    "antares-350m": {
+      "metrics": {
+        "cases": 72,
+        "completed": 58,
+        "incomplete": 14,
+        "completed_matches": 29,
+        "false_positive_paths": 40,
+        "missed_paths": 0,
+        "duration_seconds": 870.831
+      },
+      "confusion_matrix": {
+        "true_positive": 29,
+        "false_negative": 0,
+        "false_positive": 29,
+        "true_negative": 0,
+        "incomplete_unsafe": 7,
+        "incomplete_safe": 7
+      },
+      "phase_a_file_metrics": {
+        "completed_unsafe_cases": 29,
+        "true_positive_files": 29,
+        "false_positive_files": 0,
+        "missed_files": 0,
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1": 1.0
+      }
+    }
+  },
+  "per_repeat": {
+    "1": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 24,
+          "completed": 24,
+          "incomplete": 0,
+          "completed_matches": 12,
+          "false_positive_paths": 14,
+          "missed_paths": 0,
+          "duration_seconds": 567.117
+        },
+        "confusion_matrix": {
+          "true_positive": 12,
+          "false_negative": 0,
+          "false_positive": 12,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 0
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 12,
+          "true_positive_files": 12,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 24,
+          "completed": 20,
+          "incomplete": 4,
+          "completed_matches": 10,
+          "false_positive_paths": 14,
+          "missed_paths": 0,
+          "duration_seconds": 277.784
+        },
+        "confusion_matrix": {
+          "true_positive": 10,
+          "false_negative": 0,
+          "false_positive": 10,
+          "true_negative": 0,
+          "incomplete_unsafe": 2,
+          "incomplete_safe": 2
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 10,
+          "true_positive_files": 10,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      }
+    },
+    "2": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 24,
+          "completed": 24,
+          "incomplete": 0,
+          "completed_matches": 12,
+          "false_positive_paths": 14,
+          "missed_paths": 0,
+          "duration_seconds": 646.095
+        },
+        "confusion_matrix": {
+          "true_positive": 12,
+          "false_negative": 0,
+          "false_positive": 12,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 0
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 12,
+          "true_positive_files": 12,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 24,
+          "completed": 19,
+          "incomplete": 5,
+          "completed_matches": 9,
+          "false_positive_paths": 13,
+          "missed_paths": 0,
+          "duration_seconds": 292.289
+        },
+        "confusion_matrix": {
+          "true_positive": 9,
+          "false_negative": 0,
+          "false_positive": 10,
+          "true_negative": 0,
+          "incomplete_unsafe": 3,
+          "incomplete_safe": 2
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 9,
+          "true_positive_files": 9,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      }
+    },
+    "3": {
+      "antares-1b": {
+        "metrics": {
+          "cases": 24,
+          "completed": 24,
+          "incomplete": 0,
+          "completed_matches": 12,
+          "false_positive_paths": 12,
+          "missed_paths": 0,
+          "duration_seconds": 639.452
+        },
+        "confusion_matrix": {
+          "true_positive": 12,
+          "false_negative": 0,
+          "false_positive": 12,
+          "true_negative": 0,
+          "incomplete_unsafe": 0,
+          "incomplete_safe": 0
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 12,
+          "true_positive_files": 12,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      },
+      "antares-350m": {
+        "metrics": {
+          "cases": 24,
+          "completed": 19,
+          "incomplete": 5,
+          "completed_matches": 10,
+          "false_positive_paths": 13,
+          "missed_paths": 0,
+          "duration_seconds": 300.758
+        },
+        "confusion_matrix": {
+          "true_positive": 10,
+          "false_negative": 0,
+          "false_positive": 9,
+          "true_negative": 0,
+          "incomplete_unsafe": 2,
+          "incomplete_safe": 3
+        },
+        "phase_a_file_metrics": {
+          "completed_unsafe_cases": 10,
+          "true_positive_files": 10,
+          "false_positive_files": 0,
+          "missed_files": 0,
+          "precision": 1.0,
+          "recall": 1.0,
+          "f1": 1.0
+        }
+      }
+    }
+  }
+}
