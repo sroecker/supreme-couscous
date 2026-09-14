@@ -193,3 +193,12 @@ The first packaged VSCodium 1.95.3 run passed review checks but failed the SQL-c
 Native keyboard/visual validation and Microsoft VS Code testing remain pending. The normal VSCodium profile was not updated.
 
 Fresh packaged run: antares-350m: completed, 8.6s, findings app.py; antares-1b: completed, 24.3s, findings app.py. Both passed the successful-tool and known-candidate assertions; the editor test exited 0. Raw smoke records are in ignored `logs/vscodium-extension-test.json`; review evidence is in `logs/reliability-editor-test.json`.
+
+
+## Version 0.4.4: review revisions, start hints, and setup guidance
+
+Regression coverage adds unchanged review/export checks alongside an independent writer, retry of failed freshness persistence, note-focus/scroll restoration in the generated webview script, explicit server-start model/port assignments, and missing launcher prerequisites. Export freshness timestamps are snapshot metadata; actual source/decision changes remain durable.
+
+Focus and scroll checks use the simulated DOM. They do not replace the pending native keyboard/visual, accessibility, untrusted-workspace, or Microsoft VS Code validation.
+
+Validation on 2026-09-14: **45 extension tests** passed with the CLI Python interpreter selected, and **11 Python tests** passed under Python 3.12.14. Packaged `antares-local-0.4.4.vsix` was installed into the isolated VSCodium 1.95.3 profile; `test/reliability-editor.js` passed its real webview messaging, review persistence and source-freshness checks with exit 0. No model inference or model accuracy re-evaluation was performed for this UI/launcher patch. The normal editor profile was not updated.

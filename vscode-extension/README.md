@@ -1,6 +1,6 @@
 # Antares Local for VS Code and VSCodium
 
-Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.3 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
+Run local security investigations with the installed Antares CLI and llama.cpp. Version 0.4.4 includes scan profiles, automatic draft saving, workspace run history, freshness checks before export, and explicit local server startup. No Marketplace, Copilot, Cisco AI Defense, or cloud-model service is required at runtime.
 
 ## Install and connect
 
@@ -12,7 +12,7 @@ npm test
 npm run package
 ```
 
-Run **Extensions: Install from VSIX…**, select `antares-local-0.4.3.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
+Run **Extensions: Install from VSIX…**, select `antares-local-0.4.4.vsix`, and reload if requested. The extension uses standard editor APIs and supports local trusted macOS workspaces. See [validation](../docs/vscode-extension-validation.md) for exact tested versions.
 
 1. Complete the repository setup to install the CLI and convert weights.
 2. Open the source workspace and trust it.
@@ -56,7 +56,7 @@ Each completed or partial result is saved before switching the review panel. If 
 2. Inspect the file and relevant callers or middleware using the general checklist. Antares supplies file-level candidates, without verified lines or detailed vulnerability explanations.
 3. Type review notes. Each edit is sent immediately to extension memory; disk writes are batched over 150 ms. Closing and reopening the review panel retains delivered edits. Wait for **Draft saved** before closing the editor. Navigation and export request a final draft acknowledgement. Unacknowledged keystrokes are not guaranteed to survive abrupt shutdown.
 4. **Confirm issue**, **Dismiss candidate**, or **Save as unreviewed** records your assessment. Dismissal requires a reason. Saving a decision consumes that candidate's draft. These actions do not change source code.
-5. Use **Next unreviewed** or select another candidate. Explorer navigation also preserves acknowledged drafts.
+5. Use **Next unreviewed** or select another candidate. Navigation preserves acknowledged drafts and restores the focused control and scroll position within the same run.
 
 The category list distinguishes candidate counts from category errors. **Retry failed categories** creates a linked run for only the failed categories, retaining the original results and decisions. It reuses the recorded model, budget, timeout, and target; save dirty files before retrying. The new attempt scans the current saved source, not an archived snapshot. Retried findings start unreviewed. A result remains incomplete even if every returned candidate has a human decision.
 
@@ -72,7 +72,7 @@ Known-dead process locks are reclaimed automatically. An empty lock or interrupt
 
 Edits observed during inference mark the incoming run potentially stale, including the first scan. Repeated source-change events persist the transition to stale once rather than rewriting the full report for every keystroke. Opening review, recording decisions, and exporting check reviewed candidate-file hashes. Changed, missing, or unsafe files return to unreviewed with their notes retained. Observed source edits/renames/deletions mark results potentially stale and persist that warning. Dependency changes are not comprehensively tracked; a rescan is needed to refresh the investigation itself.
 
-**Export result and review** flushes drafts and checks freshness before creating a snapshot. JSON includes execution state, decisions, drafts explicitly separate from decisions, the check timestamp/scope, and dirty-file paths. Draft notes never silently become confirmed or dismissed decisions. The snapshot represents the check time; edits after that time require another export or scan.
+**Export result and review** flushes drafts and checks freshness before creating a snapshot. Merely opening an unchanged review or exporting it does not increment the stored revision; export-check timestamps belong to the snapshot. Actual stale-state transitions and invalidated decisions are still persisted, and failed writes remain eligible for retry. JSON includes execution state, decisions, drafts explicitly separate from decisions, the check timestamp/scope, and dirty-file paths. Draft notes never silently become confirmed or dismissed decisions. The snapshot represents the check time; edits after that time require another export or scan.
 
 ## Settings
 
@@ -97,3 +97,5 @@ From the repository root, `python3 -m unittest discover -s tests -v` checks the 
 ## License
 
 MIT. Antares CLI, llama.cpp, and model weights retain their own licenses and are not included in the VSIX.
+
+Server-start hints explicitly set the model and port, overriding unrelated values in your terminal environment. Shell launchers report missing Python, CLI, runtime, profiles, or server binaries with setup guidance before trying to run them.

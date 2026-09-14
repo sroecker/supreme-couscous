@@ -82,3 +82,13 @@ test('per-category errors remain incomplete and malformed sweep reports are reje
  assert.equal(isComplete(parseReport(JSON.stringify(r)),0),false);
  assert.throws(()=>parseReport(JSON.stringify({...good,per_cwe_results:'bad'})));
 });
+
+test('server hints pin the requested model and port despite inherited overrides',async()=>{
+ const {checkServer}=require('../dist/core');const previous=global.fetch;global.fetch=async()=>{throw Error('offline')};
+ try{
+  for(const model of ['antares-1b','antares-350m']){
+   const connection=profile(model);await assert.rejects(checkServer(connection),e=>e.startCommand===`ANTARES_MODEL=${model} ANTARES_PORT=${new URL(connection.endpoint).port} ./scripts/serve.sh`);
+  }
+  await assert.rejects(checkServer({model:'antares-1b',endpoint:'http://127.0.0.1:8099/v1/completions'}),e=>e.startCommand.includes('ANTARES_PORT=8099'));
+ }finally{global.fetch=previous}
+});

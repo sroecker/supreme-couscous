@@ -24,10 +24,10 @@ async function harness(t, legacy=true) {
    createWebviewPanel:()=>{
     let receive,state,html,disposed;const pending=[];const panel={dispose(){state=undefined;current=undefined;disposed?.()},reveal(){},onDidDispose:fn=>{disposed=fn},webview:{onDidReceiveMessage:fn=>receive=fn,postMessage:async data=>{if(current)current.message({data});return true}}};
     Object.defineProperty(panel.webview,'html',{get:()=>html,set:value=>{
-     html=value;const note={value:'',disabled:false,addEventListener:(name,fn)=>note[name]=fn};const match=value.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/);note.value=match?.[1]??'';const feedback={},stale={};const document={body:{dataset:{run:value.match(/data-run="([^"]+)"/)[1]}},getElementById:id=>({note,feedback,stale})[id],querySelectorAll:()=>[]};
-     const window={addEventListener:(_n,fn)=>window.message=fn};
+     html=value;const note={id:'note',focus:()=>document.activeElement=note,value:'',disabled:false,addEventListener:(name,fn)=>note[name]=fn};const match=value.match(/<textarea[^>]*>([\s\S]*?)<\/textarea>/);note.value=match?.[1]??'';const feedback={},stale={};const document={body:{dataset:{run:value.match(/data-run="([^"]+)"/)[1]}},getElementById:id=>({note,feedback,stale})[id],querySelectorAll:()=>[]};
+     const window={scrollX:0,scrollY:0,scrollTo(x,y){this.scrollX=x;this.scrollY=y},addEventListener:(_n,fn)=>window.message=fn};
      vm.runInNewContext(value.match(/<script nonce="[^"]+">([\s\S]*?)<\/script>/)[1],{document,window,acquireVsCodeApi:()=>({getState:()=>state,setState:s=>state=s,postMessage:m=>{pending.push(Promise.resolve().then(()=>receive(m)))}}),setTimeout,clearTimeout});
-     current={note,message:window.message,pending};
+     current={note,document,window,message:window.message,pending};
     }});panels.push(panel);return panel;
    }
   }
@@ -144,4 +144,25 @@ for (const failure of ['conflict','disk']) test(`closed panel retains a failed $
   failing=false;await h.vscode.commands.executeCommand('antares.retryDraftSave');await h.vscode.commands.executeCommand('antares.history');
   assert.equal(h.api.getLastRun().id,next.id);assert.equal((await h.api.store.list()).find(r=>r.id===oldId).drafts[0].note,'Draft retained after failure');
  }
+});
+
+test('unchanged navigation and export do not invalidate another window revision',async t=>{
+ const h=await harness(t),otherWindow=structuredClone(h.api.getLastRun()),revision=otherWindow.revision;
+ await h.api.showReview();const snapshot=await h.api.prepareSnapshot();await h.api.showReview();
+ assert.equal(h.api.getLastRun().revision,revision);assert.ok(snapshot.freshness.checked);
+ assert.equal((await h.api.store.list())[0].freshness,undefined);
+ otherWindow.drafts={0:{note:'Independent window edit',updated:'now'}};await h.api.store.save(otherWindow);
+});
+test('review navigation restores note focus and scroll position',async t=>{
+ const h=await harness(t);h.api.getLastRun().report.findings.push({...h.run.report.findings[0],title:'Second candidate'});
+ await h.api.showReview();h.current.note.focus();h.current.window.scrollTo(0,420);
+ await h.api.showReview(1);assert.equal(h.current.document.activeElement,h.current.note);assert.equal(h.current.window.scrollY,420);
+});
+
+test('freshness save failure is retried even when the in-memory stale flag is already set',async t=>{
+ const h=await harness(t),save=h.api.store.save.bind(h.api.store);let fail=true;
+ t.mock.method(h.api.store,'save',async run=>{if(fail){fail=false;throw Error('Temporary storage failure')}return save(run)});
+ h.edit();await new Promise(resolve=>setTimeout(resolve,30));
+ assert.equal(h.api.getLastRun().sourceChanged,true);assert.ok(!(await h.api.store.list())[0].sourceChanged);
+ await h.api.prepareSnapshot(false);assert.equal((await h.api.store.list())[0].sourceChanged,true);
 });

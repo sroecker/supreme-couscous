@@ -140,3 +140,8 @@ Implemented immediate delivery of note edits with host-side batched persistence,
 ## Follow-up: 0.4.3
 
 Track failed draft saves independently of panel lifetime; provide Retry Draft Save for transient storage errors and retain conflict recovery through History. Give every older workspace-scoped record a stable location-derived editor ID while preserving its original disk ID and revision lock. Defer main-thread cancellation until tool registration completes. Regression tests cover closed-panel failure/recovery, legacy ID collisions, and injected SIGTERM/SIGINT during registration.
+
+
+## Follow-up: 0.4.4
+
+Implemented the actionable review suggestions: avoid revision churn from unchanged review/export checks, pin model and port in server-start hints, validate launcher prerequisites with actionable messages, and restore webview focus/scroll on navigation. Keep existing warning semantics, command activation, repository metadata, and TypeScript JSON emission. Larger controller refactors, shared-runtime relocation, watcher performance tuning, and history retention remain separate work requiring their own scope or measurements.

@@ -68,7 +68,9 @@ export class LocalServerError extends Error {
   constructor(message: string, public readonly startCommand: string) { super(message); }
 }
 export async function checkServer(connection: { model: string; endpoint: string }) {
-  const command = connection.model === 'antares-350m' ? 'ANTARES_MODEL=antares-350m ANTARES_PORT=8086 ./scripts/serve.sh' : './scripts/serve.sh';
+  profile(connection.model); // Validate before including the model name in a shell hint.
+  const port = new URL(connection.endpoint).port || new URL(profile(connection.model).endpoint).port;
+  const command = `ANTARES_MODEL=${connection.model} ANTARES_PORT=${port} ./scripts/serve.sh`;
   const url = new URL('/health', connection.endpoint);
   let response: Response;
   try {

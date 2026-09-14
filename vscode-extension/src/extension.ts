@@ -42,9 +42,10 @@ export async function activate(context: vscode.ExtensionContext) {
   const deferredChanges = new Set<string>();
   const review = new ReviewPanel(handleReviewMessage);
   context.subscriptions.push(review);
+  const unsavedRuns = new WeakSet<Run>();
   let writes: Promise<unknown> = Promise.resolve();
   function persist(run: Run) {
-    const pending = writes.then(() => store.save(run));
+    const pending = writes.then(() => store.save(run)).then(() => { unsavedRuns.delete(run); }, error => { unsavedRuns.add(run); throw error; });
     writes = pending.catch(() => {});
     return pending;
   }
@@ -381,14 +382,17 @@ export async function activate(context: vscode.ExtensionContext) {
     if (!last) throw new Error('No result to export.');
     await flushDrafts();
     await writes;
-    await refreshDecisions(last);
-    last.freshness = { checked: new Date().toISOString(), scope: 'Reviewed candidate file hashes only; dependencies are not comprehensively tracked.', dirtyFiles: vscode.workspace.textDocuments.filter(d => d.isDirty && d.uri.scheme === 'file' && inside(last!.target, d.uri.fsPath)).map(d => path.relative(last!.target, d.uri.fsPath)) };
-    if (last.freshness.dirtyFiles.length) last.sourceChanged = true;
-    await persist(last);
+    let changed = await refreshDecisions(last);
+    const dirtyFiles = vscode.workspace.textDocuments.filter(d => d.isDirty && d.uri.scheme === 'file' && inside(last!.target, d.uri.fsPath)).map(d => path.relative(last!.target, d.uri.fsPath));
+    if (dirtyFiles.length && !last.sourceChanged) { last.sourceChanged = true; changed = true; }
+    if (changed || unsavedRuns.has(last)) await persist(last);
     refresh();
     if (render && review.visible) review.show(last, review.selected);
-    return structuredClone(last);
+    const snapshot = structuredClone(last);
+    snapshot.freshness = { checked: new Date().toISOString(), scope: 'Reviewed candidate file hashes only; dependencies are not comprehensively tracked.', dirtyFiles };
+    return snapshot;
   }
+
   register('antares.export', async () => {
     if (busy || savingReview) throw new Error('Wait for the current operation to finish.');
     const snapshot = await prepareSnapshot();

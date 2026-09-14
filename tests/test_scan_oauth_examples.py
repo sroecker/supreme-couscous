@@ -55,6 +55,30 @@ class EvaluationTests(unittest.TestCase):
 
 
 class LauncherTests(unittest.TestCase):
+    def test_missing_setup_has_actionable_errors(self):
+        import shutil
+        import sys
+        with tempfile.TemporaryDirectory(prefix='antares preflight ') as temporary:
+            root = Path(temporary)
+            (root/'scripts').mkdir()
+            for filename in ['antares.sh','serve.sh','model_profile.sh']:
+                shutil.copy(scan.ROOT/'scripts'/filename, root/'scripts'/filename)
+            def check(fragment):
+                result = subprocess.run(['bash', str(root/'scripts/antares.sh')], capture_output=True, text=True)
+                self.assertEqual(result.returncode, 2)
+                self.assertIn(fragment, result.stderr)
+                self.assertNotIn('Traceback', result.stderr)
+            check('virtual environment')
+            (root/'.venv/bin').mkdir(parents=True)
+            (root/'.venv/bin/python').symlink_to(sys.executable)
+            check('Missing model profiles')
+            (root/'vscode-extension/src').mkdir(parents=True)
+            shutil.copy(scan.ROOT/'vscode-extension/src/model-profiles.json',root/'vscode-extension/src/model-profiles.json')
+            check('Antares CLI missing')
+            (root/'.venv/bin/antares').write_text('')
+            (root/'.venv/bin/antares').chmod(0o755)
+            check('Missing Antares runtime')
+
     def test_shared_defaults_and_explicit_overrides(self):
         import shutil
         import sys
